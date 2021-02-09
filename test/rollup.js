@@ -1,6 +1,6 @@
 import path from 'path'
 import {compile} from '../index.js'
-import fs from 'fs/promises'
+import {promises as fs} from 'fs'
 import test from 'tape'
 import {rollup} from 'rollup'
 import React from 'react'

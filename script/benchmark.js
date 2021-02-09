@@ -1,4 +1,4 @@
-import fs from 'fs/promises'
+import {promises as fs} from 'fs'
 import gfm from 'remark-gfm'
 import marky from 'marky'
 import {sync as mdx1} from 'mdx1'

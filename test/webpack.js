@@ -1,6 +1,6 @@
 import {promisify} from 'util'
 import path from 'path'
-import fs from 'fs/promises'
+import {promises as fs} from 'fs'
 import test from 'tape'
 import webpack from 'webpack'
 import React from 'react'

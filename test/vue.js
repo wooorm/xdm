@@ -1,6 +1,6 @@
 import path from 'path'
 import {compile} from '../index.js'
-import fs from 'fs/promises'
+import {promises as fs} from 'fs'
 import test from 'tape'
 import {transformAsync as babel} from '@babel/core'
 import {h, createSSRApp} from 'vue'
