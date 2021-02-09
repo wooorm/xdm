@@ -106,7 +106,9 @@ test('xdm', async function (t) {
   )
 
   t.equal(
-    render(h(await run(compileSync('?', {jsxImportSource: 'preact/compat'})))),
+    render(
+      h(await run(compileSync('?', {jsxImportSource: 'preact/compat'})), {})
+    ),
     '<p>?</p>',
     'should support an import source (`@jsxImportSource`)'
   )
@@ -121,7 +123,8 @@ test('xdm', async function (t) {
             pragmaFrag: 'preact.Fragment',
             pragmaImportSource: 'preact/compat'
           })
-        )
+        ),
+        {}
       )
     ),
     '%',
@@ -133,7 +136,8 @@ test('xdm', async function (t) {
       h(
         await run(compileSync('<>1</>', {jsxImportSource: 'preact'}), {
           keepImport: true
-        })
+        }),
+        {}
       )
     ),
     '1',
@@ -953,7 +957,7 @@ test('theme-ui', async function (t) {
  *
  * @param {import('../lib/core.js').VFileCompatible} input
  * @param {{keepImport?: boolean, returnModule?: boolean}} [options]
- * @return {Promise<import('react').FunctionComponent & {[key: string]: unknown}>}
+ * @return {Promise<(import('react').FunctionComponent | import('preact').FunctionComponent) & {[key: string]: unknown}>}
  */
 async function run(input, options = {}) {
   var name = 'fixture-' + nanoid().toLowerCase() + '.js'

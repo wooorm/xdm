@@ -16,6 +16,7 @@ test('xdm (evaluate)', async function (t) {
 
   t.throws(
     function () {
+      // @ts-ignore runtime.js does not have a typing
       evaluateSync('a', {Fragment: runtime.Fragment})
     },
     /Expected `jsx` given to `evaluate`/,
@@ -24,6 +25,7 @@ test('xdm (evaluate)', async function (t) {
 
   t.throws(
     function () {
+      // @ts-ignore runtime.js does not have a typing
       evaluateSync('a', {Fragment: runtime.Fragment, jsx: runtime.jsx})
     },
     /Expected `jsxs` given to `evaluate`/,
