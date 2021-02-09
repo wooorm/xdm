@@ -1,0 +1,114 @@
+{
+  "name": "xdm",
+  "version": "0.0.0",
+  "description": "an MDX compiler",
+  "license": "MIT",
+  "keywords": [
+    "xdm",
+    "mdx",
+    "markdown",
+    "jsx"
+  ],
+  "repository": "wooorm/xdm",
+  "bugs": "https://github.com/wooorm/xdm/issues",
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/wooorm"
+  },
+  "author": "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)",
+  "contributors": [
+    "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)"
+  ],
+  "type": "module",
+  "module": "./index.js",
+  "files": [
+    "lib/",
+    "index.js",
+    "webpack.cjs"
+  ],
+  "dependencies": {
+    "astring": "^1.6.0",
+    "estree-util-build-jsx": "^1.1.0",
+    "estree-util-is-identifier-name": "^1.0.0",
+    "estree-walker": "^3.0.0",
+    "hast-util-to-estree": "^1.2.0",
+    "loader-utils": "^2.0.0",
+    "mdast-util-mdx": "^0.1.0",
+    "micromark-extension-mdxjs": "^0.3.0",
+    "periscopic": "^3.0.0",
+    "remark-parse": "^9.0.0",
+    "remark-rehype": "^8.0.0",
+    "stringify-entities": "^3.1.0",
+    "unified": "^9.0.0",
+    "unist-builder": "^2.0.0",
+    "unist-util-stringify-position": "^2.0.0",
+    "unist-util-visit": "^2.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0",
+    "@babel/plugin-transform-react-jsx": "^7.0.0",
+    "@emotion/react": "^11.0.0",
+    "@mdx-js/react": "^2.0.0-next.8",
+    "@theme-ui/preset-base": "^0.3.0",
+    "@vue/babel-plugin-jsx": "^1.0.0",
+    "@vue/server-renderer": "^3.0.0",
+    "c8": "^7.0.0",
+    "convert-source-map": "^1.0.0",
+    "estree-to-babel": "^3.0.0",
+    "nanoid": "^3.0.0",
+    "preact": "^10.0.0",
+    "preact-render-to-string": "^5.0.0",
+    "prettier": "^2.0.0",
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0",
+    "rehype-katex": "^4.0.0",
+    "remark-cli": "^9.0.0",
+    "remark-footnotes": "^3.0.0",
+    "remark-frontmatter": "^3.0.0",
+    "remark-gfm": "^1.0.0",
+    "remark-math": "^4.0.0",
+    "remark-preset-wooorm": "^8.0.0",
+    "rollup": "^2.0.0",
+    "source-map": "^0.7.0",
+    "tape": "^5.0.0",
+    "theme-ui": "^0.3.0",
+    "vue": "^3.0.0",
+    "webpack": "^5.0.0",
+    "xo": "^0.37.0"
+  },
+  "scripts": {
+    "format": "remark . -qfo && prettier . -w --loglevel warn && xo --fix",
+    "test-api": "node test/index.js",
+    "test-coverage": "c8 --check-coverage --branches 100 --functions 100 --lines 100 --statements 100 --reporter lcov node --experimental-modules test/index.js",
+    "test": "npm run format && npm run test-coverage"
+  },
+  "prettier": {
+    "tabWidth": 2,
+    "useTabs": false,
+    "singleQuote": true,
+    "bracketSpacing": false,
+    "semi": false,
+    "trailingComma": "none"
+  },
+  "xo": {
+    "prettier": true,
+    "extensions": [
+      "cjs"
+    ],
+    "rules": {
+      "import/no-mutable-exports": "off",
+      "no-var": "off",
+      "prefer-arrow-callback": "off",
+      "prefer-const": "off"
+    }
+  },
+  "remarkConfig": {
+    "plugins": [
+      "preset-wooorm",
+      [
+        "lint-no-html",
+        false
+      ]
+    ]
+  }
+}

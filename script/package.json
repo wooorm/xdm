@@ -1,0 +1,14 @@
+{
+  "name": "benchmark",
+  "type": "module",
+  "dependencies": {
+    "marky": "^1.0.0",
+    "mdx1": "npm:@mdx-js/mdx@latest",
+    "mdx2": "npm:@mdx-js/mdx@next"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node benchmark.js"
+  },
+  "xo": false
+}
