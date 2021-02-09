@@ -1,0 +1,19 @@
+{
+    "files": [
+        "index.js"
+      ],
+      "include": [
+        "lib/**/*.js",
+        "test/**/*.js"
+      ],
+      "compilerOptions": {
+        "target": "ES2020",
+        "lib": ["ESNext.Array"],
+        "module": "commonjs",
+        "allowJs": true,
+        "checkJs": true,
+        "resolveJsonModule": true,
+        "noEmit": true,
+        "esModuleInterop": true
+    }
+}
