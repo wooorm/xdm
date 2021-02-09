@@ -1762,7 +1762,7 @@ Most of the work is done by:
 
 [downloads-badge]: https://img.shields.io/npm/dm/xdm.svg
 
-[downloads]: https://www.npjs.com/package/xdm
+[downloads]: https://www.npmjs.com/package/xdm
 
 [size-badge]: https://img.shields.io/bundlephobia/minzip/xdm.svg
 
