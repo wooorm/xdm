@@ -12,7 +12,8 @@
 
 This is mostly things I wrote for `@mdx-js/mdx` which are not slated to be
 released (soon?) plus some further changes that I think are good ideas (source
-maps, ESM only, defaulting to an automatic JSX runtime, more docs).
+maps, ESM only, defaulting to an automatic JSX runtime, no Babel, smallish
+browser size, more docs).
 
 ## Install
 
