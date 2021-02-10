@@ -13,7 +13,9 @@
         "allowJs": true,
         "checkJs": true,
         "resolveJsonModule": true,
-        "noEmit": true,
+        "declaration": true,
+        "noEmit": false,
+        "emitDeclarationOnly": true,
         "esModuleInterop": true,
         "skipLibCheck": true
     }

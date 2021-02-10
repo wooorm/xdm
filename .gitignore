@@ -4,3 +4,4 @@ coverage/
 node_modules/
 giant.mdx
 yarn.lock
+*.d.ts

@@ -15,6 +15,7 @@ test('xdm (webpack)', async function (t) {
   )
 
   await promisify(webpack)({
+    // @ts-ignore context does not exist on the webpack options type
     context: base,
     entry: './webpack.mdx',
     mode: 'none',

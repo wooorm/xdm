@@ -41,6 +41,7 @@ test('xdm (babel)', async function (t) {
         ) {
           return compileSync(
             {contents, path: options.sourceFileName},
+            // @ts-ignore TODO find out why compiler causes TS error
             {recmaPlugins: [recmaBabel]}
           ).result
         }

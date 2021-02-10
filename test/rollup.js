@@ -19,10 +19,11 @@ test('xdm (rollup)', async function (t) {
     external: ['react/jsx-runtime'],
     plugins: [
       {
+        name: 'xdm',
         async transform(contents, filePath) {
           if (path.extname(filePath) !== '.mdx') return null
           var file = await compile({contents, path: filePath})
-          return {code: file.contents, map: file.map}
+          return {code: String(file.contents), map: file.map?.toString()}
         }
       }
     ]

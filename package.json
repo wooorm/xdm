@@ -21,9 +21,11 @@
   ],
   "type": "module",
   "module": "./index.js",
+  "types": "./index.d.ts",
   "files": [
     "lib/",
     "index.js",
+    "index.d.ts",
     "webpack.cjs"
   ],
   "dependencies": {
@@ -87,7 +89,9 @@
     "format": "remark . -qfo && prettier . -w --loglevel warn && xo --fix",
     "test-api": "node test/index.js",
     "test-coverage": "c8 --check-coverage --branches 100 --functions 100 --lines 100 --statements 100 --reporter lcov node --experimental-modules test/index.js",
-    "test": "npm run format && npm run test-coverage"
+    "test-types": "tsc",
+    "test": "npm run format && npm run test-coverage && npm run test-types",
+    "prepare": "tsc"
   },
   "prettier": {
     "tabWidth": 2,

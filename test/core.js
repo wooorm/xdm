@@ -283,6 +283,7 @@ test('xdm', async function (t) {
         {
           components: {
             y: {
+              // @ts-ignore React typings do not support nested component names
               z() {
                 return React.createElement('span', {}, '!')
               }
