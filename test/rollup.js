@@ -20,10 +20,11 @@ test('xdm (rollup)', async function (t) {
     plugins: [
       {
         name: 'xdm',
+        // @ts-ignore TODO narrow the types of file.contents and file.map
         async transform(contents, filePath) {
           if (path.extname(filePath) !== '.mdx') return null
           var file = await compile({contents, path: filePath})
-          return {code: String(file.contents), map: file.map?.toString()}
+          return {code: file.contents, map: file.map}
         }
       }
     ]
