@@ -58,6 +58,7 @@
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "@types/tape": "^4.0.0",
+    "@types/webpack": "^4.0.0",
     "@vue/babel-plugin-jsx": "^1.0.0",
     "@vue/server-renderer": "^3.0.0",
     "c8": "^7.0.0",
