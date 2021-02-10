@@ -1693,7 +1693,6 @@ export default MDXContent
 **API** (build):
 
 *   Remove `skipExport` or `wrapExport` options
-*   Remove support for `parent.child` combos (`ol.li`)
 *   Add support for automatic JSX runtime
 *   Add support for non-react classic runtime
 *   Add support for source maps
@@ -1713,6 +1712,9 @@ export default MDXContent
 *   Sandbox: when passing `components: {h1 = () => ...}` that component gets
     used for `# heading` but not for `<h1>heading</h1>`
 *   Local components (including layouts) precede over given components
+*   Remove support for passing `parent.child` combos (`ol.li`) for components
+*   Remove support for passing `inlineCode` component (use `pre` and/or `code`
+    instead)
 *   Exported things are available from `evaluate`
 *   Fix a bug with encoding `"` in attributes
 
