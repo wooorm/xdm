@@ -974,7 +974,8 @@ export default {
 
 #### Snowpack
 
-Snowpack uses Rollup (for local files) which can be extended.
+[Snowpack](https://www.snowpack.dev) uses [Rollup][] (for local files) which can
+be extended.
 Install `xdm` and add something along these lines to your `snowpack.config.js`:
 
 ```js
@@ -998,6 +999,17 @@ module.exports = {
   }
 }
 ```
+
+#### Vite
+
+[Vite](https://vitejs.dev) supports [Rollup][] plugins directly in `plugins` in
+your `vite.config.js`:
+
+#### WMR
+
+[WMR](https://github.com/preactjs/wmr) supports [Rollup][] plugins directly by
+[pushing them to `config.plugins`](https://github.com/preactjs/wmr#configuration-and-plugins)
+in `wmr.config.js`.
 
 ### Compilers
 
