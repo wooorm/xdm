@@ -848,17 +848,21 @@ test('MDX (ESM)', async function (t) {
   )
 
   t.equal(
-    await run(compileSync('export const number = Math.PI'), {
-      returnModule: true
-    }).number,
+    (
+      await run(compileSync('export const number = Math.PI'), {
+        returnModule: true
+      })
+    ).number,
     Math.PI,
     'should support exporting w/ ESM'
   )
 
   t.equal(
-    await run(
-      compileSync('export const number = Math.PI\nexport {number as pi}'),
-      {returnModule: true}
+    (
+      await run(
+        compileSync('export const number = Math.PI\nexport {number as pi}'),
+        {returnModule: true}
+      )
     ).pi,
     Math.PI,
     'should support `export as` w/ ESM'
@@ -957,7 +961,7 @@ test('theme-ui', async function (t) {
  *
  * @param {import('../lib/core.js').VFileCompatible} input
  * @param {{keepImport?: boolean, returnModule?: boolean}} [options]
- * @return {Promise<(import('react').FunctionComponent | import('preact').FunctionComponent) & {[key: string]: unknown}>}
+ * @return {Promise<import('../lib/evaluate.js').ExportMap["default"] & import('../lib/evaluate.js').ExportMap>}
  */
 async function run(input, options = {}) {
   var name = 'fixture-' + nanoid().toLowerCase() + '.js'
