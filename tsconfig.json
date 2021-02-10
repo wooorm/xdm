@@ -9,10 +9,10 @@
       "compilerOptions": {
         "target": "ES2020",
         "lib": ["ES2020"],
-        "module": "commonjs",
+        "module": "ES2020",
+        "moduleResolution": "node",
         "allowJs": true,
         "checkJs": true,
-        "resolveJsonModule": true,
         "declaration": true,
         "noEmit": false,
         "emitDeclarationOnly": true,
