@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * webpack loader
+ * Webpack loader
  *
  * @remarks
  * To do: once webpack supports ESM loaders, remove this wrapper.
