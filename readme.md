@@ -1700,6 +1700,7 @@ export default MDXContent
 *   Add `evaluate` instead of `runtime` package to eval MDX
 *   Remove JSX from output (by default)
 *   Default to automatic JSX runtime
+*   No [GFM by default](#github-flavored-markdown-gfm)
 
 **API** (run):
 
