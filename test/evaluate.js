@@ -65,8 +65,8 @@ test('xdm (evaluate)', async function (t) {
     '1',
     'should support an `export function` (1)'
   )
-  
-  if (typeof mod.a !== 'function') throw TypeError('missing function')
+
+  if (typeof mod.a !== 'function') throw new TypeError('missing function')
 
   t.equal(mod.a(), 1, 'should support an `export function` (2)')
 
