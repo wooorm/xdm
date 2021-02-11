@@ -10,7 +10,6 @@ import test from 'tape'
 // Note: Node has an experimental `--enable-source-maps` flag, but most of V8
 // doesn’t seem to support it.
 // So instead use a userland module.
-/* eslint-disable-next-line import/no-unassigned-import */
 import 'source-map-support/register.js'
 
 test('xdm (source maps)', async function (t) {

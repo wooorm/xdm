@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unassigned-import */
 import './babel.js'
 import './core.js'
 import './evaluate.js'

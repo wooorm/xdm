@@ -63,12 +63,13 @@
     "@vue/server-renderer": "^3.0.0",
     "c8": "^7.0.0",
     "convert-source-map": "^1.0.0",
+    "eslint-plugin-es": "^4.0.0",
+    "eslint-plugin-security": "^1.0.0",
     "estree-to-babel": "^3.0.0",
     "nanoid": "^3.0.0",
     "preact": "^10.0.0",
     "preact-render-to-string": "^5.0.0",
     "prettier": "^2.0.0",
-    "rimraf": "^3.0.0",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "rehype-katex": "^4.0.0",
@@ -78,6 +79,7 @@
     "remark-gfm": "^1.0.0",
     "remark-math": "^4.0.0",
     "remark-preset-wooorm": "^8.0.0",
+    "rimraf": "^3.0.0",
     "rollup": "^2.0.0",
     "source-map": "^0.7.0",
     "tape": "^5.0.0",
@@ -105,16 +107,50 @@
     "trailingComma": "none"
   },
   "xo": {
-    "prettier": true,
+    "envs": [
+      "shared-node-browser"
+    ],
     "extensions": [
       "cjs"
     ],
+    "prettier": true,
     "rules": {
       "import/no-mutable-exports": "off",
+      "new-cap": "off",
       "no-var": "off",
       "prefer-arrow-callback": "off",
       "prefer-const": "off"
-    }
+    },
+    "overrides": [
+      {
+        "files": [
+          "lib/**/*.js"
+        ],
+        "extends": [
+          "plugin:es/restrict-to-es2019",
+          "plugin:security/recommended"
+        ],
+        "rules": {
+          "security/detect-object-injection": "off"
+        }
+      },
+      {
+        "files": [
+          "lib/evaluate.js"
+        ],
+        "rules": {
+          "no-new-func": "off"
+        }
+      },
+      {
+        "files": [
+          "test/**/*.js"
+        ],
+        "rules": {
+          "import/no-unassigned-import": "off"
+        }
+      }
+    ]
   },
   "remarkConfig": {
     "plugins": [
