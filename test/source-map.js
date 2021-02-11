@@ -38,7 +38,7 @@ test('xdm (source maps)', async function (t) {
     t.fail()
   } catch (error) {
     var match = /at Component \(file:([^)]+)\)/.exec(error.stack)
-    var place = path.join(base, 'unknown.mdx') + ':2:3'
+    var place = path.posix.join(...base.split(path.sep), 'unknown.mdx') + ':2:3'
     t.equal(match[1].slice(-place.length), place, 'should support source maps')
   }
 
