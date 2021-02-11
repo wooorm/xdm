@@ -19,6 +19,8 @@ test('xdm (rollup)', async function (t) {
     external: ['react/jsx-runtime'],
     plugins: [
       {
+        name: 'xdm',
+        // @ts-ignore TODO narrow the types of file.contents and file.map
         async transform(contents, filePath) {
           if (path.extname(filePath) !== '.mdx') return null
           var file = await compile({contents, path: filePath})
@@ -36,6 +38,8 @@ test('xdm (rollup)', async function (t) {
     )
   )
 
+  /** @type {import("react").FunctionComponent} */
+  // @ts-ignore file is dynamically generated
   var Content = (await import('./context/rollup.js')).default
 
   t.equal(

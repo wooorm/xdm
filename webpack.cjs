@@ -1,6 +1,13 @@
 'use strict'
 
-// To do: once webpack supports ESM loaders, remove this wrapper.
+/**
+ * Webpack loader
+ *
+ * @remarks
+ * To do: once webpack supports ESM loaders, remove this wrapper.
+ *
+ * @param {string} code
+ */
 module.exports = function (code) {
   var callback = this.async()
   // Note that `import()` caches, so this should be fast enough.

@@ -15,6 +15,7 @@ test('xdm (webpack)', async function (t) {
   )
 
   await promisify(webpack)({
+    // @ts-ignore context does not exist on the webpack options type
     context: base,
     entry: './webpack.mdx',
     mode: 'none',
@@ -23,6 +24,8 @@ test('xdm (webpack)', async function (t) {
   })
 
   // One for ESM loading CJS, one for webpack.
+  /** @type {import("react").FunctionComponent} */
+  // @ts-ignore file is dynamically generated
   var Content = (await import('./context/webpack.cjs')).default.default
 
   t.equal(

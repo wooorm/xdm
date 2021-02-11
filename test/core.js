@@ -106,7 +106,9 @@ test('xdm', async function (t) {
   )
 
   t.equal(
-    render(h(await run(compileSync('?', {jsxImportSource: 'preact/compat'})))),
+    render(
+      h(await run(compileSync('?', {jsxImportSource: 'preact/compat'})), {})
+    ),
     '<p>?</p>',
     'should support an import source (`@jsxImportSource`)'
   )
@@ -121,7 +123,8 @@ test('xdm', async function (t) {
             pragmaFrag: 'preact.Fragment',
             pragmaImportSource: 'preact/compat'
           })
-        )
+        ),
+        {}
       )
     ),
     '%',
@@ -133,7 +136,8 @@ test('xdm', async function (t) {
       h(
         await run(compileSync('<>1</>', {jsxImportSource: 'preact'}), {
           keepImport: true
-        })
+        }),
+        {}
       )
     ),
     '1',
@@ -279,6 +283,7 @@ test('xdm', async function (t) {
         {
           components: {
             y: {
+              // @ts-ignore React typings do not support nested component names
               z() {
                 return React.createElement('span', {}, '!')
               }
@@ -844,19 +849,23 @@ test('MDX (ESM)', async function (t) {
   )
 
   t.equal(
-    await run(compileSync('export const number = Math.pi'), {
-      returnModule: true
-    }).number,
-    Math.pi,
+    (
+      await run(compileSync('export const number = Math.PI'), {
+        returnModule: true
+      })
+    ).number,
+    Math.PI,
     'should support exporting w/ ESM'
   )
 
   t.equal(
-    await run(
-      compileSync('export const number = Math.pi\nexport {number as pi}'),
-      {returnModule: true}
+    (
+      await run(
+        compileSync('export const number = Math.PI\nexport {number as pi}'),
+        {returnModule: true}
+      )
     ).pi,
-    Math.pi,
+    Math.PI,
     'should support `export as` w/ ESM'
   )
 
@@ -949,6 +958,12 @@ test('theme-ui', async function (t) {
   t.end()
 })
 
+/**
+ *
+ * @param {import('../lib/core.js').VFileCompatible} input
+ * @param {{keepImport?: boolean, returnModule?: boolean}} [options]
+ * @return {Promise<import('../lib/evaluate.js').ExportMap["default"] & import('../lib/evaluate.js').ExportMap>}
+ */
 async function run(input, options = {}) {
   var name = 'fixture-' + nanoid().toLowerCase() + '.js'
   var fp = path.join('test', 'context', name)

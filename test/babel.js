@@ -20,6 +20,8 @@ test('xdm (babel)', async function (t) {
 
   await fs.writeFile(path.join(base, 'babel.js'), js)
 
+  /** @type {import("react").FunctionComponent} */
+  // @ts-ignore file is dynamically generated
   var Content = (await import('./context/babel.js')).default
 
   t.equal(
@@ -39,6 +41,7 @@ test('xdm (babel)', async function (t) {
         ) {
           return compileSync(
             {contents, path: options.sourceFileName},
+            // @ts-ignore TODO find out why compiler causes TS error
             {recmaPlugins: [recmaBabel]}
           ).result
         }

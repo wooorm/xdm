@@ -20,6 +20,8 @@ test('xdm (vue)', async function (t) {
 
   await fs.writeFile(path.join(base, 'vue.js'), js)
 
+  /** @type {import("vue").Component} */
+  // @ts-ignore file is dynamically generated
   var Content = (await import('./context/vue.js')).default
 
   var result = await renderToString(

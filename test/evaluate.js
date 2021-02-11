@@ -16,6 +16,7 @@ test('xdm (evaluate)', async function (t) {
 
   t.throws(
     function () {
+      // @ts-ignore runtime.js does not have a typing
       evaluateSync('a', {Fragment: runtime.Fragment})
     },
     /Expected `jsx` given to `evaluate`/,
@@ -24,6 +25,7 @@ test('xdm (evaluate)', async function (t) {
 
   t.throws(
     function () {
+      // @ts-ignore runtime.js does not have a typing
       evaluateSync('a', {Fragment: runtime.Fragment, jsx: runtime.jsx})
     },
     /Expected `jsxs` given to `evaluate`/,
@@ -64,6 +66,8 @@ test('xdm (evaluate)', async function (t) {
     'should support an `export function` (1)'
   )
 
+  if (typeof mod.a !== 'function') throw new TypeError('missing function')
+
   t.equal(mod.a(), 1, 'should support an `export function` (2)')
 
   mod = await evaluate(
@@ -77,6 +81,7 @@ test('xdm (evaluate)', async function (t) {
     'should support an `export class` (1)'
   )
 
+  // @ts-ignore TODO figure out how to narrow class type in JSDoc typescript
   t.equal(new mod.A().b, 1, 'should support an `export class` (2)')
 
   mod = await evaluate('export const a = 1\nexport {a as b}\n\n{a}', runtime)

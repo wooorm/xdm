@@ -29,6 +29,8 @@ test('xdm (source maps)', async function (t) {
     String(file).replace(/\/jsx-runtime(?=["'])/g, '$&.js')
   )
 
+  /** @type {import("react").FunctionComponent} */
+  // @ts-ignore file is dynamically generated
   var Content = (await import('./context/sourcemap.js')).default
 
   try {
