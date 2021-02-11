@@ -22,6 +22,7 @@
   "type": "module",
   "module": "./index.js",
   "types": "./index.d.ts",
+  "sideEffects": false,
   "files": [
     "lib/",
     "index.js",
