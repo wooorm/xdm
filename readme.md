@@ -1761,7 +1761,7 @@ turn the results from the parser into a syntax tree:
 [mdast](https://github.com/syntax-tree/mdast).
 
 Markdown is closest to the source format.
-This is where remark plugins come in.
+This is where [remark plugins][remark-plugins] come in.
 Typically, there shouldn’t be too much going on here.
 But perhaps you want to support GFM (tables and such)?
 Then you can add a plugin here: `remark-gfm`.
@@ -1783,7 +1783,8 @@ AST, that plugin can supports *all* these use cases (for example,
 for syntax highlighting or
 [`rehype-katex`](https://github.com/remarkjs/remark-math/tree/main/packages/rehype-katex)
 for math).
-So, this is where rehype plugins come in: most of the plugins, probably.
+So, this is where [rehype plugins][rehype-plugins] come in: most of the plugins,
+probably.
 
 Then we go to JavaScript: esast (JS; an AST which is compatible with estree but
 looks a bit more like other unist ASTs).
