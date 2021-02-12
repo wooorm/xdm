@@ -69,6 +69,7 @@ time.
     *   [Footnotes](#footnotes)
     *   [Frontmatter](#frontmatter)
 *   [Differences from `@mdx-js/mdx`](#differences-from-mdx-jsmdx)
+*   [Architecture](#architecture)
 *   [Security](#security)
 *   [Related](#related)
 *   [License](#license)
@@ -1737,6 +1738,66 @@ export default MDXContent
 *   ± same as `main` branch of `@mdx-js/mdx`
 *   Fix JSX tags to prevent `<p><h1 /></p>`
 
+## Architecture
+
+To understand what this project does, it’s very important to first understand
+what unified does: please read through the
+[`unifiedjs/unified`](https://github.com/unifiedjs/unified) readme (the part
+until you hit the API section is required reading).
+
+**xdm** is a unified pipeline — wrapped so that most folks don’t need to know
+about unified.
+
+The *input* is MDX (serialized markdown with embedded JSX, ESM, and
+expressions).
+The markdown is parsed with [`micromark`][micromark] and the embedded JS with
+one of its extensions
+[`micromark-extension-mdxjs`](https://github.com/micromark/micromark-extension-mdxjs)
+(which in turn uses [acorn][]).
+Then [`mdast-util-from-markdown`](https://github.com/syntax-tree/mdast-util-from-markdown)
+and its extension
+[`mdast-util-mdx`](https://github.com/syntax-tree/mdast-util-mdx) are used to
+turn the results from the parser into a syntax tree:
+[mdast](https://github.com/syntax-tree/mdast).
+
+Markdown is closest to the source format.
+This is where remark plugins come in.
+Typically, there shouldn’t be too much going on here.
+But perhaps you want to support GFM (tables and such)?
+Then you can add a plugin here: `remark-gfm`.
+
+After markdown, we go to [hast](https://github.com/syntax-tree/hast) (HTML).
+This transormation is done by
+[`mdast-util-to-hast`](https://github.com/syntax-tree/mdast-util-to-hast).
+Wait, why, what does HTML have to do with it?
+Part of the reason is that we care about HTML semantics: we want to know that
+something is an `<a>`, not whether it’s a link with a resource (`[text](url)`)
+or a reference to a defined link definition (`[text][id]\n\n[id]: url`).
+So an HTML AST is *closer* to where we want to go.
+Another reason is that there are many things folks need when they go MDX -> JS,
+markdown -> HTML, or even folks who only process their HTML -> HTML: use cases
+other than xdm.
+By having a single AST in these cases and writing a plugin that works on that
+AST, that plugin can supports *all* these use cases (for example,
+[`rehype-highlight`](https://github.com/rehypejs/rehype-highlight)
+for syntax highlighting or
+[`rehype-katex`](https://github.com/remarkjs/remark-math/tree/main/packages/rehype-katex)
+for math).
+So, this is where rehype plugins come in: most of the plugins, probably.
+
+Then we go to JavaScript: esast (JS; an AST which is compatible with estree but
+looks a bit more like other unist ASTs).
+This transformation is done by
+[`hast-util-to-estree`](https://github.com/syntax-tree/hast-util-to-estree).
+This is a new ecosystem that does not have utilities or plugins yet.
+But it’s where we **xdm** does its thing: where it adds imports/exports, where
+it compiles JSX away into `_jsx()` calls, and where it does the other cool
+things that it provides.
+
+Finally, The output is serialized JavaScript.
+That final step is done by [astring](https://github.com/davidbonnet/astring), a
+small and fast JS generator.
+
 ## Security
 
 MDX is unsafe: it’s a programming language.
@@ -1755,9 +1816,9 @@ transforms, before finally serializing JavaScript.
 
 Most of the work is done by:
 
-*   [`micromark`](https://github.com/micromark/micromark)
+*   [`micromark`][micromark]
     — Handles parsing of markdown (CommonMark)
-*   [`acorn`](https://github.com/acornjs/acorn)
+*   [`acorn`][acorn]
     — Handles parsing of JS (ECMAScript)
 *   [`unifiedjs.com`](https://unifiedjs.com)
     — Ties it all together
@@ -1833,3 +1894,7 @@ Most of the work is done by:
 [rollup]: #rollup
 
 [caveats]: #caveats
+
+[micromark]: https://github.com/micromark/micromark
+
+[acorn]: https://github.com/acornjs/acorn
