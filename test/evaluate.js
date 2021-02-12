@@ -8,7 +8,7 @@ import {evaluate, evaluateSync} from '../index.js'
 test('xdm (evaluate)', async function (t) {
   t.throws(
     function () {
-      // @ts-ignore Expected.
+      // @ts-expect-error
       evaluateSync('a')
     },
     /Expected `Fragment` given to `evaluate`/,
@@ -17,7 +17,7 @@ test('xdm (evaluate)', async function (t) {
 
   t.throws(
     function () {
-      // @ts-ignore Expected.
+      // @ts-expect-error
       evaluateSync('a', {Fragment: runtime.Fragment})
     },
     /Expected `jsx` given to `evaluate`/,
@@ -26,7 +26,7 @@ test('xdm (evaluate)', async function (t) {
 
   t.throws(
     function () {
-      // @ts-ignore Expected.
+      // @ts-expect-error
       evaluateSync('a', {Fragment: runtime.Fragment, jsx: runtime.jsx})
     },
     /Expected `jsxs` given to `evaluate`/,
