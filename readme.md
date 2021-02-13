@@ -417,7 +417,7 @@ compile(file, {jsxRuntime: 'classic'})
 
 ###### `options.jsxImportSource`
 
-Place to import automatic JSX runtimes from (`string?`, default: `react`).
+Place to import automatic JSX runtimes from (`string?`, default: `'react'`).
 When in the `automatic` runtime, this is used to define an import for
 `_Fragment`, `_jsx`, and `_jsxs`.
 
