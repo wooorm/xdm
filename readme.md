@@ -1746,7 +1746,17 @@ what unified does: please read through the
 until you hit the API section is required reading).
 
 **xdm** is a unified pipeline — wrapped so that most folks don’t need to know
-about unified.
+about unified: [`core.js#L76-L101`](https://github.com/wooorm/xdm/blob/e4c2340b41d3354617aa42350306fd35cb57967d/lib/core.js#L76-L101).
+The processor goes through these steps:
+
+1.  Parse MDX (serialized markdown with embedded JSX, ESM, and expressions)
+    to mdast (markdown syntax tree)
+2.  Transform through remark (markdown ecosystem)
+3.  Transform mdast to hast (HTML syntax tree)
+4.  Transform through rehype (HTML ecosystem)
+5.  Transform hast to esast (JS syntax tree)
+6.  Do the work needed to get a component
+7.  Serialize esast as JavaScript
 
 The *input* is MDX (serialized markdown with embedded JSX, ESM, and
 expressions).
@@ -1762,9 +1772,10 @@ turn the results from the parser into a syntax tree:
 
 Markdown is closest to the source format.
 This is where [remark plugins][remark-plugins] come in.
-Typically, there shouldn’t be too much going on here.
-But perhaps you want to support GFM (tables and such)?
-Then you can add a plugin here: `remark-gfm`.
+Typically, there shouldn’t be much going on here.
+But perhaps you want to support GFM (tables and such) or frontmatter?
+Then you can add a plugin here: `remark-gfm` or `remark-frontmatter`,
+respectively.
 
 After markdown, we go to [hast](https://github.com/syntax-tree/hast) (HTML).
 This transormation is done by
@@ -1791,9 +1802,9 @@ looks a bit more like other unist ASTs).
 This transformation is done by
 [`hast-util-to-estree`](https://github.com/syntax-tree/hast-util-to-estree).
 This is a new ecosystem that does not have utilities or plugins yet.
-But it’s where we **xdm** does its thing: where it adds imports/exports, where
-it compiles JSX away into `_jsx()` calls, and where it does the other cool
-things that it provides.
+But it’s where **xdm** does its thing: where it adds imports/exports, where it
+compiles JSX away into `_jsx()` calls, and where it does the other cool things
+that it provides.
 
 Finally, The output is serialized JavaScript.
 That final step is done by [astring](https://github.com/davidbonnet/astring), a
