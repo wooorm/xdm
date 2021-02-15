@@ -1439,6 +1439,90 @@ function code({className, ...props}) {
 
 </details>
 
+#### Syntax highlighting with the `meta` field
+
+Markdown supports a meta string for code:
+
+````markdown
+```js filename="index.js"
+console.log(1)
+```
+````
+
+This is a *hidden* part of markdown: it’s normally not rendered.
+But as the above example shows, it’s a useful place to put some extra fields.
+
+**xdm** doesn’t know whether you’re handling code as a component or what the
+format of that meta string is, so it defaults to how markdown handles it: `meta`
+is ignored.
+
+But it’s possible to pass that string as a prop by writing a rehype plugin:
+
+```js
+function rehypeMetaAsAttribute() {
+  return transform
+}
+
+function transform(tree) {
+  visit(tree, 'element', onelement)
+}
+
+function onelement(node) {
+  if (node.tagName === 'code' && node.data && node.data.meta) {
+    node.properties.meta = node.data.meta
+  }
+}
+```
+
+This would yields the following JSX:
+
+```jsx
+<pre>
+  <code class="language-js" meta='filename="index.js"'>
+    console.log(1)
+  </code>
+</pre>
+```
+
+Note that the `meta` attribute is not valid HTML, so make sure to handle `code`
+with a component.
+
+The meta string in this example looks a lot like HTML attributes.
+What if we wanted to parse that string and add each “attribute” as a prop?
+Using the same rehype plugin as above, but with a different `onelement`
+function, that can be achieved:
+
+```js
+var re = /\b([-\w]+)(?:=(?:"([^"]*)"|'([^']*)'|([^"'\s]+)))?/g
+
+// …
+
+function onelement(node) {
+  var match
+
+  if (node.tagName === 'code' && node.data && node.data.meta) {
+    re.lastIndex = 0 // Reset regex.
+
+    while ((match = re.exec(node.data.meta))) {
+      node.properties[match[1]] = match[2] || match[3] || match[4] || ''
+    }
+  }
+}
+```
+
+This would yields the following JSX:
+
+```jsx
+<pre>
+  <code class="language-js" filename="index.js">
+    console.log(1)
+  </code>
+</pre>
+```
+
+Note that the these added attributes are not valid HTML, so make sure to handle
+`code` with a component.
+
 ### Math
 
 Use
