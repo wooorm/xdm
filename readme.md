@@ -13,7 +13,7 @@
 This is mostly things I wrote for `@mdx-js/mdx` which are not slated to be
 released (soon?) plus some further changes that I think are good ideas (source
 maps, ESM only, defaulting to an automatic JSX runtime, no Babel, smallish
-browser size, more docs).
+browser size, more docs, esbuild plugin).
 
 ## Install
 
@@ -109,8 +109,8 @@ See [§ MDX syntax][mdx-syntax] below for more on how the format works.
 
 This section describes how to use the API.
 See [§ MDX syntax][mdx-syntax] on how the format works.
-See [§ Integrations][integrations] on how to use **xdm** with webpack, Rollup,
-Babel, etc.
+See [§ Integrations][integrations] on how to use **xdm** with Babel, esbuild,
+Rollup, webpack, etc.
 
 Say we have an MDX document, `example.mdx`:
 
@@ -200,6 +200,9 @@ See [§ MDX content][mdx-content] below on how to use the result.
 There is no default export.
 
 `xdm/webpack.cjs` exports a [webpack][] loader as the default export.
+
+`xdm/esbuild.js` exports a function that returns an esbuild plugin as the
+default export.
 
 ### `compile(file, options?)`
 
@@ -539,7 +542,7 @@ Run MDX.
 This does not support imports and it’s called **evaluate** because it `eval`s
 JavaScript.
 To get the full power of MDX it’s suggested to use `compile`, write to a file,
-and then run with Node or bundle with webpack/Rollup.
+and then run with Node or bundle with esbuild/Rollup/webpack.
 But if you trust your content and know that it doesn’t contain imports,
 `evaluate` can work.
 
@@ -883,38 +886,21 @@ precedence).
 
 ### Bundlers
 
-#### Webpack
+#### esbuild
 
-Install `xdm` and use `xdm/webpack.cjs`.
-Add something along these lines to your `webpack.config.js`:
-
-```js
-module.exports = {
-  module: {
-    // …
-    rules: [
-      // …
-      {test: /\.mdx$/, use: [{loader: 'xdm/webpack.cjs', options: {}}]}
-    ]
-  }
-}
-```
-
-Source maps are supported when [`SourceMapGenerator`][sm] is passed in.
-
-If you use modern JavaScript features you might want to use Babel through
-[`babel-loader`](https://webpack.js.org/loaders/babel-loader/) to compile to
-code that works:
+Install `xdm` and use `xdm/esbuild.js`.
+Add something along these lines to your `build` call:
 
 ```js
-// …
-use: [
-  // Note that Webpack runs right-to-left: `xdm` is used first, then
-  // `babel-loader`.
-  {loader: 'babel-loader', options: {}},
-  {loader: 'xdm/webpack.cjs', options: {}}
-]
-// …
+import xdm from 'xdm/esbuild.js'
+import esbuild from 'esbuild'
+
+await esbuild.build({
+  entryPoints: ['index.mdx'],
+  outfile: 'output.js',
+  format: 'esm',
+  plugins: [xdm({/* Options… */})]
+})
 ```
 
 #### Rollup
@@ -969,6 +955,40 @@ export default {
     })
   ]
 }
+```
+
+#### Webpack
+
+Install `xdm` and use `xdm/webpack.cjs`.
+Add something along these lines to your `webpack.config.js`:
+
+```js
+module.exports = {
+  module: {
+    // …
+    rules: [
+      // …
+      {test: /\.mdx$/, use: [{loader: 'xdm/webpack.cjs', options: {}}]}
+    ]
+  }
+}
+```
+
+Source maps are supported when [`SourceMapGenerator`][sm] is passed in.
+
+If you use modern JavaScript features you might want to use Babel through
+[`babel-loader`](https://webpack.js.org/loaders/babel-loader/) to compile to
+code that works:
+
+```js
+// …
+use: [
+  // Note that Webpack runs right-to-left: `xdm` is used first, then
+  // `babel-loader`.
+  {loader: 'babel-loader', options: {}},
+  {loader: 'xdm/webpack.cjs', options: {}}
+]
+// …
 ```
 
 ### Build systems

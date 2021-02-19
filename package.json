@@ -25,6 +25,8 @@
   "sideEffects": false,
   "files": [
     "lib/",
+    "esbuild.js",
+    "esbuild.d.ts",
     "index.js",
     "index.d.ts",
     "webpack.cjs"
@@ -63,7 +65,7 @@
     "@vue/babel-plugin-jsx": "^1.0.0",
     "@vue/server-renderer": "^3.0.0",
     "c8": "^7.0.0",
-    "convert-source-map": "^1.0.0",
+    "esbuild": "^0.8.0",
     "eslint-plugin-es": "^4.0.0",
     "eslint-plugin-security": "^1.0.0",
     "estree-to-babel": "^3.0.0",
@@ -149,6 +151,22 @@
         ],
         "rules": {
           "import/no-unassigned-import": "off"
+        }
+      },
+      {
+        "files": [
+          "lib/esbuild.js"
+        ],
+        "rules": {
+          "eqeqeq": [
+            "error",
+            "always",
+            {
+              "null": "ignore"
+            }
+          ],
+          "no-eq-null": "off",
+          "security/detect-non-literal-fs-filename": "off"
         }
       }
     ]
