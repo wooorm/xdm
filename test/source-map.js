@@ -1,7 +1,6 @@
 import {promises as fs} from 'fs'
 import path from 'path'
 import {compile} from '../index.js'
-import {fromObject} from 'convert-source-map'
 import React from 'react'
 import {renderToStaticMarkup} from 'react-dom/server.js'
 import {SourceMapGenerator} from 'source-map'
@@ -21,7 +20,10 @@ test('xdm (source maps)', async function (t) {
     {SourceMapGenerator}
   )
 
-  file.contents += fromObject(file.map).toComment() + '\n'
+  file.contents +=
+    '\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,' +
+    Buffer.from(JSON.stringify(file.map)).toString('base64') +
+    '\n'
 
   await fs.writeFile(
     path.join(base, 'sourcemap.js'),

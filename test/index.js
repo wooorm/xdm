@@ -1,5 +1,6 @@
 import './babel.js'
 import './core.js'
+import './esbuild.js'
 import './evaluate.js'
 import './rollup.js'
 import './source-map.js'
