@@ -272,6 +272,12 @@ await compile(file, {
 
 </details>
 
+###### `options.recmaPlugins`
+
+List of recma plugins, presets, and pairs.
+This is a new ecosystem, currently in beta, to transform
+[esast](https://github.com/syntax-tree/esast) (JavaScript) trees.
+
 ###### `options.SourceMapGenerator`
 
 The `SourceMapGenerator` class from [`source-map`][source-map] (optional).
@@ -577,6 +583,8 @@ var {default: Content} = await evaluate('# hi', {...runtime, ...otherOptions})
 
 ###### `options.rehypePlugins`
 
+###### `options.recmaPlugins`
+
 Same as for [`compile`][compile].
 
 ###### `options.useMDXComponents`
@@ -698,7 +706,7 @@ Some other features often used with markdown are:
     ([see guide below](#syntax-highlighting))
 
 These are many more things possible by configuring
-[remark plugins][remark-plugins] (and [rehype plugins][rehype-plugins]).
+[remark plugins][remark-plugins] and [rehype plugins][rehype-plugins].
 
 #### Caveats
 
@@ -1844,7 +1852,8 @@ The processor goes through these steps:
 4.  Transform through rehype (HTML ecosystem)
 5.  Transform hast to esast (JS syntax tree)
 6.  Do the work needed to get a component
-7.  Serialize esast as JavaScript
+7.  Transform through recma (JS ecosystem)
+8.  Serialize esast as JavaScript
 
 The *input* is MDX (serialized markdown with embedded JSX, ESM, and
 expressions).
@@ -1885,8 +1894,8 @@ for math).
 So, this is where [rehype plugins][rehype-plugins] come in: most of the plugins,
 probably.
 
-Then we go to JavaScript: esast (JS; an AST which is compatible with estree but
-looks a bit more like other unist ASTs).
+Then we go to JavaScript: [esast](https://github.com/syntax-tree/esast) (JS; an
+AST which is compatible with estree but looks a bit more like other unist ASTs).
 This transformation is done by
 [`hast-util-to-estree`](https://github.com/syntax-tree/hast-util-to-estree).
 This is a new ecosystem that does not have utilities or plugins yet.
