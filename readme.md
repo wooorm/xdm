@@ -47,6 +47,7 @@ time.
     *   [`compileSync(file, options?)`](#compilesyncfile-options)
     *   [`evaluate(file, options)`](#evaluatefile-options)
     *   [`evaluateSync(file, options)`](#evaluatesyncfile-options)
+    *   [`createProcessor(options)`](#createprocessoroptions)
 *   [MDX syntax](#mdx-syntax)
     *   [Markdown](#markdown)
     *   [JSX](#jsx)
@@ -195,8 +196,9 @@ See [§ MDX content][mdx-content] below on how to use the result.
 `xdm` exports the following identifiers:
 [`compile`][compile],
 [`compileSync`](#compilesyncfile-options),
-[`evaluate`][eval], and
-[`evaluateSync`](#evaluatesyncfile-options).
+[`evaluate`][eval],
+[`evaluateSync`](#evaluatesyncfile-options), and
+[`createProcessor`](#createprocessoroptions).
 There is no default export.
 
 `xdm/esbuild.js` exports a function as the default export that returns an
@@ -634,6 +636,12 @@ console.log(await evaluate(file, {...runtime}))
 Run MDX.
 Synchronous version of [`evaluate`][eval].
 When possible please use the async `evaluate`.
+
+### `createProcessor(options)`
+
+Create a unified processor to compile MDX to JS.
+Has the same options as [`compile`][compile], but returns a configured
+[`processor`](https://github.com/unifiedjs/unified#processor).
 
 ## MDX syntax
 
@@ -1842,7 +1850,8 @@ what unified does: please read through the
 until you hit the API section is required reading).
 
 **xdm** is a unified pipeline — wrapped so that most folks don’t need to know
-about unified: [`core.js#L76-L101`](https://github.com/wooorm/xdm/blob/e4c2340b41d3354617aa42350306fd35cb57967d/lib/core.js#L76-L101).
+about unified:
+[`core.js#L76-L102`](https://github.com/wooorm/xdm/blob/main/lib/core.js#L76-L102).
 The processor goes through these steps:
 
 1.  Parse MDX (serialized markdown with embedded JSX, ESM, and expressions)
