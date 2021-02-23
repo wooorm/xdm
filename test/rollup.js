@@ -1,10 +1,10 @@
 import path from 'path'
-import {compile} from '../index.js'
 import {promises as fs} from 'fs'
 import test from 'tape'
 import {rollup} from 'rollup'
 import React from 'react'
 import {renderToStaticMarkup} from 'react-dom/server.js'
+import rollupXdm from '../rollup.js'
 
 test('xdm (rollup)', async function (t) {
   var base = path.resolve(path.join('test', 'context'))
@@ -17,17 +17,7 @@ test('xdm (rollup)', async function (t) {
   var bundle = await rollup({
     input: path.join(base, 'rollup.mdx'),
     external: ['react/jsx-runtime'],
-    plugins: [
-      {
-        name: 'xdm',
-        // @ts-ignore TODO narrow the types of file.contents and file.map
-        async transform(contents, filePath) {
-          if (path.extname(filePath) !== '.mdx') return null
-          var file = await compile({contents, path: filePath})
-          return {code: file.contents, map: file.map}
-        }
-      }
-    ]
+    plugins: [rollupXdm()]
   })
 
   await fs.writeFile(

@@ -13,7 +13,7 @@
 This is mostly things I wrote for `@mdx-js/mdx` which are not slated to be
 released (soon?) plus some further changes that I think are good ideas (source
 maps, ESM only, defaulting to an automatic JSX runtime, no Babel, smallish
-browser size, more docs, esbuild plugin).
+browser size, more docs, esbuild and Rollup plugins).
 
 ## Install
 
@@ -199,10 +199,13 @@ See [§ MDX content][mdx-content] below on how to use the result.
 [`evaluateSync`](#evaluatesyncfile-options).
 There is no default export.
 
-`xdm/webpack.cjs` exports a [webpack][] loader as the default export.
+`xdm/esbuild.js` exports a function as the default export that returns an
+esbuild plugin.
 
-`xdm/esbuild.js` exports a function that returns an esbuild plugin as the
-default export.
+`xdm/rollup.js` exports a function as the default export that returns a Rollup
+plugin.
+
+`xdm/webpack.cjs` exports a [webpack][] loader as the default export.
 
 ### `compile(file, options?)`
 
@@ -905,29 +908,21 @@ await esbuild.build({
 
 #### Rollup
 
-Install `xdm` and use it directly.
+Install `xdm` and use `xdm/rollup.js`.
 Add something along these lines to your `rollup.config.js`:
 
 ```js
 import path from 'path'
-import {compile} from 'xdm'
+import xdm from 'xdm/rollup.js'
 
 export default {
   // …
   plugins: [
     // …
-    {
-      async transform(contents, fp) {
-        if (path.extname(fp) !== '.mdx') return null
-        var file = await compile({contents, path: fp}, {/* Options… */})
-        return {code: file.contents, map: file.map}
-      }
-    }
+    xdm({/* Options… */})
   ]
 }
 ```
-
-Source maps are supported when [`SourceMapGenerator`][sm] is passed in.
 
 If you use modern JavaScript features you might want to use Babel through
 [`@rollup/plugin-babel`](https://github.com/rollup/plugins/tree/master/packages/babel)
@@ -941,13 +936,7 @@ export default {
   // …
   plugins: [
     // …
-    {
-      async transform(contents, fp) {
-        if (path.extname(fp) !== '.mdx') return null
-        var file = await compile({contents, path: fp}, {/* Options… */})
-        return {code: file.contents, map: file.map}
-      }
-    },
+    xdm({/* Options… */}),
     babel({
       // Also run on what used to be `.mdx` (but is now JS):
       extensions: ['.js', '.jsx', '.es6', '.es', '.mjs', '.mdx'],
@@ -956,6 +945,21 @@ export default {
   ]
 }
 ```
+
+Source maps are supported when [`SourceMapGenerator`][sm] is passed in.
+
+`options` are the same as from [`compile`][compile], with the additions of:
+
+###### `options.extensions`
+
+List of extensions to support (`Array.<string>`, default: `['.mdx']`).
+
+###### `options.include`
+
+###### `options.exclude`
+
+List of [`picomatch`][pico] patterns to include and/or exclude
+(`string`, `RegExp`, `Array.<string|RegExp>`, default: `[]`).
 
 #### Webpack
 
@@ -997,29 +1001,9 @@ use: [
 
 [Snowpack](https://www.snowpack.dev) uses [Rollup][] (for local files) which can
 be extended.
-Install `xdm` and add something along these lines to your `snowpack.config.js`:
-
-```js
-var path = require('path')
-var {compile} = require('xdm')
-
-module.exports = {
-  // …
-  packageOptions: {
-    rollup: {
-      plugins: [
-        {
-          async transform(contents, fp) {
-            if (path.extname(fp) !== '.mdx') return null
-            var file = await compile({contents, path: fp}, {/* Options… */})
-            return {code: file.contents, map: file.map}
-          }
-        }
-      ]
-    }
-  }
-}
-```
+Unfortunately, `snowpack.config.js` is currently, ironically, CommonJS.
+So figuring out a way to `import('xdm/rollup.js')` and use it in Snowpack, is
+left as an exercise to the reader.
 
 #### Vite
 
@@ -2014,3 +1998,5 @@ Most of the work is done by:
 [micromark]: https://github.com/micromark/micromark
 
 [acorn]: https://github.com/acornjs/acorn
+
+[pico]: https://github.com/micromatch/picomatch#globbing-features
