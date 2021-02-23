@@ -200,10 +200,10 @@ See [§ MDX content][mdx-content] below on how to use the result.
 There is no default export.
 
 `xdm/esbuild.js` exports a function as the default export that returns an
-esbuild plugin.
+[esbuild][] plugin.
 
-`xdm/rollup.js` exports a function as the default export that returns a Rollup
-plugin.
+`xdm/rollup.js` exports a function as the default export that returns a
+[Rollup][] plugin.
 
 `xdm/webpack.cjs` exports a [webpack][] loader as the default export.
 
@@ -545,7 +545,7 @@ Run MDX.
 This does not support imports and it’s called **evaluate** because it `eval`s
 JavaScript.
 To get the full power of MDX it’s suggested to use `compile`, write to a file,
-and then run with Node or bundle with esbuild/Rollup/webpack.
+and then run with Node or bundle with [esbuild][]/[Rollup][]/[webpack][].
 But if you trust your content and know that it doesn’t contain imports,
 `evaluate` can work.
 
@@ -781,9 +781,9 @@ export const pi = 3.14
 <MyChart data={data} label={'Something with ' + pi} />
 ```
 
-Note that when using [`evaluate`][eval], `imports` are not supported but exports
-can still be used to define things in MDX (except `export … from`, which also
-imports).
+Note that when using [`evaluate`][eval], `import`s are not supported but
+`export`s can still be used to define things in MDX (except `export … from`,
+which also imports).
 
 ### Expressions
 
@@ -1008,7 +1008,7 @@ left as an exercise to the reader.
 #### Vite
 
 [Vite](https://vitejs.dev) supports [Rollup][] plugins directly in `plugins` in
-your `vite.config.js`:
+your `vite.config.js`.
 
 #### WMR
 
@@ -1989,9 +1989,11 @@ Most of the work is done by:
 
 [sm]: #optionssourcemapgenerator
 
-[webpack]: #webpack
+[esbuild]: #esbuild
 
 [rollup]: #rollup
+
+[webpack]: #webpack
 
 [caveats]: #caveats
 
