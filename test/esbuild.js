@@ -8,6 +8,9 @@ import {renderToStaticMarkup} from 'react-dom/server.js'
 
 test('xdm (esbuild)', async function (t) {
   var base = path.resolve(path.join('test', 'context'))
+  var message
+  var Content
+  var result
 
   await fs.writeFile(
     path.join(base, 'esbuild.mdx'),
@@ -25,7 +28,7 @@ test('xdm (esbuild)', async function (t) {
 
   /** @type {import("react").FunctionComponent} */
   // @ts-ignore file is dynamically generated
-  var Content = (await import('./context/esbuild.js')).default
+  Content = (await import('./context/esbuild.js')).default
 
   t.equal(
     renderToStaticMarkup(React.createElement(Content)),
@@ -51,7 +54,7 @@ test('xdm (esbuild)', async function (t) {
     })
     t.fail('esbuild should throw')
   } catch (error) {
-    var message = error.errors[0]
+    message = error.errors[0]
     delete message.detail
     t.deepEqual(
       message,
@@ -105,11 +108,11 @@ test('xdm (esbuild)', async function (t) {
     })
     t.fail('esbuild should throw')
   } catch (error) {
-    var result = JSON.parse(JSON.stringify(error))
+    result = JSON.parse(JSON.stringify(error))
 
-    ;[...result.errors, ...result.warnings].forEach((d) => {
-      delete d.detail
-    })
+    for (message of [...result.errors, ...result.warnings]) {
+      delete message.detail
+    }
 
     t.deepEqual(
       result,

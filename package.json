@@ -90,7 +90,7 @@
     "typescript": "^4.0.0",
     "vue": "^3.0.0",
     "webpack": "^5.0.0",
-    "xo": "^0.37.0"
+    "xo": "^0.38.0"
   },
   "scripts": {
     "format": "remark . -qfo && prettier . -w --loglevel warn && xo --fix",
@@ -118,7 +118,9 @@
     ],
     "prettier": true,
     "rules": {
+      "complexity": "off",
       "import/no-mutable-exports": "off",
+      "max-depth": "off",
       "new-cap": "off",
       "no-var": "off",
       "prefer-arrow-callback": "off",
