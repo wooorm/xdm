@@ -1011,6 +1011,17 @@ use: [
 // …
 ```
 
+Note that `webpack-cli` doesn’t support loaders using the ESM syntax directly or
+indirectly.  Because `xdm` is uses ESM, this means the `xdm/webpack.cjs` loader
+doesn’t just work with `webpack-cli`.  To use this loader with `webpack-cli`,
+set the `DISABLE_V8_COMPILE_CACHE=1` environment variable.  See
+[#11](https://github.com/wooorm/xdm/issues/11#issuecomment-785043772) for
+details.
+
+```sh
+DISABLE_V8_COMPILE_CACHE=1 webpack
+```
+
 ### Build systems
 
 #### Snowpack
