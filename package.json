@@ -27,6 +27,7 @@
     "lib/",
     "esbuild.js",
     "esbuild.d.ts",
+    "esm-loader.js",
     "index.js",
     "index.d.ts",
     "rollup.js",
@@ -97,8 +98,8 @@
   },
   "scripts": {
     "format": "remark . -qfo && prettier . -w --loglevel warn && xo --fix",
-    "test-api": "node test/index.js",
-    "test-coverage": "c8 --check-coverage --branches 100 --functions 100 --lines 100 --statements 100 --reporter lcov node --experimental-modules test/index.js",
+    "test-api": "node --experimental-loader=./esm-loader.js test/index.js",
+    "test-coverage": "c8 --check-coverage --branches 100 --functions 100 --lines 100 --statements 100 --reporter lcov node --experimental-modules --experimental-loader=./esm-loader.js test/index.js",
     "prebuild": "rimraf \"*.d.ts\" \"{lib,test}/**/*.d.ts\"",
     "build": "tsc",
     "test": "npm run format && npm run test-coverage && npm run build",
