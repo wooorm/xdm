@@ -15,6 +15,8 @@ released (soon?) plus some further changes that I think are good ideas (source
 maps, ESM only, defaulting to an automatic JSX runtime, no Babel, smallish
 browser size, more docs, esbuild and Rollup plugins).
 
+There are also some cool experimental features in [👩‍🔬 lab][lab]!
+
 ## Install
 
 Use Node 12 or later.
@@ -48,6 +50,8 @@ time.
     *   [`evaluate(file, options)`](#evaluatefile-options)
     *   [`evaluateSync(file, options)`](#evaluatesyncfile-options)
     *   [`createProcessor(options)`](#createprocessoroptions)
+*   [👩‍🔬 lab](#-lab)
+    *   [Importing `.mdx` files directly](#importing-mdx-files-directly)
 *   [MDX syntax](#mdx-syntax)
     *   [Markdown](#markdown)
     *   [JSX](#jsx)
@@ -208,6 +212,8 @@ There is no default export.
 [Rollup][] plugin.
 
 `xdm/webpack.cjs` exports a [webpack][] loader as the default export.
+
+There is also an `xdm/esm-loader.js`, see [👩‍🔬 lab][lab] for more info.
 
 ### `compile(file, options?)`
 
@@ -642,6 +648,46 @@ When possible please use the async `evaluate`.
 Create a unified processor to compile MDX to JS.
 Has the same options as [`compile`][compile], but returns a configured
 [`processor`](https://github.com/unifiedjs/unified#processor).
+
+## 👩‍🔬 lab
+
+This section describes experimental features!
+These do not adhere to semver and could break at any time!
+
+### Importing `.mdx` files directly
+
+[ESM loaders](https://nodejs.org/api/esm.html#esm_loaders) are a very
+experimental feature in Node, slated to change.
+
+Still, the let projects “hijack” imports, to do all sorts of fancy things!
+
+**xdm** comes with experimental support for importing `.mdx` files without any
+compilation, using `xdm/esm-loader.js`:
+
+Assuming `example.mdx` from [§ Use][use] exists, and our module `example.js`
+looks as follows:
+
+```js
+import {renderToStaticMarkup} from 'react-dom/server.js'
+import React from 'react'
+import Content from './example.mdx'
+
+console.log(renderToStaticMarkup(React.createElement(Content)))
+```
+
+Running that with:
+
+```sh
+node --experimental-loader=xdm/esm-loader.js example.js
+```
+
+…yields:
+
+```js
+<h1>Hello, World!</h1>
+```
+
+Currently, no options are supported.
 
 ## MDX syntax
 
@@ -2035,3 +2081,5 @@ Most of the work is done by:
 [acorn]: https://github.com/acornjs/acorn
 
 [pico]: https://github.com/micromatch/picomatch#globbing-features
+
+[lab]: #-lab
