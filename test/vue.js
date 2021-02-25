@@ -3,7 +3,7 @@ import {compile} from '../index.js'
 import {promises as fs} from 'fs'
 import test from 'tape'
 import {transformAsync as babel} from '@babel/core'
-import {h, createSSRApp} from 'vue'
+import vue from 'vue'
 import {renderToString} from '@vue/server-renderer'
 
 test('xdm (vue)', async function (t) {
@@ -18,6 +18,12 @@ test('xdm (vue)', async function (t) {
 
   var js = (await babel(jsx, {plugins: ['@vue/babel-plugin-jsx']})).code
 
+  // Vue used to be ESM, but it recently published a minor/patch w/o that.
+  js = js.replace(
+    /import {[^}]+} from "vue";/,
+    'import vue from "vue"; const {isVNode: _isVNode, createVNode: _createVNode, createTextVNode: _createTextVNode, Fragment: _Fragment} = vue'
+  )
+
   await fs.writeFile(path.join(base, 'vue.js'), js)
 
   /** @type {import("vue").Component} */
@@ -25,14 +31,14 @@ test('xdm (vue)', async function (t) {
   var Content = (await import('./context/vue.js')).default
 
   var result = await renderToString(
-    createSSRApp({
+    vue.createSSRApp({
       // App components.
       components: {Content},
       template: '<Content :components="mdxComponents" />',
       data() {
         return {
           mdxComponents: {
-            em: (props, context) => h('i', context.attrs, context.slots),
+            em: (props, context) => vue.h('i', context.attrs, context.slots),
             D: () => '<3'
           }
         }
