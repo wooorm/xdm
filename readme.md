@@ -659,7 +659,8 @@ These do not adhere to semver and could break at any time!
 [ESM loaders](https://nodejs.org/api/esm.html#esm_loaders) are a very
 experimental feature in Node, slated to change.
 
-Still, the let projects “hijack” imports, to do all sorts of fancy things!
+Still, the feature lets projects “hijack” imports, to do all sorts of fancy
+things!
 
 **xdm** comes with experimental support for importing `.mdx` files without any
 compilation, using `xdm/esm-loader.js`:
@@ -683,7 +684,7 @@ node --experimental-loader=xdm/esm-loader.js example.js
 
 …yields:
 
-```js
+```html
 <h1>Hello, World!</h1>
 ```
 
