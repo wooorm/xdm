@@ -15,5 +15,7 @@ export async function transformSource(source, context, defaultTransformSource) {
           await compile({contents: source, path: context.url})
         ).replace(/\/jsx-runtime(?=["'])/g, '$&.js')
       }
-    : defaultTransformSource(source, context, defaultTransformSource)
+    : // For some reason, on Erbium, c8 is missing the following two lines.
+      /* c8 ignore next 2 */
+      defaultTransformSource(source, context, defaultTransformSource)
 }
