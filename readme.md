@@ -705,7 +705,7 @@ looks as follows:
 ```js
 var React = require('react')
 var {renderToStaticMarkup} = require('react-dom/server.js')
-var Content = require('./context/register.mdx')
+var Content = require('./example.mdx')
 
 console.log(renderToStaticMarkup(React.createElement(Content)))
 ```
