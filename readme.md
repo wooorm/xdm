@@ -52,6 +52,7 @@ time.
     *   [`createProcessor(options)`](#createprocessoroptions)
 *   [👩‍🔬 lab](#-lab)
     *   [Importing `.mdx` files directly](#importing-mdx-files-directly)
+    *   [Requiring `.mdx` files directly](#requiring-mdx-files-directly)
 *   [MDX syntax](#mdx-syntax)
     *   [Markdown](#markdown)
     *   [JSX](#jsx)
@@ -213,7 +214,8 @@ There is no default export.
 
 `xdm/webpack.cjs` exports a [webpack][] loader as the default export.
 
-There is also an `xdm/esm-loader.js`, see [👩‍🔬 lab][lab] for more info.
+There is also `xdm/esm-loader.js` and `xdm/register.cjs`, see [👩‍🔬 lab][lab]
+for more info.
 
 ### `compile(file, options?)`
 
@@ -658,12 +660,10 @@ These do not adhere to semver and could break at any time!
 
 [ESM loaders](https://nodejs.org/api/esm.html#esm_loaders) are a very
 experimental feature in Node, slated to change.
-
 Still, the feature lets projects “hijack” imports, to do all sorts of fancy
 things!
-
-**xdm** comes with experimental support for importing `.mdx` files without any
-compilation, using `xdm/esm-loader.js`:
+**xdm** comes with experimental support for importing `.mdx` files with
+on-the-fly compilation, using `xdm/esm-loader.js`:
 
 Assuming `example.mdx` from [§ Use][use] exists, and our module `example.js`
 looks as follows:
@@ -689,6 +689,43 @@ node --experimental-loader=xdm/esm-loader.js example.js
 ```
 
 Currently, no options are supported.
+
+### Requiring `.mdx` files directly
+
+[`require.extensions`](https://nodejs.org/api/modules.html#modules_require_extensions)
+is a deprecated feature in Node.
+Still, the feature lets projects “hijack” `require` calls, to do all sorts of
+fancy things!
+**xdm** comes with support for requiring `.mdx` files with on-the-fly
+evaluation, using `xdm/register.cjs`:
+
+Assuming `example.mdx` from [§ Use][use] exists, and our script `example.cjs`
+looks as follows:
+
+```js
+var React = require('react')
+var {renderToStaticMarkup} = require('react-dom/server.js')
+var Content = require('./context/register.mdx')
+
+console.log(renderToStaticMarkup(React.createElement(Content)))
+```
+
+Running that with:
+
+```sh
+node -r xdm/register.cjs example.cjs
+```
+
+…yields:
+
+```html
+<h1>Hello, World!</h1>
+```
+
+Currently, no options are supported.
+
+The register hook uses [`evaluate`][eval].
+That means `import` (and `export … from`) are not supported in `.mdx` files.
 
 ## MDX syntax
 
