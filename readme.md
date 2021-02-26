@@ -1946,7 +1946,7 @@ Then you can add a plugin here: `remark-gfm` or `remark-frontmatter`,
 respectively.
 
 After markdown, we go to [hast](https://github.com/syntax-tree/hast) (HTML).
-This transormation is done by
+This transformation is done by
 [`mdast-util-to-hast`](https://github.com/syntax-tree/mdast-util-to-hast).
 Wait, why, what does HTML have to do with it?
 Part of the reason is that we care about HTML semantics: we want to know that
