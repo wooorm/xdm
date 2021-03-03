@@ -67,6 +67,24 @@ test('xdm (evaluate)', async function (t) {
     'should support an `import from` w/ `evaluate` and given a `baseUrl`'
   )
 
+  t.equal(
+    renderToStaticMarkup(
+      React.createElement(
+        (
+          await evaluate(
+            'import {number} from "' +
+              new URL('./context/data.js', import.meta.url) +
+              '"\n\n{number}',
+            // @ts-ignore runtime.js does not have a typing
+            {baseUrl: import.meta.url, ...runtime}
+          )
+        ).default
+      )
+    ),
+    '3.14',
+    'should support an `import` w/ a full url w/ `evaluate` and `baseUrl`'
+  )
+
   t.match(
     renderToStaticMarkup(
       React.createElement(
@@ -80,7 +98,7 @@ test('xdm (evaluate)', async function (t) {
       )
     ),
     /<div class="css-\w+">Hi!<\/div>/,
-    'should support an import default w/ `evaluate` and `baseUrl`'
+    'should support an import default and a bare specifier w/ `evaluate` and `baseUrl`'
   )
 
   t.match(
