@@ -559,14 +559,18 @@ When possible please use the async `compile`.
 ### `evaluate(file, options)`
 
 Run MDX.
-This does not support imports and it’s called **evaluate** because it `eval`s
-JavaScript.
+It’s called **evaluate** because it `eval`s JavaScript.
 To get the full power of MDX it’s suggested to use `compile`, write to a file,
 and then run with Node or bundle with [esbuild][]/[Rollup][]/[webpack][].
-But if you trust your content and know that it doesn’t contain imports,
-`evaluate` can work.
+But if you trust your content, `evaluate` can work.
 
-It *does* support top-level await!
+`evaluate` wraps code in an [`AsyncFunction`][async-function], `evaluateSync`
+uses a normal [`Function`][function].
+That means that `evaluate` also supports top-level await.
+
+Typically, `import` (or `export … from`) does not work.
+But there is experimental support if a `baseUrl` is passed.
+See [Imports in `evaluate`](#imports-in-evaluate) in [👩‍🔬 lab][lab]!
 
 ###### `file`
 
@@ -618,6 +622,9 @@ var {default: Content} = await evaluate('# hi', {...provider, ...runtime, ...oth
 
 ###### `options.baseUrl`
 
+Where to resolve relative imports from (`string?`, example: `import.meta.url`).
+
+Experimental!
 See [Imports in `evaluate`](#imports-in-evaluate) in [👩‍🔬 lab][lab]!
 
 ###### Returns
@@ -731,12 +738,14 @@ node -r xdm/register.cjs example.cjs
 
 Currently, no options are supported.
 
-The register hook uses [`evaluate`][eval].
-That means `import` (and `export … from`) are not supported in `.mdx` files.
+The register hook uses [`evaluateSync`][eval].
+That means `import` (and `export … from`) are not supported when requiring
+`.mdx` files.
 
 ### Imports in `evaluate`
 
-`evaluate` supports top-level await.
+`evaluate` wraps code in an [`AsyncFunction`][async-function], which means that
+it also supports top-level await.
 So, as a follow up, **xdm** can turn import statements (`import {x} from 'y'`)
 into import expressions (`const {x} = await import('y')`).
 
@@ -744,17 +753,46 @@ There’s one catch: where to import from?
 You must pass a `baseUrl` to [`evaluate`][eval].
 Typically, you should use `import.meta.url`.
 
-Assuming `example.mdx` from [§ Use][use] exists, and our script `example.cjs`
-looks as follows:
+Say we have a module `data.js`:
+
+```js
+export var number = 3.14
+```
+
+And our module `example.js` looks as follows:
 
 ```js
 import * as runtime from 'react/jsx-runtime.js'
 import {evaluate} from 'xdm'
 
-var {x} = await evaluate('export {x} from "./data.js"', {...runtime, baseUrl: import.meta.url})
+main()
 
-console.log(x)
+
+async function main() {
+  var baseUrl = 'https://a.full/url' // Typically `import.meta.url`
+  var {number} = await evaluate(
+    'export {number} from "./data.js"',
+    {...runtime, baseUrl}
+  )
+
+  console.log(number)
+}
 ```
+
+<details>
+<summary>Show evaluated JS</summary>
+
+```js
+;(async function (_runtime) {
+  const {number} = await import('file:///Users/user/path/to/data.js')
+
+  function MDXContent(_props) { /* … */ }
+
+  return {number, default: MDXContent}
+})(runtime)
+```
+
+</details>
 
 ## MDX syntax
 
@@ -914,6 +952,10 @@ Note that when using [`evaluate`][eval], `import`s are not supported but
 `export`s can still be used to define things in MDX (except `export … from`,
 which also imports).
 
+> There is experimental support for `import` (and `export … from`) in `evaluate`
+> if a `baseUrl` is passed.
+> See [Imports in `evaluate`](#imports-in-evaluate) in [👩‍🔬 lab][lab]!
+
 ### Expressions
 
 Braces can be used to embed JavaScript expressions in MDX:
@@ -1004,8 +1046,7 @@ export default function Layout({children}) => <main>{children}</main>
 All the things.
 ```
 
-The layout can also be imported and *then* exported with an `export … from` (but
-not when using [`evaluate`][eval]):
+The layout can also be imported and *then* exported with an `export … from`:
 
 ```js
 export {Layout as default} from './components.js'
@@ -2120,6 +2161,10 @@ Most of the work is done by:
 [rehype-plugins]: https://github.com/rehypejs/rehype/blob/main/doc/plugins.md#list-of-plugins
 
 [gfm]: https://github.com/remarkjs/remark-gfm
+
+[async-function]: https://developer.mozilla.org/docs/JavaScript/Reference/Global_Objects/AsyncFunction
+
+[function]: https://developer.mozilla.org/docs/JavaScript/Reference/Global_Objects/Function
 
 [compile]: #compilefile-options
 
