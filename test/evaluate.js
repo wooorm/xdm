@@ -51,6 +51,22 @@ test('xdm (evaluate)', async function (t) {
     'should evaluate (sync)'
   )
 
+  t.equal(
+    renderToStaticMarkup(
+      React.createElement(
+        (
+          await evaluate(
+            'import {number} from "./context/data.js"\n\n{number}',
+            // @ts-ignore runtime.js does not have a typing
+            {baseUrl: import.meta.url, ...runtime}
+          )
+        ).default
+      )
+    ),
+    '3.14',
+    'should support an `import from` w/ `evaluate` and given a `baseUrl`'
+  )
+
   // @ts-ignore runtime.js does not have a typing
   var mod = await evaluate('export const a = 1\n\n{a}', runtime)
 
@@ -123,8 +139,32 @@ test('xdm (evaluate)', async function (t) {
       // @ts-ignore runtime.js does not have a typing
       evaluateSync('export {a} from "b"', runtime)
     },
-    /Cannot use `export … from` in contained MDX/,
+    /Cannot use `import` or `export … from` in `evaluateSync`/,
     'should throw on an export from'
+  )
+
+  t.equal(
+    (
+      await evaluate(
+        'export {number} from "./context/data.js"',
+        // @ts-ignore runtime.js does not have a typing
+        {baseUrl: import.meta.url, ...runtime}
+      )
+    ).number,
+    3.14,
+    'should support an `export from` w/ `evaluate` and given a `baseUrl`'
+  )
+
+  t.equal(
+    (
+      await evaluate(
+        'import {number} from "./context/data.js"\nexport {number}',
+        // @ts-ignore runtime.js does not have a typing
+        {baseUrl: import.meta.url, ...runtime}
+      )
+    ).number,
+    3.14,
+    'should support an `export` w/ `evaluate` and given a `baseUrl`'
   )
 
   t.throws(
@@ -132,7 +172,7 @@ test('xdm (evaluate)', async function (t) {
       // @ts-ignore runtime.js does not have a typing
       evaluateSync('export * from "a"', runtime)
     },
-    /Cannot use `export \* from` in contained MDX/,
+    /Cannot use `import` or `export … from` in `evaluateSync`/,
     'should throw on an export all from'
   )
 
@@ -141,7 +181,7 @@ test('xdm (evaluate)', async function (t) {
       // @ts-ignore runtime.js does not have a typing
       evaluateSync('import {a} from "b"', runtime)
     },
-    /Cannot use `import` in contained MDX/,
+    /Cannot use `import` or `export … from` in `evaluateSync`/,
     'should throw on an import'
   )
 
@@ -150,7 +190,7 @@ test('xdm (evaluate)', async function (t) {
       // @ts-ignore runtime.js does not have a typing
       evaluateSync('import a from "b"', runtime)
     },
-    /Cannot use `import` in contained MDX/,
+    /Cannot use `import` or `export … from` in `evaluateSync`/,
     'should throw on an import default'
   )
 

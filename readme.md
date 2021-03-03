@@ -53,6 +53,7 @@ time.
 *   [👩‍🔬 lab](#-lab)
     *   [Importing `.mdx` files directly](#importing-mdx-files-directly)
     *   [Requiring `.mdx` files directly](#requiring-mdx-files-directly)
+    *   [Imports in `evaluate`](#imports-in-evaluate)
 *   [MDX syntax](#mdx-syntax)
     *   [Markdown](#markdown)
     *   [JSX](#jsx)
@@ -565,6 +566,8 @@ and then run with Node or bundle with [esbuild][]/[Rollup][]/[webpack][].
 But if you trust your content and know that it doesn’t contain imports,
 `evaluate` can work.
 
+It *does* support top-level await!
+
 ###### `file`
 
 See [`compile`][compile].
@@ -612,6 +615,10 @@ var {default: Content} = await evaluate('# hi', {...provider, ...runtime, ...oth
 ```
 
 </details>
+
+###### `options.baseUrl`
+
+See [Imports in `evaluate`](#imports-in-evaluate) in [👩‍🔬 lab][lab]!
 
 ###### Returns
 
@@ -726,6 +733,28 @@ Currently, no options are supported.
 
 The register hook uses [`evaluate`][eval].
 That means `import` (and `export … from`) are not supported in `.mdx` files.
+
+### Imports in `evaluate`
+
+`evaluate` supports top-level await.
+So, as a follow up, **xdm** can turn import statements (`import {x} from 'y'`)
+into import expressions (`const {x} = await import('y')`).
+
+There’s one catch: where to import from?
+You must pass a `baseUrl` to [`evaluate`][eval].
+Typically, you should use `import.meta.url`.
+
+Assuming `example.mdx` from [§ Use][use] exists, and our script `example.cjs`
+looks as follows:
+
+```js
+import * as runtime from 'react/jsx-runtime.js'
+import {evaluate} from 'xdm'
+
+var {x} = await evaluate('export {x} from "./data.js"', {...runtime, baseUrl: import.meta.url})
+
+console.log(x)
+```
 
 ## MDX syntax
 

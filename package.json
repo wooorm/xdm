@@ -100,8 +100,8 @@
   },
   "scripts": {
     "format": "remark . -qfo && prettier . -w --loglevel warn && xo --fix",
-    "test-api": "node --experimental-loader=./esm-loader.js test/index.js && node test/register.cjs",
-    "test-coverage": "c8 --check-coverage --branches 100 --functions 100 --lines 100 --statements 100 --reporter lcov node --experimental-modules --experimental-loader=./esm-loader.js test/index.js",
+    "test-api": "node --no-warnings --experimental-loader=./esm-loader.js test/index.js && node test/register.cjs",
+    "test-coverage": "c8 --check-coverage --branches 100 --functions 100 --lines 100 --statements 100 --reporter lcov node --no-warnings --experimental-loader=./esm-loader.js test/index.js",
     "prebuild": "rimraf \"*.d.ts\" \"{lib,test}/**/*.d.ts\"",
     "build": "tsc",
     "test": "npm run format && npm run test-coverage && npm run build",
