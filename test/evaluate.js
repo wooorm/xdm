@@ -67,6 +67,38 @@ test('xdm (evaluate)', async function (t) {
     'should support an `import from` w/ `evaluate` and given a `baseUrl`'
   )
 
+  t.match(
+    renderToStaticMarkup(
+      React.createElement(
+        (
+          await evaluate(
+            'import x from "theme-ui"\n\n<x.Text>Hi!</x.Text>',
+            // @ts-ignore runtime.js does not have a typing
+            {baseUrl: import.meta.url, ...runtime}
+          )
+        ).default
+      )
+    ),
+    /<div class="css-\w+">Hi!<\/div>/,
+    'should support an import default w/ `evaluate` and `baseUrl`'
+  )
+
+  t.match(
+    renderToStaticMarkup(
+      React.createElement(
+        (
+          await evaluate(
+            'import * as x from "theme-ui"\n\n<x.Text>Hi!</x.Text>',
+            // @ts-ignore runtime.js does not have a typing
+            {baseUrl: import.meta.url, ...runtime}
+          )
+        ).default
+      )
+    ),
+    /<div class="css-\w+">Hi!<\/div>/,
+    'should support an import as w/ `evaluate` and `baseUrl`'
+  )
+
   // @ts-ignore runtime.js does not have a typing
   var mod = await evaluate('export const a = 1\n\n{a}', runtime)
 
