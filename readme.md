@@ -702,7 +702,21 @@ node --experimental-loader=xdm/esm-loader.js example.js
 <h1>Hello, World!</h1>
 ```
 
-Currently, no options are supported.
+To pass options, you can make your own loader, such as this `myloader.js`:
+
+```js
+import {createLoader} from 'xdm/esm-loader.js'
+
+var {getFormat, transformSource} = createLoader(/* Options… */)
+
+export {getFormat, transformSource}
+```
+
+Which can then be used with `node --experimental-loader=./my-loader.js`
+
+Node itself does not yet support multiple loaders.
+But it is possible to combine multiple loaders with
+[`@node-loader/core`](https://github.com/node-loader/node-loader-core)
 
 ### Requiring `.mdx` files directly
 
