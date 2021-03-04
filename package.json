@@ -149,7 +149,7 @@
       },
       {
         "files": [
-          "lib/evaluate.js"
+          "lib/run.js"
         ],
         "rules": {
           "no-new-func": "off"
