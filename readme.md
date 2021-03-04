@@ -289,6 +289,45 @@ List of recma plugins, presets, and pairs.
 This is a new ecosystem, currently in beta, to transform
 [esast](https://github.com/syntax-tree/esast) (JavaScript) trees.
 
+###### `options.format`
+
+Format the file is in (`'mdx' | 'markdown' | 'detect'`, default: `'detect'`).
+
+*   `'mdx'` — treat file as [MDX][mdx-syntax]
+*   `'markdown'` — treat file as plain vanilla markdown
+*   `'detect'` — use `'markdown'` for files with an extension in
+    `markdownExtensions` and `'mdx'` otherwise
+
+`'detect'` cannot detect markdown if a file is passed without a path.
+So pass a full vfile (with `path`) or an object with a path.
+
+<details>
+<summary>Example</summary>
+
+```js
+compile({contents: '…'}) // Seen as MDX
+compile({contents: '…'}, {format: 'markdown'}) // Seen as markdown
+compile({contents: '…', path: 'readme.md'}) // Seen as markdown
+
+// Please do not use `.md` for MDX as other tools won’t know how to handle it.
+compile({contents: '…', path: 'readme.md'}, {format: 'mdx'}) // Seen as MDX
+compile({contents: '…', path: 'readme.md'}, {markdownExtensions: []}) // Seen as MDX
+```
+
+</details>
+
+###### `options.markdownExtensions`
+
+List of markdown extensions, with dot (`Array.<string>`, default: `['.md',
+'.markdown', '.mdown', '.mkdn', '.mkd', '.mdwn', '.mkdown', '.ron']`).
+
+###### `options.mdxExtensions`
+
+List of MDX extensions, with dot (`Array.<string>`, default: `['.mdx']`).
+Has no effect in `compile` or `evaluate`, but does affect [esbuild][],
+[Rollup][], and the experimental ESM loader + register hook (see [👩‍🔬
+lab][lab]).
+
 ###### `options.SourceMapGenerator`
 
 The `SourceMapGenerator` class from [`source-map`][source-map] (optional).
@@ -664,6 +703,9 @@ When possible please use the async `evaluate`.
 Create a unified processor to compile MDX to JS.
 Has the same options as [`compile`][compile], but returns a configured
 [`processor`](https://github.com/unifiedjs/unified#processor).
+
+Note that `format: 'detect'` does not work here: only `'md'` or `'mdx'` are
+allowed (and `'mdx'` is the default).
 
 ## 👩‍🔬 lab
 
