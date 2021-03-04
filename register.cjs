@@ -1,3 +1,6 @@
 'use strict'
-/* eslint-disable-next-line import/no-unassigned-import */
-require('./lib/integration/require.cjs')
+
+var runtime = require('react/jsx-runtime')
+var register = require('./lib/integration/require.cjs')
+
+register({...runtime})

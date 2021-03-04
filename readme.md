@@ -712,11 +712,11 @@ var {getFormat, transformSource} = createLoader(/* Options… */)
 export {getFormat, transformSource}
 ```
 
-Which can then be used with `node --experimental-loader=./my-loader.js`
+Which can then be used with `node --experimental-loader=./my-loader.js`.
 
 Node itself does not yet support multiple loaders.
 But it is possible to combine multiple loaders with
-[`@node-loader/core`](https://github.com/node-loader/node-loader-core)
+[`@node-loader/core`](https://github.com/node-loader/node-loader-core).
 
 ### Requiring `.mdx` files directly
 
@@ -750,7 +750,17 @@ node -r xdm/register.cjs example.cjs
 <h1>Hello, World!</h1>
 ```
 
-Currently, no options are supported.
+To pass options, you can make your own hook, such as this `my-hook.cjs`:
+
+```js
+'use strict'
+
+var register = require('xdm/lib/integration/require.cjs')
+
+register({/* Options… */})
+```
+
+Which can then be used with `node -r ./hook.js`.
 
 The register hook uses [`evaluateSync`][eval].
 That means `import` (and `export … from`) are not supported when requiring
