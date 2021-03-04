@@ -2025,7 +2025,7 @@ until you hit the API section is required reading).
 
 **xdm** is a unified pipeline — wrapped so that most folks don’t need to know
 about unified:
-[`core.js#L76-L102`](https://github.com/wooorm/xdm/blob/main/lib/core.js#L76-L102).
+[`core.js#L76-L102`](https://github.com/wooorm/xdm/blob/main/lib/core.js#L58-L84).
 The processor goes through these steps:
 
 1.  Parse MDX (serialized markdown with embedded JSX, ESM, and expressions)

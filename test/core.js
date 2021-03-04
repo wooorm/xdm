@@ -960,7 +960,7 @@ test('theme-ui', async function (t) {
 
 /**
  *
- * @param {import('../lib/core.js').VFileCompatible} input
+ * @param {import('../lib/compile.js').VFileCompatible} input
  * @param {{keepImport?: boolean, returnModule?: boolean}} [options]
  * @return {Promise<import('../lib/evaluate.js').ExportMap["default"] & import('../lib/evaluate.js').ExportMap>}
  */
