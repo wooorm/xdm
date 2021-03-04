@@ -52,8 +52,10 @@
     "stringify-entities": "^3.1.0",
     "unified": "^9.0.0",
     "unist-builder": "^2.0.0",
+    "unist-util-position-from-estree": "^1.0.0",
     "unist-util-stringify-position": "^2.0.0",
-    "unist-util-visit": "^2.0.0"
+    "unist-util-visit": "^2.0.0",
+    "vfile": "^4.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",

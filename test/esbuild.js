@@ -26,7 +26,7 @@ test('xdm (esbuild)', async function (t) {
     plugins: [esbuildXdm()]
   })
 
-  /** @type {import("react").FunctionComponent} */
+  /** @type {import('react').FunctionComponent} */
   // @ts-ignore file is dynamically generated
   Content = (await import('./context/esbuild.js')).default
 
