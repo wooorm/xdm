@@ -784,7 +784,7 @@ async function main() {
 
 ```js
 ;(async function (_runtime) {
-  const {number} = await import('file:///Users/user/path/to/data.js')
+  const {number} = await import('https://a.full/data.js')
 
   function MDXContent(_props) { /* … */ }
 
