@@ -165,7 +165,7 @@
       },
       {
         "files": [
-          "lib/esbuild.js"
+          "lib/integration/esbuild.js"
         ],
         "rules": {
           "eqeqeq": [
