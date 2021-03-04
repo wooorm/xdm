@@ -1362,6 +1362,11 @@ import Post from './post.mdx'
 <Post components={{em: props => <i {...props} />}} />
 ```
 
+> What about React server components?
+> While they are currently very alpha, and not shipping soon, there is an
+> [experimental demo](https://wooorm.com/server-components-mdx-demo/)
+> combining xdm with RSC.
+
 #### Preact
 
 Define a different import source in [options][compile]:
