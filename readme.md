@@ -624,6 +624,15 @@ See [Imports in `evaluate`](#imports-in-evaluate) in [👩‍🔬 lab][lab]!
 
 See [`compile`][compile].
 
+###### `options`
+
+Most options are the same as [`compile`][compile], with the following
+exceptions:
+
+*   `providerImportSource` is replaced by `useMDXComponents`
+*   `jsx*` and `pragma*` options are replaced by `jsx`, `jsxs`, and `Fragment`
+*   `baseUrl` is an experiment that only works here
+
 ###### `options.jsx`
 
 ###### `options.jsxs`
@@ -643,14 +652,6 @@ var {default: Content} = await evaluate('# hi', {...runtime, ...otherOptions})
 ```
 
 </details>
-
-###### `options.remarkPlugins`
-
-###### `options.rehypePlugins`
-
-###### `options.recmaPlugins`
-
-Same as for [`compile`][compile].
 
 ###### `options.useMDXComponents`
 
