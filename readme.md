@@ -2069,6 +2069,13 @@ export default MDXContent
 
 *   No providers by default
 *   No runtime at all
+*   `export`s work in `evaluate`
+
+**Input**:
+
+*   ± same as `main` branch of `@mdx-js/mdx`
+*   Fix JSX tags to prevent `<p><h1 /></p>`
+*   Plain markdown can be loaded (`format: 'md'`)
 
 **Output**:
 
@@ -2083,10 +2090,11 @@ export default MDXContent
 *   Exported things are available from `evaluate`
 *   Fix a bug with encoding `"` in attributes
 
-**Input**:
+**Experiments**:
 
-*   ± same as `main` branch of `@mdx-js/mdx`
-*   Fix JSX tags to prevent `<p><h1 /></p>`
+*   Add support for `import Content from './file.mdx'` in Node
+*   Add support for `require('./file.mdx')` in Node
+*   Add support for imports in `evaluate`
 
 ## Architecture
 
