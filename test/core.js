@@ -7,6 +7,7 @@ import {render} from 'preact-render-to-string'
 import React from 'react'
 import {renderToStaticMarkup} from 'react-dom/server.js'
 import rehypeKatex from 'rehype-katex'
+import rehypeRaw from 'rehype-raw'
 import remarkFootnotes from 'remark-footnotes'
 import remarkFrontmatter from 'remark-frontmatter'
 import remarkGfm from 'remark-gfm'
@@ -14,7 +15,7 @@ import remarkMath from 'remark-math'
 import test from 'tape'
 import {components as themeUiComponents, ThemeProvider} from 'theme-ui'
 import {base as themeUiBaseTheme} from '@theme-ui/preset-base'
-import {compile, compileSync} from '../index.js'
+import {compile, compileSync, createProcessor, nodeTypes} from '../index.js'
 
 test('xdm', async function (t) {
   t.equal(
@@ -414,6 +415,162 @@ test('xdm', async function (t) {
       'should throw if a required component is not passed or given to `MDXProvider`'
     )
   }
+
+  t.equal(
+    renderToStaticMarkup(
+      React.createElement(await run(createProcessor().processSync('x')))
+    ),
+    '<p>x</p>',
+    'should support `createProcessor`'
+  )
+
+  t.equal(
+    renderToStaticMarkup(
+      React.createElement(
+        await run(createProcessor({format: 'md'}).processSync('\tx'))
+      )
+    ),
+    '<pre><code>x\n</code></pre>',
+    'should support `format: md`'
+  )
+
+  t.equal(
+    renderToStaticMarkup(
+      React.createElement(
+        await run(createProcessor({format: 'mdx'}).processSync('\tx'))
+      )
+    ),
+    '<p>x</p>',
+    'should support `format: mdx`'
+  )
+
+  try {
+    // @ts-ignore Sure the types prohibit it but what if someone does it anyway?
+    createProcessor({format: 'detect'})
+    t.fail()
+  } catch (error) {
+    t.equal(
+      error.message,
+      "Incorrect `format: 'detect'`: `createProcessor` can support either `md` or `mdx`; it does not support detecting the format",
+      'should not support `format: detect`'
+    )
+  }
+
+  t.equal(
+    renderToStaticMarkup(
+      React.createElement(await run(await compile({contents: '\tx'})))
+    ),
+    '<p>x</p>',
+    'should detect as `mdx` by default'
+  )
+
+  t.equal(
+    renderToStaticMarkup(
+      React.createElement(
+        await run(await compile({contents: '\tx', path: 'y.md'}))
+      )
+    ),
+    '<pre><code>x\n</code></pre>',
+    'should detect `.md` as `md`'
+  )
+
+  t.equal(
+    renderToStaticMarkup(
+      React.createElement(
+        await run(await compile({contents: '\tx', path: 'y.mdx'}))
+      )
+    ),
+    '<p>x</p>',
+    'should detect `.mdx` as `mdx`'
+  )
+
+  t.equal(
+    renderToStaticMarkup(
+      React.createElement(
+        await run(
+          await compile({contents: '\tx', path: 'y.md'}, {format: 'mdx'})
+        )
+      )
+    ),
+    '<p>x</p>',
+    'should not “detect” `.md` w/ `format: mdx`'
+  )
+
+  t.equal(
+    renderToStaticMarkup(
+      React.createElement(
+        await run(
+          await compile({contents: '\tx', path: 'y.mdx'}, {format: 'md'})
+        )
+      )
+    ),
+    '<pre><code>x\n</code></pre>',
+    'should not “detect” `.mdx` w/ `format: md`'
+  )
+
+  t.equal(
+    renderToStaticMarkup(
+      React.createElement(
+        await run(await compile({contents: '<q>r</q>', path: 's.md'}))
+      )
+    ),
+    '<p>r</p>',
+    'should not support HTML in markdown by default'
+  )
+
+  t.equal(
+    renderToStaticMarkup(
+      React.createElement(
+        await run(
+          await compile(
+            {contents: '<q>r</q>', path: 's.md'},
+            {rehypePlugins: [rehypeRaw]}
+          )
+        )
+      )
+    ),
+    '<p><q>r</q></p>',
+    'should support HTML in markdown w/ `rehype-raw`'
+  )
+
+  t.match(
+    String(
+      await compile('a', {
+        format: 'md',
+        remarkPlugins: [
+          () => (/** @type {import('hast').Root} */ tree) => {
+            tree.children.unshift({
+              // @ts-ignore MDXHAST.
+              type: 'mdxjsEsm',
+              value: '',
+              data: {
+                estree: {
+                  type: 'Program',
+                  comments: [],
+                  body: [
+                    {
+                      type: 'VariableDeclaration',
+                      kind: 'var',
+                      declarations: [
+                        {
+                          type: 'VariableDeclarator',
+                          id: {type: 'Identifier', name: 'a'},
+                          init: {type: 'Literal', value: 1}
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            })
+          }
+        ],
+        rehypePlugins: [[rehypeRaw, {passThrough: nodeTypes}]]
+      })
+    ),
+    /var a = 1/,
+    'should support injected MDX nodes w/ `rehype-raw`'
+  )
 
   t.end()
 })
@@ -973,7 +1130,8 @@ async function run(input, options = {}) {
   // Extensionless imports only work in faux-ESM (webpack and such),
   // *not* in Node by default: *except* if there’s an export map defined
   // in `package.json`.
-  // React doesn’t have one yet, so add the extension for ’em:
+  // React doesn’t have one yet (it’s on `master` but not yet released), so add
+  // the extension for ’em:
   if (!options.keepImport) {
     doc = doc.replace(/\/jsx-runtime(?=["'])/g, '$&.js')
   }

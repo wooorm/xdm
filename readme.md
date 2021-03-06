@@ -291,14 +291,15 @@ This is a new ecosystem, currently in beta, to transform
 
 ###### `options.format`
 
-Format the file is in (`'mdx' | 'markdown' | 'detect'`, default: `'detect'`).
+Format the file is in (`'detect' | 'mdx' | 'md'`, default: `'detect'`).
 
+*   `'detect'` — use `'markdown'` for files with an extension in `mdExtensions`
+    and `'mdx'` otherwise
 *   `'mdx'` — treat file as [MDX][mdx-syntax]
-*   `'markdown'` — treat file as plain vanilla markdown
-*   `'detect'` — use `'markdown'` for files with an extension in
-    `markdownExtensions` and `'mdx'` otherwise
+*   `'md'` — treat file as plain vanilla markdown
 
-`'detect'` cannot detect markdown if a file is passed without a path.
+The format cannot be detected if a file is passed without a path or extension:
+`mdx` will be assumed.
 So pass a full vfile (with `path`) or an object with a path.
 
 <details>
@@ -306,17 +307,25 @@ So pass a full vfile (with `path`) or an object with a path.
 
 ```js
 compile({contents: '…'}) // Seen as MDX
-compile({contents: '…'}, {format: 'markdown'}) // Seen as markdown
+compile({contents: '…'}, {format: 'md'}) // Seen as markdown
 compile({contents: '…', path: 'readme.md'}) // Seen as markdown
 
 // Please do not use `.md` for MDX as other tools won’t know how to handle it.
 compile({contents: '…', path: 'readme.md'}, {format: 'mdx'}) // Seen as MDX
-compile({contents: '…', path: 'readme.md'}, {markdownExtensions: []}) // Seen as MDX
+compile({contents: '…', path: 'readme.md'}, {mdExtensions: []}) // Seen as MDX
 ```
 
 </details>
 
-###### `options.markdownExtensions`
+This option mostly affects [esbuild][] and [Rollup][] plugins, and the
+experimental ESM loader + register hook (see [👩‍🔬 lab][lab]), because in those
+it affects *which* files are “registered”:
+
+*   `format: 'mdx'` registers the extensions in `options.mdxExtensions`
+*   `format: 'md'` registers the extensions in `options.mdExtensions`
+*   `format: 'detect'` registers both lists of extensions
+
+###### `options.mdExtensions`
 
 List of markdown extensions, with dot (`Array.<string>`, default: `['.md',
 '.markdown', '.mdown', '.mkdn', '.mkd', '.mdwn', '.mkdown', '.ron']`).
@@ -1185,10 +1194,6 @@ export default {
 Source maps are supported when [`SourceMapGenerator`][sm] is passed in.
 
 `options` are the same as from [`compile`][compile], with the additions of:
-
-###### `options.extensions`
-
-List of extensions to support (`Array.<string>`, default: `['.mdx']`).
 
 ###### `options.include`
 
