@@ -289,6 +289,54 @@ List of recma plugins, presets, and pairs.
 This is a new ecosystem, currently in beta, to transform
 [esast](https://github.com/syntax-tree/esast) (JavaScript) trees.
 
+###### `options.format`
+
+Format the file is in (`'detect' | 'mdx' | 'md'`, default: `'detect'`).
+
+*   `'detect'` — use `'markdown'` for files with an extension in `mdExtensions`
+    and `'mdx'` otherwise
+*   `'mdx'` — treat file as [MDX][mdx-syntax]
+*   `'md'` — treat file as plain vanilla markdown
+
+The format cannot be detected if a file is passed without a path or extension:
+`mdx` will be assumed.
+So pass a full vfile (with `path`) or an object with a path.
+
+<details>
+<summary>Example</summary>
+
+```js
+compile({contents: '…'}) // Seen as MDX
+compile({contents: '…'}, {format: 'md'}) // Seen as markdown
+compile({contents: '…', path: 'readme.md'}) // Seen as markdown
+
+// Please do not use `.md` for MDX as other tools won’t know how to handle it.
+compile({contents: '…', path: 'readme.md'}, {format: 'mdx'}) // Seen as MDX
+compile({contents: '…', path: 'readme.md'}, {mdExtensions: []}) // Seen as MDX
+```
+
+</details>
+
+This option mostly affects [esbuild][] and [Rollup][] plugins, and the
+experimental ESM loader + register hook (see [👩‍🔬 lab][lab]), because in those
+it affects *which* files are “registered”:
+
+*   `format: 'mdx'` registers the extensions in `options.mdxExtensions`
+*   `format: 'md'` registers the extensions in `options.mdExtensions`
+*   `format: 'detect'` registers both lists of extensions
+
+###### `options.mdExtensions`
+
+List of markdown extensions, with dot (`Array.<string>`, default: `['.md',
+'.markdown', '.mdown', '.mkdn', '.mkd', '.mdwn', '.mkdown', '.ron']`).
+
+###### `options.mdxExtensions`
+
+List of MDX extensions, with dot (`Array.<string>`, default: `['.mdx']`).
+Has no effect in `compile` or `evaluate`, but does affect [esbuild][],
+[Rollup][], and the experimental ESM loader + register hook (see [👩‍🔬
+lab][lab]).
+
 ###### `options.SourceMapGenerator`
 
 The `SourceMapGenerator` class from [`source-map`][source-map] (optional).
@@ -576,6 +624,15 @@ See [Imports in `evaluate`](#imports-in-evaluate) in [👩‍🔬 lab][lab]!
 
 See [`compile`][compile].
 
+###### `options`
+
+Most options are the same as [`compile`][compile], with the following
+exceptions:
+
+*   `providerImportSource` is replaced by `useMDXComponents`
+*   `jsx*` and `pragma*` options are replaced by `jsx`, `jsxs`, and `Fragment`
+*   `baseUrl` is an experiment that only works here
+
 ###### `options.jsx`
 
 ###### `options.jsxs`
@@ -595,14 +652,6 @@ var {default: Content} = await evaluate('# hi', {...runtime, ...otherOptions})
 ```
 
 </details>
-
-###### `options.remarkPlugins`
-
-###### `options.rehypePlugins`
-
-###### `options.recmaPlugins`
-
-Same as for [`compile`][compile].
 
 ###### `options.useMDXComponents`
 
@@ -664,6 +713,9 @@ When possible please use the async `evaluate`.
 Create a unified processor to compile MDX to JS.
 Has the same options as [`compile`][compile], but returns a configured
 [`processor`](https://github.com/unifiedjs/unified#processor).
+
+Note that `format: 'detect'` does not work here: only `'md'` or `'mdx'` are
+allowed (and `'mdx'` is the default).
 
 ## 👩‍🔬 lab
 
@@ -1143,10 +1195,6 @@ export default {
 Source maps are supported when [`SourceMapGenerator`][sm] is passed in.
 
 `options` are the same as from [`compile`][compile], with the additions of:
-
-###### `options.extensions`
-
-List of extensions to support (`Array.<string>`, default: `['.mdx']`).
 
 ###### `options.include`
 
@@ -2021,6 +2069,13 @@ export default MDXContent
 
 *   No providers by default
 *   No runtime at all
+*   `export`s work in `evaluate`
+
+**Input**:
+
+*   ± same as `main` branch of `@mdx-js/mdx`
+*   Fix JSX tags to prevent `<p><h1 /></p>`
+*   Plain markdown can be loaded (`format: 'md'`)
 
 **Output**:
 
@@ -2035,10 +2090,11 @@ export default MDXContent
 *   Exported things are available from `evaluate`
 *   Fix a bug with encoding `"` in attributes
 
-**Input**:
+**Experiments**:
 
-*   ± same as `main` branch of `@mdx-js/mdx`
-*   Fix JSX tags to prevent `<p><h1 /></p>`
+*   Add support for `import Content from './file.mdx'` in Node
+*   Add support for `require('./file.mdx')` in Node
+*   Add support for imports in `evaluate`
 
 ## Architecture
 

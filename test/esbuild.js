@@ -12,6 +12,7 @@ test('xdm (esbuild)', async function (t) {
   var Content
   var result
 
+  // MDX.
   await fs.writeFile(
     path.join(base, 'esbuild.mdx'),
     'export const Message = () => <>World!</>\n\n# Hello, <Message />'
@@ -38,6 +39,93 @@ test('xdm (esbuild)', async function (t) {
 
   await fs.unlink(path.join(base, 'esbuild.mdx'))
   await fs.unlink(path.join(base, 'esbuild.js'))
+
+  // Markdown.
+  await fs.writeFile(path.join(base, 'esbuild.md'), '\ta')
+
+  await esbuild.build({
+    bundle: true,
+    define: {'process.env.NODE_ENV': '"development"'},
+    entryPoints: [path.join(base, 'esbuild.md')],
+    outfile: path.join(base, 'esbuild-md.js'),
+    format: 'esm',
+    plugins: [esbuildXdm()]
+  })
+
+  /** @type {import('react').FunctionComponent} */
+  // @ts-ignore file is dynamically generated
+  Content = (await import('./context/esbuild-md.js')).default
+
+  t.equal(
+    renderToStaticMarkup(React.createElement(Content)),
+    '<pre><code>a\n</code></pre>',
+    'should compile `.md`'
+  )
+
+  await fs.unlink(path.join(base, 'esbuild.md'))
+  await fs.unlink(path.join(base, 'esbuild-md.js'))
+
+  // `.md` as MDX extension.
+  await fs.writeFile(path.join(base, 'esbuild.md'), '\ta')
+
+  await esbuild.build({
+    bundle: true,
+    define: {'process.env.NODE_ENV': '"development"'},
+    entryPoints: [path.join(base, 'esbuild.md')],
+    outfile: path.join(base, 'esbuild-md-as-mdx.js'),
+    format: 'esm',
+    plugins: [esbuildXdm({mdExtensions: [], mdxExtensions: ['.md']})]
+  })
+
+  /** @type {import('react').FunctionComponent} */
+  // @ts-ignore file is dynamically generated
+  Content = (await import('./context/esbuild-md-as-mdx.js')).default
+
+  t.equal(
+    renderToStaticMarkup(React.createElement(Content)),
+    '<p>a</p>',
+    'should compile `.md` as MDX w/ configuration'
+  )
+
+  await fs.unlink(path.join(base, 'esbuild.md'))
+  await fs.unlink(path.join(base, 'esbuild-md-as-mdx.js'))
+
+  // File not in `extnames`:
+  await fs.writeFile(path.join(base, 'esbuild.md'), 'a')
+  await fs.writeFile(path.join(base, 'esbuild.mdx'), 'a')
+
+  try {
+    await esbuild.build({
+      entryPoints: [path.join(base, 'esbuild.md')],
+      outfile: path.join(base, 'esbuild-md-as-mdx.js'),
+      plugins: [esbuildXdm({format: 'mdx'})]
+    })
+    t.fail()
+  } catch (error) {
+    t.match(
+      String(error),
+      /No loader is configured for "\.md" files/,
+      'should not handle `.md` files w/ `format: mdx`'
+    )
+  }
+
+  try {
+    await esbuild.build({
+      entryPoints: [path.join(base, 'esbuild.mdx')],
+      outfile: path.join(base, 'esbuild-md-as-mdx.js'),
+      plugins: [esbuildXdm({format: 'md'})]
+    })
+    t.fail()
+  } catch (error) {
+    t.match(
+      String(error),
+      /No loader is configured for "\.mdx" files/,
+      'should not handle `.mdx` files w/ `format: md`'
+    )
+  }
+
+  await fs.unlink(path.join(base, 'esbuild.md'))
+  await fs.unlink(path.join(base, 'esbuild.mdx'))
 
   console.log('\nnote: the following errors and warnings are expected!\n')
 
