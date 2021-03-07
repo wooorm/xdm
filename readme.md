@@ -15,7 +15,7 @@ released (soon?) plus some further changes that I think are good ideas (source
 maps, ESM only, defaulting to an automatic JSX runtime, no Babel, smallish
 browser size, more docs, esbuild and Rollup plugins).
 
-There are also some cool experimental features in [👩‍🔬 lab][lab]!
+There are also some cool experimental features in [👩‍🔬 Lab][lab]!
 
 ## Install
 
@@ -50,7 +50,7 @@ time.
     *   [`evaluate(file, options)`](#evaluatefile-options)
     *   [`evaluateSync(file, options)`](#evaluatesyncfile-options)
     *   [`createProcessor(options)`](#createprocessoroptions)
-*   [👩‍🔬 lab](#-lab)
+*   [👩‍🔬 Lab](#-lab)
     *   [Importing `.mdx` files directly](#importing-mdx-files-directly)
     *   [Requiring `.mdx` files directly](#requiring-mdx-files-directly)
     *   [Imports in `evaluate`](#imports-in-evaluate)
@@ -216,7 +216,7 @@ There is no default export.
 
 `xdm/webpack.cjs` exports a [webpack][] loader as the default export.
 
-There is also `xdm/esm-loader.js` and `xdm/register.cjs`, see [👩‍🔬 lab][lab]
+There is also `xdm/esm-loader.js` and `xdm/register.cjs`, see [👩‍🔬 Lab][lab]
 for more info.
 
 ### `compile(file, options?)`
@@ -319,7 +319,7 @@ compile({contents: '…', path: 'readme.md'}, {mdExtensions: []}) // Seen as MDX
 </details>
 
 This option mostly affects [esbuild][] and [Rollup][] plugins, and the
-experimental ESM loader + register hook (see [👩‍🔬 lab][lab]), because in those
+experimental ESM loader + register hook (see [👩‍🔬 Lab][lab]), because in those
 it affects *which* files are “registered”:
 
 *   `format: 'mdx'` registers the extensions in `options.mdxExtensions`
@@ -336,7 +336,7 @@ List of markdown extensions, with dot (`Array.<string>`, default: `['.md',
 List of MDX extensions, with dot (`Array.<string>`, default: `['.mdx']`).
 Has no effect in `compile` or `evaluate`, but does affect [esbuild][],
 [Rollup][], and the experimental ESM loader + register hook (see [👩‍🔬
-lab][lab]).
+Lab][lab]).
 
 ###### `options.SourceMapGenerator`
 
@@ -619,7 +619,7 @@ That means that `evaluate` also supports top-level await.
 
 Typically, `import` (or `export … from`) does not work.
 But there is experimental support if a `baseUrl` is passed.
-See [Imports in `evaluate`](#imports-in-evaluate) in [👩‍🔬 lab][lab]!
+See [Imports in `evaluate`](#imports-in-evaluate) in [👩‍🔬 Lab][lab]!
 
 ###### `file`
 
@@ -675,7 +675,7 @@ var {default: Content} = await evaluate('# hi', {...provider, ...runtime, ...oth
 Where to resolve relative imports from (`string?`, example: `import.meta.url`).
 
 Experimental!
-See [Imports in `evaluate`](#imports-in-evaluate) in [👩‍🔬 lab][lab]!
+See [Imports in `evaluate`](#imports-in-evaluate) in [👩‍🔬 Lab][lab]!
 
 ###### Returns
 
@@ -718,7 +718,7 @@ Has the same options as [`compile`][compile], but returns a configured
 Note that `format: 'detect'` does not work here: only `'md'` or `'mdx'` are
 allowed (and `'mdx'` is the default).
 
-## 👩‍🔬 lab
+## 👩‍🔬 Lab
 
 This section describes experimental features!
 These do not adhere to semver and could break at any time!
@@ -1034,7 +1034,7 @@ which also imports).
 
 > There is experimental support for `import` (and `export … from`) in `evaluate`
 > if a `baseUrl` is passed.
-> See [Imports in `evaluate`](#imports-in-evaluate) in [👩‍🔬 lab][lab]!
+> See [Imports in `evaluate`](#imports-in-evaluate) in [👩‍🔬 Lab][lab]!
 
 ### Expressions
 
