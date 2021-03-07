@@ -673,6 +673,8 @@ var {default: Content} = await evaluate('# hi', {...provider, ...runtime, ...oth
 ###### `options.baseUrl`
 
 Where to resolve relative imports from (`string?`, example: `import.meta.url`).
+If one is set, `import` (and `export … from`) can be handled.
+Otherwise, they crash.
 
 Experimental!
 See [Imports in `evaluate`](#imports-in-evaluate) in [👩‍🔬 Lab][lab]!
@@ -755,7 +757,7 @@ node --experimental-loader=xdm/esm-loader.js example.js
 <h1>Hello, World!</h1>
 ```
 
-To pass options, you can make your own loader, such as this `myloader.js`:
+To pass options, you can make your own loader, such as this `my-loader.js`:
 
 ```js
 import {createLoader} from 'xdm/esm-loader.js'
@@ -767,8 +769,8 @@ export {getFormat, transformSource}
 
 Which can then be used with `node --experimental-loader=./my-loader.js`.
 
-Node itself does not yet support multiple loaders.
-But it is possible to combine multiple loaders with
+Node itself does not yet support multiple loaders, but it is possible to combine
+multiple loaders with
 [`@node-loader/core`](https://github.com/node-loader/node-loader-core).
 
 ### Requiring `.mdx` files directly
@@ -813,7 +815,7 @@ var register = require('xdm/lib/integration/require.cjs')
 register({/* Options… */})
 ```
 
-Which can then be used with `node -r ./hook.js`.
+Which can then be used with `node -r ./my-hook.js`.
 
 The register hook uses [`evaluateSync`][eval].
 That means `import` (and `export … from`) are not supported when requiring
@@ -857,7 +859,7 @@ async function main() {
 ```
 
 <details>
-<summary>Show evaluated JS</summary>
+<summary>Show ± evaluated JS</summary>
 
 ```js
 ;(async function (_runtime) {
@@ -1418,6 +1420,12 @@ module.exports = {
 #### React
 
 Works out of the box.
+
+> What about React server components?
+> While they are currently very alpha, and not shipping soon, there is an
+> [experimental demo](https://wooorm.com/server-components-mdx-demo/)
+> combining xdm with RSC.
+
 You can set `providerImportSource` to `'@mdx-js/react'` (which has to be
 installed) to support context-based components passing.
 
@@ -1437,11 +1445,6 @@ import Post from './post.mdx'
 
 <Post components={{em: props => <i {...props} />}} />
 ```
-
-> What about React server components?
-> While they are currently very alpha, and not shipping soon, there is an
-> [experimental demo](https://wooorm.com/server-components-mdx-demo/)
-> combining xdm with RSC.
 
 #### Preact
 
@@ -1967,6 +1970,9 @@ title: Hi, World!
 
 # {frontmatter.title}
 ```
+
+> **Note**: [`remark-mdx-frontmatter`](https://github.com/remcohaszing/remark-mdx-frontmatter)
+> implements the following (and a bit more!)
 
 We can write a remark plugin which turns the YAML frontmatter into an ESM export
 to solve it:
