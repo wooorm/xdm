@@ -75,6 +75,7 @@ time.
     *   [Math](#math)
     *   [Footnotes](#footnotes)
     *   [Frontmatter](#frontmatter)
+*   [Plugins](#plugins)
 *   [Differences from `@mdx-js/mdx`](#differences-from-mdx-jsmdx)
 *   [Architecture](#architecture)
 *   [Security](#security)
@@ -942,6 +943,9 @@ Some other features often used with markdown are:
 
 These are many more things possible by configuring
 [remark plugins][remark-plugins] and [rehype plugins][rehype-plugins].
+
+There are also a couple specific remark/rehype/recma plugins that work with
+xdm: see [plugins][].
 
 #### Caveats
 
@@ -2052,6 +2056,29 @@ export default MDXContent
 
 </details>
 
+## Plugins
+
+xdm has several extension points:
+
+*   Components and a layout (wrapper) can be defined internally or passed at
+    runtime (see [§ MDX content][mdx-content])
+*   Plugins can hook into several stages of compilation ([remark
+    plugins][remark-plugins], [rehype plugins][rehype-plugins], and the new
+    recma plugins)
+
+There are also a few of these extensions made specifically for MDX:
+
+###### Components
+
+None yet!
+
+###### Plugins
+
+*   [`remark-mdx-images`](https://github.com/remcohaszing/remark-mdx-images)
+    — change image sources to JavaScript imports
+*   [`remark-mdx-frontmatter`](https://github.com/remcohaszing/remark-mdx-frontmatter)
+    — change frontmatter (YAML) metadata to exports
+
 ## Differences from `@mdx-js/mdx`
 
 **API** (build):
@@ -2272,6 +2299,8 @@ Most of the work is done by:
 [webpack]: #webpack
 
 [caveats]: #caveats
+
+[plugins]: #plugins
 
 [micromark]: https://github.com/micromark/micromark
 
