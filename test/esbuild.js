@@ -180,6 +180,11 @@ test('xdm (esbuild)', async function (t) {
           rehypePlugins: [
             function () {
               return transform
+              /**
+               * 
+               * @param {import('unist').Parent} tree 
+               * @param {import('vfile').VFile} file 
+               */
               function transform(tree, file) {
                 file.message('1')
                 file.message('2', tree.children[1]) // EOL between both, no position.
