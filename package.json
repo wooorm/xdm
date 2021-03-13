@@ -96,6 +96,7 @@
     "source-map": "^0.7.0",
     "tape": "^5.0.0",
     "theme-ui": "^0.3.0",
+    "type-coverage": "^2.0.0",
     "typescript": "^4.0.0",
     "vue": "^3.0.0",
     "webpack": "^5.0.0",
@@ -106,7 +107,7 @@
     "test-api": "node --no-warnings --experimental-loader=./esm-loader.js test/index.js && node test/register.cjs",
     "test-coverage": "c8 --check-coverage --branches 100 --functions 100 --lines 100 --statements 100 --reporter lcov node --no-warnings --experimental-loader=./esm-loader.js test/index.js",
     "prebuild": "rimraf \"*.d.ts\" \"{lib,test}/**/*.d.ts\"",
-    "build": "tsc",
+    "build": "tsc && type-coverage",
     "test": "npm run format && npm run test-coverage && npm run build",
     "prepublishOnly": "npm run build"
   },
@@ -190,5 +191,10 @@
         false
       ]
     ]
+  },
+  "typeCoverage": {
+    "atLeast": 80,
+    "detail": true,
+    "strict": true
   }
 }
