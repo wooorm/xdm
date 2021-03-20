@@ -181,9 +181,9 @@ test('xdm (esbuild)', async function (t) {
             function () {
               return transform
               /**
-               * 
-               * @param {import('unist').Parent} tree 
-               * @param {import('vfile').VFile} file 
+               *
+               * @param {import('unist').Parent} tree
+               * @param {import('vfile').VFile} file
                */
               function transform(tree, file) {
                 file.message('1')
