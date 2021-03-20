@@ -12,9 +12,20 @@ test('xdm (ESM loader)', async function (t) {
     'export const Message = () => <>World!</>\n\n# Hello, <Message />'
   )
 
-  // OMG, it works!
-  // @ts-ignore file is dynamically generated
-  var Content = await import('./context/esm-loader.mdx')
+  var Content
+
+  try {
+    // @ts-ignore file is dynamically generated
+    Content = await import('./context/esm-loader.mdx')
+  } catch (error) {
+    if (error.code === 'ERR_UNKNOWN_FILE_EXTENSION') {
+      throw new Error(
+        'Please run Node with `--experimental-loader=./esm-loader.js` to test the ESM loader'
+      )
+    }
+
+    throw error
+  }
 
   t.equal(
     renderToStaticMarkup(React.createElement(Content.default)),
