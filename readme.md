@@ -1404,9 +1404,12 @@ in a `next.config.js` file like so:
 
 ```js
 module.exports = {
+  // Support MDX files as pages:
+  pageExtensions: ['mdx', 'tsx', 'ts', 'jsx', 'js'],
+  // Support loading `.mdx`:
   webpack(config) {
     config.module.rules.push({
-      test: /\.mdx/,
+      test: /\.mdx$/,
       use: [{loader: 'xdm/webpack.cjs', options: {}}]
     })
 
