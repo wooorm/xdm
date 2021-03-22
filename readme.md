@@ -338,6 +338,57 @@ Has no effect in `compile` or `evaluate`, but does affect [esbuild][],
 [Rollup][], and the experimental ESM loader + register hook (see [👩‍🔬
 Lab][lab]).
 
+###### `options.outputFormat`
+
+Output format to generate (`'program' | 'function-body'`, default: `'program'`).
+In most cases `'program'` should be used, as it results in a whole program.
+In [`evaluate`][eval] `outputFormat: 'function-body'` is used compile to code
+that can be `eval`ed more easily.
+In some cases, you might want to use `evaluate`, such as when compiling on the
+server and running on the client.
+
+The `'program'` format will use import statements to import the runtime (and
+optionally provider) and otherwise keep the code as it was.
+
+The `'function-body'` format normally crash on import statements, but it will
+turn export statements into normal statements and return what was normally
+exported.
+It will also get the runtime (and optionally provider) from `arguments[0]`.
+
+<details>
+<summary>Example</summary>
+
+A module `example.js`:
+
+```js
+import {compile} from 'xdm'
+
+main('export var no = 3.14\n\n# hi {no}')
+
+async function main(code) {
+  console.log(String(await compile(code, {outputFormat: 'program'}))) // Default
+  console.log(String(await compile(code, {outputFormat: 'function-body'})))
+}
+```
+
+…yields:
+
+```js
+import {Fragment as _Fragment, jsx as _jsx} from 'react/jsx-runtime'
+export var no = 3.14
+function MDXContent(_props) { /* … */ }
+export default MDXContent
+```
+
+```js
+const {Fragment: _Fragment, jsx: _jsx} = arguments[0]
+var no = 3.14
+function MDXContent(_props) { /* … */ }
+return {no, default: MDXContent}
+```
+
+</details>
+
 ###### `options.SourceMapGenerator`
 
 The `SourceMapGenerator` class from [`source-map`][source-map] (optional).

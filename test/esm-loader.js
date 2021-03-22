@@ -19,6 +19,7 @@ test('xdm (ESM loader)', async function (t) {
     Content = await import('./context/esm-loader.mdx')
   } catch (error) {
     if (error.code === 'ERR_UNKNOWN_FILE_EXTENSION') {
+      await fs.unlink(path.join(base, 'esm-loader.mdx'))
       throw new Error(
         'Please run Node with `--experimental-loader=./esm-loader.js` to test the ESM loader'
       )
