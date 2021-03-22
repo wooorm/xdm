@@ -58,13 +58,13 @@ test('xdm (evaluate)', async function (t) {
           await evaluate(
             'import {number} from "./context/data.js"\n\n{number}',
             // @ts-ignore runtime.js does not have a typing
-            {baseUrl: import.meta.url, ...runtime}
+            {baseUrl: import.meta.url, useDynamicImport: true, ...runtime}
           )
         ).default
       )
     ),
     '3.14',
-    'should support an `import from` w/ `evaluate` and given a `baseUrl`'
+    'should support an `import` of a relative url w/ `useDynamicImport`'
   )
 
   t.equal(
@@ -76,13 +76,13 @@ test('xdm (evaluate)', async function (t) {
               new URL('./context/data.js', import.meta.url) +
               '"\n\n{number}',
             // @ts-ignore runtime.js does not have a typing
-            {baseUrl: import.meta.url, ...runtime}
+            {baseUrl: import.meta.url, useDynamicImport: true, ...runtime}
           )
         ).default
       )
     ),
     '3.14',
-    'should support an `import` w/ a full url w/ `evaluate` and `baseUrl`'
+    'should support an `import` of a full url w/ `useDynamicImport`'
   )
 
   t.match(
@@ -92,13 +92,13 @@ test('xdm (evaluate)', async function (t) {
           await evaluate(
             'import x from "theme-ui"\n\n<x.Text>Hi!</x.Text>',
             // @ts-ignore runtime.js does not have a typing
-            {baseUrl: import.meta.url, ...runtime}
+            {baseUrl: import.meta.url, useDynamicImport: true, ...runtime}
           )
         ).default
       )
     ),
     /<div class="css-\w+">Hi!<\/div>/,
-    'should support an import default and a bare specifier w/ `evaluate` and `baseUrl`'
+    'should support an import default of a bare specifier w/ `useDynamicImport`'
   )
 
   t.match(
@@ -108,13 +108,13 @@ test('xdm (evaluate)', async function (t) {
           await evaluate(
             'import * as x from "theme-ui"\n\n<x.Text>Hi!</x.Text>',
             // @ts-ignore runtime.js does not have a typing
-            {baseUrl: import.meta.url, ...runtime}
+            {baseUrl: import.meta.url, useDynamicImport: true, ...runtime}
           )
         ).default
       )
     ),
     /<div class="css-\w+">Hi!<\/div>/,
-    'should support an import as w/ `evaluate` and `baseUrl`'
+    'should support a namespace import and a bare specifier w/ `useDynamicImport`'
   )
 
   // @ts-ignore runtime.js does not have a typing
@@ -189,7 +189,7 @@ test('xdm (evaluate)', async function (t) {
       // @ts-ignore runtime.js does not have a typing
       evaluateSync('export {a} from "b"', runtime)
     },
-    /Cannot use `import` or `export … from` in `evaluateSync`/,
+    /Cannot use `import` or `export … from` in `evaluate` \(outputting a function body\) by default/,
     'should throw on an export from'
   )
 
@@ -198,11 +198,11 @@ test('xdm (evaluate)', async function (t) {
       await evaluate(
         'export {number} from "./context/data.js"',
         // @ts-ignore runtime.js does not have a typing
-        {baseUrl: import.meta.url, ...runtime}
+        {baseUrl: import.meta.url, useDynamicImport: true, ...runtime}
       )
     ).number,
     3.14,
-    'should support an `export from` w/ `evaluate` and given a `baseUrl`'
+    'should support an `export from` w/ `useDynamicImport`'
   )
 
   t.equal(
@@ -210,11 +210,62 @@ test('xdm (evaluate)', async function (t) {
       await evaluate(
         'import {number} from "./context/data.js"\nexport {number}',
         // @ts-ignore runtime.js does not have a typing
-        {baseUrl: import.meta.url, ...runtime}
+        {baseUrl: import.meta.url, useDynamicImport: true, ...runtime}
       )
     ).number,
     3.14,
-    'should support an `export` w/ `evaluate` and given a `baseUrl`'
+    'should support an `export` w/ `useDynamicImport`'
+  )
+
+  t.equal(
+    (
+      await evaluate(
+        'export {number as data} from "./context/data.js"',
+        // @ts-ignore runtime.js does not have a typing
+        {baseUrl: import.meta.url, useDynamicImport: true, ...runtime}
+      )
+    ).data,
+    3.14,
+    'should support an `export as from` w/ `useDynamicImport`'
+  )
+
+  t.equal(
+    (
+      await evaluate(
+        'export {default as data} from "./context/data.js"',
+        // @ts-ignore runtime.js does not have a typing
+        {baseUrl: import.meta.url, useDynamicImport: true, ...runtime}
+      )
+    ).data,
+    6.28,
+    'should support an `export default as from` w/ `useDynamicImport`'
+  )
+
+  t.deepEqual(
+    {
+      ...(await evaluate(
+        'export * from "./context/data.js"',
+        // @ts-ignore runtime.js does not have a typing
+        {baseUrl: import.meta.url, useDynamicImport: true, ...runtime}
+      )),
+      default: undefined
+    },
+    {default: undefined, number: 3.14},
+    'should support an `export all from` w/ `useDynamicImport`'
+  )
+
+  // I’m not sure if this makes sense, but it is how Node works.
+  t.deepEqual(
+    {
+      ...(await evaluate(
+        'export {default as number} from "./context/data.js"\nexport * from "./context/data.js"',
+        // @ts-ignore runtime.js does not have a typing
+        {baseUrl: import.meta.url, useDynamicImport: true, ...runtime}
+      )),
+      default: undefined
+    },
+    {default: undefined, number: 6.28},
+    'should support an `export all from`, but prefer explicit exports, w/ `useDynamicImport`'
   )
 
   t.throws(
@@ -222,7 +273,7 @@ test('xdm (evaluate)', async function (t) {
       // @ts-ignore runtime.js does not have a typing
       evaluateSync('export * from "a"', runtime)
     },
-    /Cannot use `import` or `export … from` in `evaluateSync`/,
+    /Cannot use `import` or `export … from` in `evaluate` \(outputting a function body\) by default/,
     'should throw on an export all from'
   )
 
@@ -231,7 +282,7 @@ test('xdm (evaluate)', async function (t) {
       // @ts-ignore runtime.js does not have a typing
       evaluateSync('import {a} from "b"', runtime)
     },
-    /Cannot use `import` or `export … from` in `evaluateSync`/,
+    /Cannot use `import` or `export … from` in `evaluate` \(outputting a function body\) by default/,
     'should throw on an import'
   )
 
@@ -240,7 +291,7 @@ test('xdm (evaluate)', async function (t) {
       // @ts-ignore runtime.js does not have a typing
       evaluateSync('import a from "b"', runtime)
     },
-    /Cannot use `import` or `export … from` in `evaluateSync`/,
+    /Cannot use `import` or `export … from` in `evaluate` \(outputting a function body\) by default/,
     'should throw on an import default'
   )
 
