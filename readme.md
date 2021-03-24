@@ -53,7 +53,6 @@ time.
 *   [👩‍🔬 Lab](#-lab)
     *   [Importing `.mdx` files directly](#importing-mdx-files-directly)
     *   [Requiring `.mdx` files directly](#requiring-mdx-files-directly)
-    *   [Imports in `evaluate`](#imports-in-evaluate)
 *   [MDX syntax](#mdx-syntax)
     *   [Markdown](#markdown)
     *   [JSX](#jsx)
@@ -344,16 +343,17 @@ Output format to generate (`'program' | 'function-body'`, default: `'program'`).
 In most cases `'program'` should be used, as it results in a whole program.
 In [`evaluate`][eval] `outputFormat: 'function-body'` is used compile to code
 that can be `eval`ed more easily.
-In some cases, you might want to use `evaluate`, such as when compiling on the
-server and running on the client.
+In some cases, you might want to do what `evaluate` does manually, such as when
+compiling on the server and running on the client.
 
 The `'program'` format will use import statements to import the runtime (and
 optionally provider) and otherwise keep the code as it was.
 
-The `'function-body'` format normally crash on import statements, but it will
-turn export statements into normal statements and return what was normally
-exported.
-It will also get the runtime (and optionally provider) from `arguments[0]`.
+The `'function-body'` format will get the runtime (and optionally provider) from
+`arguments[0]` and use a return statement to yield what was exported.
+Normally, this output format will throw on `import` (and `export … from`)
+statements, but you can support them by setting
+[`options.useDynamicImport`][usedynamicimport].
 
 <details>
 <summary>Example</summary>
@@ -385,6 +385,88 @@ const {Fragment: _Fragment, jsx: _jsx} = arguments[0]
 var no = 3.14
 function MDXContent(_props) { /* … */ }
 return {no, default: MDXContent}
+```
+
+</details>
+
+###### `options.useDynamicImport`
+
+Whether to compile to dynamic import expressions (`boolean`, default: `false`).
+This option only has effect when [`options.outputFormat`][outputformat] is
+`'function-body'`.
+
+**xdm** can turn import statements (`import x from 'y'`) into dynamic imports
+(`const {x} = await import('y')`).
+This is useful because import statements only work at the top level of
+JavaScript modules, whereas `import()` is available inside function bodies.
+
+<details>
+<summary>Example</summary>
+
+Say we have a couple modules:
+
+```js
+// meta.js:
+export var title = 'World'
+
+// numbers.js:
+export var no = 3.14
+
+// example.js:
+import {compileSync} from 'xdm'
+
+var code = `import {name} from './meta.js'
+export {no} from './numbers.js'
+
+# hi {name}!`
+
+console.log(String(compileSync(code, {outputFormat: 'function-body', useDynamicImport: true})))
+```
+
+…now running `node example.js` yields:
+
+```js
+const {Fragment: _Fragment, jsx: _jsx, jsxs: _jsxs} = arguments[0]
+const {name} = await import('./meta.js')
+const {no} = await import('./numbers.js')
+function MDXContent(_props) { /* … */ }
+return {no, default: MDXContent}
+```
+
+</details>
+
+###### `options.baseUrl`
+
+Resolve relative `import` (and `export … from`) from this URL (`string?`,
+example: `import.meta.url`).
+
+Relative specifiers are non-absolute URLs that start with `/`, `./`, or `../`.
+For example: `/index.js`, `./folder/file.js`, or `../main.js`.
+
+<details>
+<summary>Example</summary>
+
+Say we have a module `example.js`:
+
+```js
+import {compile} from 'xdm'
+
+main()
+
+async function main() {
+  var code = 'export {number} from "./data.js"\n\n# hi'
+  var baseUrl = 'https://a.full/url' // Typically `import.meta.url`
+  console.log(String(await compile(code, {baseUrl})))
+}
+```
+
+…now running `node example.js` yields:
+
+```js
+import {Fragment as _Fragment, jsx as _jsx} from 'react/jsx-runtime'
+export {number} from 'https://a.full/data.js'
+function MDXContent(_props) { /* … */ }
+export default MDXContent
 ```
 
 </details>
@@ -668,9 +750,9 @@ But if you trust your content, `evaluate` can work.
 uses a normal [`Function`][function].
 That means that `evaluate` also supports top-level await.
 
-Typically, `import` (or `export … from`) does not work.
-But there is experimental support if a `baseUrl` is passed.
-See [Imports in `evaluate`](#imports-in-evaluate) in [👩‍🔬 Lab][lab]!
+Typically, `import` (or `export … from`) do not work here.
+They can be compiled to dynamic `import()` by passing
+[`options.useDynamicImport`][usedynamicimport].
 
 ###### `file`
 
@@ -683,7 +765,6 @@ exceptions:
 
 *   `providerImportSource` is replaced by `useMDXComponents`
 *   `jsx*` and `pragma*` options are replaced by `jsx`, `jsxs`, and `Fragment`
-*   `baseUrl` is an experiment that only works here
 
 ###### `options.jsx`
 
@@ -720,15 +801,6 @@ var {default: Content} = await evaluate('# hi', {...provider, ...runtime, ...oth
 ```
 
 </details>
-
-###### `options.baseUrl`
-
-Where to resolve relative imports from (`string?`, example: `import.meta.url`).
-If one is set, `import` (and `export … from`) can be handled.
-Otherwise, they crash.
-
-Experimental!
-See [Imports in `evaluate`](#imports-in-evaluate) in [👩‍🔬 Lab][lab]!
 
 ###### Returns
 
@@ -871,58 +943,6 @@ Which can then be used with `node -r ./my-hook.js`.
 The register hook uses [`evaluateSync`][eval].
 That means `import` (and `export … from`) are not supported when requiring
 `.mdx` files.
-
-### Imports in `evaluate`
-
-`evaluate` wraps code in an [`AsyncFunction`][async-function], which means that
-it also supports top-level await.
-So, as a follow up, **xdm** can turn import statements (`import {x} from 'y'`)
-into import expressions (`const {x} = await import('y')`).
-
-There’s one catch: where to import from?
-You must pass a `baseUrl` to [`evaluate`][eval].
-Typically, you should use `import.meta.url`.
-
-Say we have a module `data.js`:
-
-```js
-export var number = 3.14
-```
-
-And our module `example.js` looks as follows:
-
-```js
-import * as runtime from 'react/jsx-runtime.js'
-import {evaluate} from 'xdm'
-
-main()
-
-
-async function main() {
-  var baseUrl = 'https://a.full/url' // Typically `import.meta.url`
-  var {number} = await evaluate(
-    'export {number} from "./data.js"',
-    {...runtime, baseUrl}
-  )
-
-  console.log(number)
-}
-```
-
-<details>
-<summary>Show ± evaluated JS</summary>
-
-```js
-;(async function (_runtime) {
-  const {number} = await import('https://a.full/data.js')
-
-  function MDXContent(_props) { /* … */ }
-
-  return {number, default: MDXContent}
-})(runtime)
-```
-
-</details>
 
 ## MDX syntax
 
@@ -1081,13 +1101,11 @@ export const pi = 3.14
 <MyChart data={data} label={'Something with ' + pi} />
 ```
 
-Note that when using [`evaluate`][eval], `import`s are not supported but
-`export`s can still be used to define things in MDX (except `export … from`,
-which also imports).
+Typically, `import` (or `export … from`) do not work here.
+They can be compiled to dynamic `import()` by passing
+[`options.useDynamicImport`][usedynamicimport].
 
-> There is experimental support for `import` (and `export … from`) in `evaluate`
-> if a `baseUrl` is passed.
-> See [Imports in `evaluate`](#imports-in-evaluate) in [👩‍🔬 Lab][lab]!
+`export`s do work and they are returned.
 
 ### Expressions
 
@@ -2157,6 +2175,8 @@ None yet!
 *   No providers by default
 *   No runtime at all
 *   `export`s work in `evaluate`
+*   Add support for compiling import statements to dynamic import expressions
+*   Add support for resolving import/export sources
 
 **Input**:
 
@@ -2174,14 +2194,13 @@ None yet!
 *   Remove support for passing `parent.child` combos (`ol.li`) for components
 *   Remove support for passing `inlineCode` component (use `pre` and/or `code`
     instead)
-*   Exported things are available from `evaluate`
+*   Support for import and exports in `evaluate`
 *   Fix a bug with encoding `"` in attributes
 
 **Experiments**:
 
 *   Add support for `import Content from './file.mdx'` in Node
 *   Add support for `require('./file.mdx')` in Node
-*   Add support for imports in `evaluate`
 
 ## Architecture
 
@@ -2349,6 +2368,10 @@ Most of the work is done by:
 [mdx-content]: #mdx-content
 
 [use]: #use
+
+[outputformat]: #optionsoutputformat
+
+[usedynamicimport]: #optionsusedynamicimport
 
 [sm]: #optionssourcemapgenerator
 
