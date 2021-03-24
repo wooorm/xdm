@@ -5,7 +5,7 @@
 [![Downloads][downloads-badge]][downloads]
 [![Size][size-badge]][size]
 
-**xdm** is an MDX compiler that focussed on two things:
+**xdm** is an MDX compiler that focusses on two things:
 
 1.  Compiling the MDX syntax (markdown + JSX) to JavaScript
 2.  Making it easier to use the MDX syntax in different places
@@ -13,7 +13,8 @@
 This is mostly things I wrote for `@mdx-js/mdx` which are not slated to be
 released (soon?) plus some further changes that I think are good ideas (source
 maps, ESM only, defaulting to an automatic JSX runtime, no Babel, smallish
-browser size, more docs, esbuild and Rollup plugins).
+browser size, more docs, import/exports in evaluate, esbuild and Rollup
+plugins).
 
 There are also some cool experimental features in [👩‍🔬 Lab][lab]!
 
@@ -39,6 +40,9 @@ You must `import` it (`require` doesn’t work).
 This is because in April, which is soon, the last Node version without ESM will
 reach end of life and projects will start migrating to ESM-only around that
 time.
+
+Note: if you’re in CommonJS, you *can* use this, but with a dynamic import
+expression: `var xdm = await import('xdm')`.
 
 ## Contents
 
@@ -92,7 +96,7 @@ There’s also [`mdsvex`][mdsvex].
 And now there’s **xdm** too.
 
 Sometimes the term is used for a runtime/helper library.
-**xdm** has **no runtime**.
+**xdm** has **no runtime**: it’s not needed!
 
 Most often the term is used for the format: markdown + JS(X) (there are some
 [caveats][]):
@@ -122,7 +126,7 @@ Rollup, webpack, etc.
 Say we have an MDX document, `example.mdx`:
 
 ```mdx
-export const Thing = () => <>World!</>
+export var Thing = () => <>World!</>
 
 # Hello, <Thing />
 ```
@@ -133,7 +137,7 @@ The below is not the actual output, but it might help to form a mental model:
 ```js
 /* @jsxRuntime automatic @jsxImportSource react */
 
-export const Thing = () => <>World!</>
+export var Thing = () => <>World!</>
 
 export default function MDXContent() {
   return <h1>Hello, <Thing /></h1>
@@ -147,9 +151,8 @@ Some observations:
 *   It’s is a complete file with import/exports
 *   A component (`MDXContent`) is exported
 
-***
-
-To compile `example.mdx` add some code in `example.js`:
+Now for how to get the actual output.
+Add some code in `example.js` to compile `example.mdx` to JavaScript:
 
 ```js
 import fs from 'fs/promises'
@@ -163,13 +166,13 @@ async function main() {
 }
 ```
 
-Now, the *actual* output of running `node example.js` is:
+The *actual* output of running `node example.js` is:
 
 ```js
 /* @jsxRuntime automatic @jsxImportSource react */
 import {Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs} from 'react/jsx-runtime'
 
-export const Thing = () => _jsx(_Fragment, {children: 'World!'})
+export var Thing = () => _jsx(_Fragment, {children: 'World!'})
 
 function MDXContent(_props) {
   const _components = Object.assign({h1: 'h1'}, _props.components)
@@ -189,11 +192,15 @@ export default MDXContent
 
 Some more observations:
 
-*   JSX is compiled away to function calls and an import of React
+*   JSX is compiled away to function calls and an import of React†
 *   The content component can be given `{components: {h1: MyComponent}}` to use
     something else for the heading
 *   The content component can be given `{components: {wrapper: MyLayout}}` to
     wrap the whole content
+
+† **xdm** is not coupled to React.
+You can also use it with [Preact](#preact), [Vue](#vue), [Emotion](#emotion),
+[Theme UI](#theme-ui), etc.
 
 See [§ MDX content][mdx-content] below on how to use the result.
 
@@ -285,9 +292,21 @@ await compile(file, {
 
 ###### `options.recmaPlugins`
 
-List of recma plugins, presets, and pairs.
+List of recma plugins.
 This is a new ecosystem, currently in beta, to transform
-[esast](https://github.com/syntax-tree/esast) (JavaScript) trees.
+[esast](https://github.com/syntax-tree/esast) trees (JavaScript).
+
+###### `options.mdExtensions`
+
+List of markdown extensions, with dot (`string[]`, default: `['.md',
+'.markdown', '.mdown', '.mkdn', '.mkd', '.mdwn', '.mkdown', '.ron']`).
+
+###### `options.mdxExtensions`
+
+List of MDX extensions, with dot (`string[]`, default: `['.mdx']`).
+Has no effect in `compile` or `evaluate`, but does affect [esbuild][],
+[Rollup][], and the experimental ESM loader + register hook (see [👩‍🔬
+Lab][lab]).
 
 ###### `options.format`
 
@@ -325,32 +344,23 @@ it affects *which* files are “registered”:
 *   `format: 'md'` registers the extensions in `options.mdExtensions`
 *   `format: 'detect'` registers both lists of extensions
 
-###### `options.mdExtensions`
-
-List of markdown extensions, with dot (`Array.<string>`, default: `['.md',
-'.markdown', '.mdown', '.mkdn', '.mkd', '.mdwn', '.mkdown', '.ron']`).
-
-###### `options.mdxExtensions`
-
-List of MDX extensions, with dot (`Array.<string>`, default: `['.mdx']`).
-Has no effect in `compile` or `evaluate`, but does affect [esbuild][],
-[Rollup][], and the experimental ESM loader + register hook (see [👩‍🔬
-Lab][lab]).
-
 ###### `options.outputFormat`
 
 Output format to generate (`'program' | 'function-body'`, default: `'program'`).
 In most cases `'program'` should be used, as it results in a whole program.
-In [`evaluate`][eval] `outputFormat: 'function-body'` is used compile to code
-that can be `eval`ed more easily.
-In some cases, you might want to do what `evaluate` does manually, such as when
-compiling on the server and running on the client.
+Internally, [`evaluate`][eval] uses `outputFormat: 'function-body'` to compile
+to code that can be `eval`ed.
+In some cases, you might want to do what `evaluate` does manually in separate
+steps and do this manually, such as when compiling on the server and running on
+the client.
 
 The `'program'` format will use import statements to import the runtime (and
-optionally provider) and otherwise keep the code as it was.
+optionally provider) and use an export statement to return the `MDXContent`
+component.
 
 The `'function-body'` format will get the runtime (and optionally provider) from
-`arguments[0]` and use a return statement to yield what was exported.
+`arguments[0]`, rewrite your export statements so that those values are returned
+instead, and use a return statement to yield what was exported.
 Normally, this output format will throw on `import` (and `export … from`)
 statements, but you can support them by setting
 [`options.useDynamicImport`][usedynamicimport].
@@ -399,6 +409,8 @@ This option only has effect when [`options.outputFormat`][outputformat] is
 (`const {x} = await import('y')`).
 This is useful because import statements only work at the top level of
 JavaScript modules, whereas `import()` is available inside function bodies.
+
+When you turn `useDynamicImport` on, you should probably set [`options.baseUrl`][baseurl] too.
 
 <details>
 <summary>Example</summary>
@@ -536,7 +548,7 @@ compile(file, {providerImportSource: '@mdx-js/react'})
  import React from 'react'
 +import {useMDXComponents as _provideComponents} from '@mdx-js/react'
 
- export const Thing = () => React.createElement(React.Fragment, null, 'World!')
+ export var Thing = () => React.createElement(React.Fragment, null, 'World!')
 
  function MDXContent(_props) {
 -  const _components = Object.assign({h1: 'h1'}, _props.components)
@@ -569,8 +581,8 @@ compile(file, {jsx: true})
  /* @jsxRuntime classic @jsx React.createElement @jsxFrag React.Fragment */
 -import {Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs} from 'react/jsx-runtime'
 -
--export const Thing = () => React.createElement(React.Fragment, null, 'World!')
-+export const Thing = () => <>World!</>
+-export var Thing = () => React.createElement(React.Fragment, null, 'World!')
++export var Thing = () => <>World!</>
 
  function MDXContent(_props) {
    const _components = Object.assign({h1: 'h1'}, _props.components)
@@ -614,8 +626,8 @@ compile(file, {jsxRuntime: 'classic'})
 +/* @jsxRuntime classic @jsx React.createElement @jsxFrag React.Fragment */
 +import React from 'react'
 
--export const Thing = () => _jsx(_Fragment, {children: 'World!'})
-+export const Thing = () => React.createElement(React.Fragment, null, 'World!')
+-export var Thing = () => _jsx(_Fragment, {children: 'World!'})
++export var Thing = () => React.createElement(React.Fragment, null, 'World!')
 …
 ```
 
@@ -678,8 +690,8 @@ compile(file, {
 +/* @jsxRuntime classic @jsx preact.createElement @jsxFrag preact.Fragment */
 +import preact from 'preact/compat'
 
--export const Thing = () => React.createElement(React.Fragment, null, 'World!')
-+export const Thing = () => preact.createElement(preact.Fragment, null, 'World!')
+-export var Thing = () => React.createElement(React.Fragment, null, 'World!')
++export var Thing = () => preact.createElement(preact.Fragment, null, 'World!')
 …
 ```
 
@@ -741,9 +753,9 @@ When possible please use the async `compile`.
 ### `evaluate(file, options)`
 
 Run MDX.
-It’s called **evaluate** because it `eval`s JavaScript.
-To get the full power of MDX it’s suggested to use `compile`, write to a file,
-and then run with Node or bundle with [esbuild][]/[Rollup][]/[webpack][].
+☢️ It’s called **evaluate** because it `eval`s JavaScript.
+When possible, please use `compile`, write to a file, and then run with Node or
+bundle with [esbuild][]/[Rollup][]/[webpack][].
 But if you trust your content, `evaluate` can work.
 
 `evaluate` wraps code in an [`AsyncFunction`][async-function], `evaluateSync`
@@ -850,10 +862,9 @@ These do not adhere to semver and could break at any time!
 
 ### Importing `.mdx` files directly
 
-[ESM loaders](https://nodejs.org/api/esm.html#esm_loaders) are a very
-experimental feature in Node, slated to change.
-Still, the feature lets projects “hijack” imports, to do all sorts of fancy
-things!
+[ESM loaders](https://nodejs.org/api/esm.html#esm_loaders) are an experimental
+feature in Node, slated to change.
+Still, they let projects “hijack” imports, to do all sorts of fancy things!
 **xdm** comes with experimental support for importing `.mdx` files with
 on-the-fly compilation, using `xdm/esm-loader.js`:
 
@@ -900,8 +911,7 @@ multiple loaders with
 
 [`require.extensions`](https://nodejs.org/api/modules.html#modules_require_extensions)
 is a deprecated feature in Node.
-Still, the feature lets projects “hijack” `require` calls, to do all sorts of
-fancy things!
+Still, it lets projects “hijack” `require` calls to do fancy things.
 **xdm** comes with support for requiring `.mdx` files with on-the-fly
 evaluation, using `xdm/register.cjs`:
 
@@ -1086,7 +1096,7 @@ To define things from within MDX, use ESM:
 ```js
 import {External} from './some/place.js'
 
-export const Local = props => <span style={{color: 'red'}} {...props} />
+export var Local = props => <span style={{color: 'red'}} {...props} />
 
 An <External /> component and <Local>a local component</Local>.
 ```
@@ -1096,7 +1106,7 @@ ESM can also be used for other things:
 ```js
 import {MyChart} from './chart-component.js'
 import data from './population.js'
-export const pi = 3.14
+export var pi = 3.14
 
 <MyChart data={data} label={'Something with ' + pi} />
 ```
@@ -1112,7 +1122,7 @@ They can be compiled to dynamic `import()` by passing
 Braces can be used to embed JavaScript expressions in MDX:
 
 ```mdx
-export const pi = 3.14
+export var pi = 3.14
 
 Two 🍰 is: {pi * 2}
 ```
@@ -1124,6 +1134,9 @@ Expressions can be empty or contain just a comment:
 ```
 
 ## MDX content
+
+All content (headings, paragraphs, etc) you write are exported as the default
+export from a compiled MDX file as a component.
 
 It’s possible to pass components in.
 Say we have a `message.mdx` file:
@@ -1227,6 +1240,11 @@ await esbuild.build({
 })
 ```
 
+esbuild takes care of turning modern JavaScript features into syntax that works
+wherever you want it to.
+No Babel needed.
+See esbuild’s docs for more info.
+
 #### Rollup
 
 Install `xdm` and use `xdm/rollup.js`.
@@ -1276,7 +1294,7 @@ Source maps are supported when [`SourceMapGenerator`][sm] is passed in.
 ###### `options.exclude`
 
 List of [`picomatch`][pico] patterns to include and/or exclude
-(`string`, `RegExp`, `Array.<string|RegExp>`, default: `[]`).
+(`string`, `RegExp`, `(string|RegExp)[]`, default: `[]`).
 
 #### Webpack
 
@@ -1320,7 +1338,7 @@ webpack API).
 To use this loader with `webpack-cli`, set the `DISABLE_V8_COMPILE_CACHE=1`
 environment variable.
 See
-[#11](https://github.com/wooorm/xdm/issues/11#issuecomment-785043772) for
+[GH-11](https://github.com/wooorm/xdm/issues/11#issuecomment-785043772) for
 details.
 
 ```sh
@@ -1434,7 +1452,7 @@ Now we can add our MDX content.
 Create an MDX file `Content.mdx` in the `src/` folder:
 
 ```mdx
-export const Box = () => (
+export var Box = () => (
   <div style={{padding: 20, backgroundColor: 'tomato'}} />
 )
 
@@ -1493,10 +1511,11 @@ module.exports = {
 
 Works out of the box.
 
-> What about React server components?
-> While they are currently very alpha, and not shipping soon, there is an
+> What about **React server components**?
+>
+> While they are currently alpha and not shipping soon, there is an
 > [experimental demo](https://wooorm.com/server-components-mdx-demo/)
-> combining xdm with RSC.
+> combining **xdm** with RSC.
 
 You can set `providerImportSource` to `'@mdx-js/react'` (which has to be
 installed) to support context-based components passing.
@@ -1970,8 +1989,8 @@ alternative.
 Say we had this `post.mdx`:
 
 ```mdx
-export const name = 'World'
-export const title = 'Hi, ' + name + '!'
+export var name = 'World'
+export var title = 'Hi, ' + name + '!'
 
 # {title}
 ```
@@ -2075,7 +2094,7 @@ function remarkMdxExportYaml() {
 
 function onyaml(node, index, parent) {
   // Create an estree from the YAML, that looks like:
-  // `export const frontmatter = JSON.parse("{…}")`
+  // `export var frontmatter = JSON.parse("{…}")`
   // It looks a bit complex.
   // I like using astexplorer (set to JavaScript and espree) to figure out how
   // these things should look.
@@ -2086,7 +2105,7 @@ function onyaml(node, index, parent) {
         type: 'ExportNamedDeclaration',
         declaration: {
           type: 'VariableDeclaration',
-          kind: 'const',
+          kind: 'var',
           declarations: [
             {
               type: 'VariableDeclarator',
@@ -2123,7 +2142,7 @@ function onyaml(node, index, parent) {
 <summary>Show equivalent JS</summary>
 
 ```js
-export const frontmatter = JSON.parse('{"title":"Hi, World!"}')
+export var frontmatter = JSON.parse('{"title":"Hi, World!"}')
 
 function MDXContent() {
   return <h1>{frontmatter.title}</h1>
@@ -2370,6 +2389,8 @@ Most of the work is done by:
 [use]: #use
 
 [outputformat]: #optionsoutputformat
+
+[baseurl]: #optionsbaseurl
 
 [usedynamicimport]: #optionsusedynamicimport
 
