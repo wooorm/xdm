@@ -350,17 +350,16 @@ Output format to generate (`'program' | 'function-body'`, default: `'program'`).
 In most cases `'program'` should be used, as it results in a whole program.
 Internally, [`evaluate`][eval] uses `outputFormat: 'function-body'` to compile
 to code that can be `eval`ed.
-In some cases, you might want to do what `evaluate` does manually in separate
-steps and do this manually, such as when compiling on the server and running on
-the client.
+In some cases, you might want to do what `evaluate` does in separate steps
+yourself, such as when compiling on the server and running on the client.
 
 The `'program'` format will use import statements to import the runtime (and
-optionally provider) and use an export statement to return the `MDXContent`
+optionally provider) and use an export statement to yield the `MDXContent`
 component.
 
 The `'function-body'` format will get the runtime (and optionally provider) from
-`arguments[0]`, rewrite your export statements so that those values are returned
-instead, and use a return statement to yield what was exported.
+`arguments[0]`, rewrite export statements, and use a return statement to yield
+what was exported.
 Normally, this output format will throw on `import` (and `export … from`)
 statements, but you can support them by setting
 [`options.useDynamicImport`][usedynamicimport].
@@ -402,7 +401,7 @@ return {no, default: MDXContent}
 ###### `options.useDynamicImport`
 
 Whether to compile to dynamic import expressions (`boolean`, default: `false`).
-This option only has effect when [`options.outputFormat`][outputformat] is
+This option applies when [`options.outputFormat`][outputformat] is
 `'function-body'`.
 
 **xdm** can turn import statements (`import x from 'y'`) into dynamic imports
@@ -454,6 +453,11 @@ example: `import.meta.url`).
 
 Relative specifiers are non-absolute URLs that start with `/`, `./`, or `../`.
 For example: `/index.js`, `./folder/file.js`, or `../main.js`.
+
+This option is useful when code will run in a different place.
+One example is when `.mdx` files are in path *a* but compiled to path *b* and
+imports should run relative the path *b*.
+Another example is when evaluating code, whether in Node or a browser.
 
 <details>
 <summary>Example</summary>
@@ -604,8 +608,7 @@ compile(file, {jsx: true})
 
 ###### `options.jsxRuntime`
 
-JSX runtime to use (`string`, `'automatic'` or `'classic'`, default:
-`'automatic'`).
+JSX runtime to use (`'automatic' | 'classic'`, default: `'automatic'`).
 The classic runtime compiles to calls such as `h('p')`, the automatic runtime
 compiles to `import _jsx from '$importSource/jsx-runtime'\n_jsx('p')`.
 
@@ -752,7 +755,7 @@ When possible please use the async `compile`.
 
 ### `evaluate(file, options)`
 
-Run MDX.
+Compile and run MDX.
 ☢️ It’s called **evaluate** because it `eval`s JavaScript.
 When possible, please use `compile`, write to a file, and then run with Node or
 bundle with [esbuild][]/[Rollup][]/[webpack][].
@@ -777,6 +780,7 @@ exceptions:
 
 *   `providerImportSource` is replaced by `useMDXComponents`
 *   `jsx*` and `pragma*` options are replaced by `jsx`, `jsxs`, and `Fragment`
+*   `outputFormat` is set to `function-body`
 
 ###### `options.jsx`
 
@@ -842,7 +846,7 @@ console.log(await evaluate(file, {...runtime}))
 
 ### `evaluateSync(file, options)`
 
-Run MDX.
+Compile and run MDX.
 Synchronous version of [`evaluate`][eval].
 When possible please use the async `evaluate`.
 
@@ -1148,7 +1152,7 @@ Say we have a `message.mdx` file:
 This file could be imported from JavaScript and passed components like so:
 
 ```js
-import Message from './message.mdx' // Assumes a bundler is used to compile MDX -> JS.
+import Message from './message.mdx' // Assumes an integration is used to compile MDX -> JS.
 
 <Message components={{Planet: () => 'Venus'}} />
 ```
@@ -1522,7 +1526,7 @@ installed) to support context-based components passing.
 
 ```js
 import {MDXProvider} from '@mdx-js/react'
-import Post from './post.mdx' // Assumes a bundler is used to compile MDX -> JS.
+import Post from './post.mdx' // Assumes an integration is used to compile MDX -> JS.
 
 <MDXProvider components={{em: props => <i {...props} />}}>
   <Post />
@@ -1600,7 +1604,7 @@ This can be done at the place where you’re using MDX content at runtime:
 ```js
 import {base} from '@theme-ui/preset-base'
 import {components, ThemeProvider} from 'theme-ui'
-import Post from './post.mdx' // Assumes a bundler is used to compile MDX -> JS.
+import Post from './post.mdx' // Assumes an integration is used to compile MDX -> JS.
 
 <ThemeProvider theme={base}>
   <Post components={components} />
@@ -1763,7 +1767,7 @@ by doing something like this:
 
 ```js
 import SyntaxHighlighter from 'react-syntax-highlighter'
-import Post from './example.mdx' // Assumes a bundler is used to compile MDX -> JS.
+import Post from './example.mdx' // Assumes an integration is used to compile MDX -> JS.
 
 <Post components={{code}} />
 
@@ -1998,7 +2002,7 @@ export var title = 'Hi, ' + name + '!'
 Used like so:
 
 ```js
-import Post from './post.mdx' // Assumes a bundler is used to compile MDX -> JS.
+import Post from './post.mdx' // Assumes an integration is used to compile MDX -> JS.
 
 console.log(Post.title) // Prints 'Hi, World!'
 ```
