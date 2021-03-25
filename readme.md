@@ -2066,96 +2066,9 @@ title: Hi, World!
 # {frontmatter.title}
 ```
 
-> **Note**: [`remark-mdx-frontmatter`](https://github.com/remcohaszing/remark-mdx-frontmatter)
-> implements the following (and a bit more!)
-
-We can write a remark plugin which turns the YAML frontmatter into an ESM export
-to solve it:
-
-```js
-import fs from 'fs/promises'
-import yaml from 'js-yaml'
-import remarkFrontmatter from 'remark-frontmatter'
-import visit from 'unist-util-visit'
-import {compile} from 'xdm'
-
-main()
-
-async function main() {
-  console.log(
-    await compile(await fs.readFile('example.mdx'), {
-      remarkPlugins: [remarkFrontmatter, remarkMdxExportYaml]
-    })
-  )
-}
-
-function remarkMdxExportYaml() {
-  return (tree) => {
-    // Find all YAML nodes.
-    visit(tree, 'yaml', onyaml)
-  }
-}
-
-function onyaml(node, index, parent) {
-  // Create an estree from the YAML, that looks like:
-  // `export var frontmatter = JSON.parse("{…}")`
-  // It looks a bit complex.
-  // I like using astexplorer (set to JavaScript and espree) to figure out how
-  // these things should look.
-  var estree = {
-    type: 'Program',
-    body: [
-      {
-        type: 'ExportNamedDeclaration',
-        declaration: {
-          type: 'VariableDeclaration',
-          kind: 'var',
-          declarations: [
-            {
-              type: 'VariableDeclarator',
-              id: {type: 'Identifier', name: 'frontmatter'},
-              init: {
-                type: 'CallExpression',
-                callee: {
-                  type: 'MemberExpression',
-                  object: {type: 'Identifier', name: 'JSON'},
-                  property: {type: 'Identifier', name: 'parse'}
-                },
-                arguments: [
-                  {
-                    type: 'Literal',
-                    value: JSON.stringify(yaml.load(node.value))
-                  }
-                ]
-              }
-            }
-          ]
-        }
-      }
-    ]
-  }
-
-  // Replace the YAML node with MDX ESM.
-  // We’re still in markdown, but by defining `data.estree`, we tell xdm to use
-  // that when we’re in JavaScript!
-  parent.children[index] = {type: 'mdxjsEsm', value: '', data: {estree}}
-}
-```
-
-<details>
-<summary>Show equivalent JS</summary>
-
-```js
-export var frontmatter = JSON.parse('{"title":"Hi, World!"}')
-
-function MDXContent() {
-  return <h1>{frontmatter.title}</h1>
-}
-
-export default MDXContent
-```
-
-</details>
+That’s what
+[`remark-mdx-frontmatter`](https://github.com/remcohaszing/remark-mdx-frontmatter)
+does.
 
 ## Plugins
 
