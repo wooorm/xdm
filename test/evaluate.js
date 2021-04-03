@@ -3,7 +3,7 @@ import React from 'react'
 import * as runtime from 'react/jsx-runtime.js'
 import {renderToStaticMarkup} from 'react-dom/server.js'
 import test from 'tape'
-import {evaluate, evaluateSync} from '../index.js'
+import {evaluate, evaluateSync, compile} from '../index.js'
 
 test('xdm (evaluate)', async function (t) {
   t.throws(
@@ -83,6 +83,18 @@ test('xdm (evaluate)', async function (t) {
     ),
     '3.14',
     'should support an `import` of a full url w/ `useDynamicImport`'
+  )
+
+  t.match(
+    String(
+      await compile(
+        'import "a"',
+        // @ts-ignore runtime.js does not have a typing
+        {outputFormat: 'function-body', useDynamicImport: true, ...runtime}
+      )
+    ),
+    /\nawait import\("a"\);?\n/,
+    'should support an `import` w/o specifiers w/ `useDynamicImport`'
   )
 
   t.match(
