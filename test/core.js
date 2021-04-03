@@ -1102,13 +1102,14 @@ test('theme-ui', async function (t) {
     renderToStaticMarkup(
       React.createElement(
         ThemeProvider,
+        // @ts-ignore
         {theme: themeUiBaseTheme},
         React.createElement(await run(String(compileSync('# h1'))), {
           components: themeUiComponents
         })
       )
     ),
-    /<style data-emotion-css="j9bg4">.css-j9bg4{color:var\(--theme-ui-colors-text,#000\);font-family:inherit;line-height:1.125;font-weight:700;font-size:32px;}<\/style><h1 class="css-j9bg4">h1<\/h1>/,
+    /<style data-emotion="css 16uteme">.css-16uteme{color:var\(--theme-ui-colors-text\);font-family:inherit;line-height:1.125;font-weight:700;font-size:32px;}<\/style><h1 class="css-16uteme">h1<\/h1>/,
     'should work'
   )
 

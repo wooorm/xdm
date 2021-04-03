@@ -153,7 +153,8 @@ test('xdm (esbuild)', async function (t) {
           length: 1,
           line: 1,
           lineText: 'asd <https://example.com>?',
-          namespace: 'file'
+          namespace: 'file',
+          suggestion: ''
         },
         notes: [],
         text:
@@ -218,7 +219,8 @@ test('xdm (esbuild)', async function (t) {
               length: 1,
               line: 3,
               lineText: '# Hello, <Message />',
-              namespace: 'file'
+              namespace: 'file',
+              suggestion: ''
             },
             notes: [],
             text: '[esbuild-xdm] 7'
@@ -232,7 +234,8 @@ test('xdm (esbuild)', async function (t) {
               length: 0,
               line: 0,
               lineText: 'export const Message = () => <>World!</>',
-              namespace: 'file'
+              namespace: 'file',
+              suggestion: ''
             },
             notes: [],
             text: '[esbuild-xdm] 1'
@@ -244,7 +247,8 @@ test('xdm (esbuild)', async function (t) {
               length: 0,
               line: 0,
               lineText: 'export const Message = () => <>World!</>',
-              namespace: 'file'
+              namespace: 'file',
+              suggestion: ''
             },
             notes: [],
             text: '[esbuild-xdm] 2'
@@ -256,7 +260,8 @@ test('xdm (esbuild)', async function (t) {
               length: 40,
               line: 1,
               lineText: 'export const Message = () => <>World!</>',
-              namespace: 'file'
+              namespace: 'file',
+              suggestion: ''
             },
             notes: [],
             text: '[esbuild-xdm] 3'
@@ -268,7 +273,8 @@ test('xdm (esbuild)', async function (t) {
               length: 40,
               line: 1,
               lineText: 'export const Message = () => <>World!</>',
-              namespace: 'file'
+              namespace: 'file',
+              suggestion: ''
             },
             notes: [],
             text: '[esbuild-xdm] 4'
@@ -280,7 +286,8 @@ test('xdm (esbuild)', async function (t) {
               length: 7,
               line: 3,
               lineText: '# Hello, <Message />',
-              namespace: 'file'
+              namespace: 'file',
+              suggestion: ''
             },
             notes: [],
             text: '[esbuild-xdm] 5'
@@ -292,7 +299,8 @@ test('xdm (esbuild)', async function (t) {
               length: 11,
               line: 3,
               lineText: '# Hello, <Message />',
-              namespace: 'file'
+              namespace: 'file',
+              suggestion: ''
             },
             notes: [],
             text: '[esbuild-xdm] 6'

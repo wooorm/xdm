@@ -97,7 +97,7 @@ test('xdm (evaluate)', async function (t) {
         ).default
       )
     ),
-    /<div class="css-\w+">Hi!<\/div>/,
+    /<span class="css-\w+">Hi!<\/span>/,
     'should support an import default of a bare specifier w/ `useDynamicImport`'
   )
 
@@ -113,7 +113,7 @@ test('xdm (evaluate)', async function (t) {
         ).default
       )
     ),
-    /<div class="css-\w+">Hi!<\/div>/,
+    /<span class="css-\w+">Hi!<\/span>/,
     'should support a namespace import and a bare specifier w/ `useDynamicImport`'
   )
 
