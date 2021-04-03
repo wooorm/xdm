@@ -39,7 +39,7 @@
     "@rollup/pluginutils": "^4.0.0",
     "astring": "^1.6.0",
     "deasync": "^0.1.0",
-    "estree-util-build-jsx": "^1.1.0",
+    "estree-util-build-jsx": "^2.0.0",
     "estree-util-is-identifier-name": "^2.0.0",
     "estree-walker": "^3.0.0",
     "hast-util-to-estree": "^1.2.0",
