@@ -207,6 +207,27 @@ test('xdm', async function (t) {
 
   t.equal(
     renderToStaticMarkup(
+      React.createElement(await run(compileSync('<X /> and <X.Y />')), {
+        components: {
+          X: Object.assign(
+            function (props) {
+              return React.createElement('span', props, '!')
+            },
+            {
+              Y(props) {
+                return React.createElement('span', props, '?')
+              }
+            }
+          )
+        }
+      })
+    ),
+    '<p><span>!</span> and <span>?</span></p>',
+    'should support passing in `components` directly and as an object w/ members'
+  )
+
+  t.equal(
+    renderToStaticMarkup(
       React.createElement(await run(compileSync('*a*')), {
         components: {
           em(props) {
