@@ -35,14 +35,8 @@ npm install xdm
 yarn add xdm
 ```
 
-`xdm` is ESM-only.
-You must `import` it (`require` doesn’t work).
-This is because in April, which is soon, the last Node version without ESM will
-reach end of life and projects will start migrating to ESM-only around that
-time.
-
-Note: if you’re in CommonJS, you *can* use this, but with a dynamic import
-expression: `var xdm = await import('xdm')`.
+This package is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c):
+Node 12+ is needed to use it and it must be `import`ed instead of `require`d.
 
 ## Contents
 
