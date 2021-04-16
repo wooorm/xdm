@@ -918,6 +918,42 @@ test('MDX (JSX)', async function (t) {
 
   t.equal(
     renderToStaticMarkup(
+      React.createElement(await run(compileSync('<a>b</a><b>c</b>')))
+    ),
+    '<a>b</a>\n<b>c</b>',
+    'should unravel JSX (text) as only children'
+  )
+
+  t.equal(
+    renderToStaticMarkup(
+      React.createElement(await run(compileSync('<a>b</a>\t<b>c</b>')))
+    ),
+    '<a>b</a>\n\t\n<b>c</b>',
+    'should unravel JSX (text) and whitespace as only children'
+  )
+
+  t.equal(
+    renderToStaticMarkup(React.createElement(await run(compileSync('{1}')))),
+    '1',
+    'should unravel expression (text) as an only child'
+  )
+
+  t.equal(
+    renderToStaticMarkup(React.createElement(await run(compileSync('{1}{2}')))),
+    '1\n2',
+    'should unravel expression (text) as only children'
+  )
+
+  t.equal(
+    renderToStaticMarkup(
+      React.createElement(await run(compileSync('{1}\n{2}')))
+    ),
+    '1\n2',
+    'should unravel expression (text) and whitespace as only children'
+  )
+
+  t.equal(
+    renderToStaticMarkup(
       React.createElement(await run(compileSync('a <>b</>')))
     ),
     '<p>a b</p>',
