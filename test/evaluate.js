@@ -98,6 +98,18 @@ test('xdm (evaluate)', async function (t) {
   )
 
   t.match(
+    String(
+      await compile(
+        'import {} from "a"',
+        // @ts-ignore runtime.js does not have a typing
+        {outputFormat: 'function-body', useDynamicImport: true, ...runtime}
+      )
+    ),
+    /\nawait import\("a"\);?\n/,
+    'should support an `import` w/ 0 specifiers w/ `useDynamicImport`'
+  )
+
+  t.match(
     renderToStaticMarkup(
       React.createElement(
         (
