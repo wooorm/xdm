@@ -8,9 +8,12 @@ import {renderToStaticMarkup} from 'react-dom/server.js'
 
 test('xdm (esbuild)', async function (t) {
   var base = path.resolve(path.join('test', 'context'))
-  var message
+  /** @type {import('react').FC} */
   var Content
+  /** @type {import('esbuild').BuildFailure} */
   var result
+  /** @type {import('esbuild').Message} */
+  var message
 
   // MDX.
   await fs.writeFile(
@@ -27,9 +30,9 @@ test('xdm (esbuild)', async function (t) {
     plugins: [esbuildXdm()]
   })
 
-  /** @type {import('react').FunctionComponent} */
-  // @ts-ignore file is dynamically generated
-  Content = (await import('./context/esbuild.js')).default
+  Content =
+    /* @ts-ignore file is dynamically generated */
+    (await import('./context/esbuild.js')).default // type-coverage:ignore-line
 
   t.equal(
     renderToStaticMarkup(React.createElement(Content)),
@@ -52,9 +55,9 @@ test('xdm (esbuild)', async function (t) {
     plugins: [esbuildXdm()]
   })
 
-  /** @type {import('react').FunctionComponent} */
-  // @ts-ignore file is dynamically generated
-  Content = (await import('./context/esbuild-md.js')).default
+  Content =
+    /* @ts-ignore file is dynamically generated */
+    (await import('./context/esbuild-md.js')).default // type-coverage:ignore-line
 
   t.equal(
     renderToStaticMarkup(React.createElement(Content)),
@@ -77,9 +80,9 @@ test('xdm (esbuild)', async function (t) {
     plugins: [esbuildXdm({mdExtensions: [], mdxExtensions: ['.md']})]
   })
 
-  /** @type {import('react').FunctionComponent} */
-  // @ts-ignore file is dynamically generated
-  Content = (await import('./context/esbuild-md-as-mdx.js')).default
+  Content =
+    /* @ts-ignore file is dynamically generated */
+    (await import('./context/esbuild-md-as-mdx.js')).default // type-coverage:ignore-line
 
   t.equal(
     renderToStaticMarkup(React.createElement(Content)),

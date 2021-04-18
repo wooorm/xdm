@@ -129,6 +129,7 @@
     ],
     "prettier": true,
     "rules": {
+      "capitalized-comments": "off",
       "complexity": "off",
       "import/no-mutable-exports": "off",
       "max-depth": "off",

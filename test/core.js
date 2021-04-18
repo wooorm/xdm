@@ -179,6 +179,7 @@ test('xdm', async function (t) {
     renderToStaticMarkup(
       React.createElement(await run(compileSync('<X />')), {
         components: {
+          /** @param {Object.<string, unknown>} props */
           X(props) {
             return React.createElement('span', props, '!')
           }
@@ -194,6 +195,7 @@ test('xdm', async function (t) {
       React.createElement(await run(compileSync('<x.y />')), {
         components: {
           x: {
+            /** @param {Object.<string, unknown>} props */
             y(props) {
               return React.createElement('span', props, '?')
             }
@@ -210,10 +212,12 @@ test('xdm', async function (t) {
       React.createElement(await run(compileSync('<X /> and <X.Y />')), {
         components: {
           X: Object.assign(
+            /** @param {Object.<string, unknown>} props */
             function (props) {
               return React.createElement('span', props, '!')
             },
             {
+              /** @param {Object.<string, unknown>} props */
               Y(props) {
                 return React.createElement('span', props, '?')
               }
@@ -230,6 +234,7 @@ test('xdm', async function (t) {
     renderToStaticMarkup(
       React.createElement(await run(compileSync('*a*')), {
         components: {
+          /** @param {Object.<string, unknown>} props */
           em(props) {
             return React.createElement('i', props)
           }
@@ -248,6 +253,7 @@ test('xdm', async function (t) {
         ),
         {
           components: {
+            /** @param {Object.<string, unknown>} props */
             em(props) {
               return React.createElement('i', props)
             }
@@ -329,8 +335,12 @@ test('xdm', async function (t) {
     renderToStaticMarkup(
       React.createElement(await run(compileSync('a')), {
         components: {
-          wrapper({components, ...props}) {
-            return React.createElement('div', props)
+          /**
+           * @param {Object.<string, unknown>} props
+           */
+          wrapper(props) {
+            var {components, ...rest} = props
+            return React.createElement('div', rest)
           }
         }
       })
@@ -349,8 +359,12 @@ test('xdm', async function (t) {
         ),
         {
           components: {
-            wrapper({components, ...props}) {
-              return React.createElement('article', props)
+            /**
+             * @param {Object.<string, unknown>} props
+             */
+            wrapper(props) {
+              var {components, ...rest} = props
+              return React.createElement('article', rest)
             }
           }
         }
@@ -408,6 +422,9 @@ test('xdm', async function (t) {
         MDXProvider,
         {
           components: {
+            /**
+             * @param {Object.<string, unknown>} props
+             */
             em(props) {
               return React.createElement('i', props)
             }
@@ -1063,20 +1080,15 @@ test('MDX (ESM)', async function (t) {
   )
 
   t.equal(
-    (
-      await run(compileSync('export const number = Math.PI'), {
-        returnModule: true
-      })
-    ).number,
+    (await runWhole(compileSync('export const number = Math.PI'))).number,
     Math.PI,
     'should support exporting w/ ESM'
   )
 
   t.equal(
     (
-      await run(
-        compileSync('export const number = Math.PI\nexport {number as pi}'),
-        {returnModule: true}
+      await runWhole(
+        compileSync('export const number = Math.PI\nexport {number as pi}')
       )
     ).pi,
     Math.PI,
@@ -1176,14 +1188,23 @@ test('theme-ui', async function (t) {
 /**
  *
  * @param {import('../lib/compile.js').VFileCompatible} input
- * @param {{keepImport?: boolean, returnModule?: boolean}} [options]
- * @return {Promise<import('../lib/evaluate.js').ExportMap["default"] & import('../lib/evaluate.js').ExportMap>}
+ * @param {{keepImport?: boolean}} [options]
+ * @return {Promise<import('../lib/evaluate.js').MDXContent>}
  */
 async function run(input, options = {}) {
+  return (await runWhole(input, options)).default
+}
+
+/**
+ *
+ * @param {import('../lib/compile.js').VFileCompatible} input
+ * @param {{keepImport?: boolean}} [options]
+ * @return {Promise<import('../lib/evaluate.js').ExportMap>}
+ */
+async function runWhole(input, options = {}) {
   var name = 'fixture-' + nanoid().toLowerCase() + '.js'
   var fp = path.join('test', 'context', name)
   var doc = String(input)
-  var mod
 
   // Extensionless imports only work in faux-ESM (webpack and such),
   // *not* in Node by default: *except* if there’s an export map defined
@@ -1197,8 +1218,8 @@ async function run(input, options = {}) {
   await fs.writeFile(fp, doc)
 
   try {
-    mod = await import('./context/' + name)
-    return options.returnModule ? mod : mod.default
+    /** @type {import('../lib/evaluate.js').ExportMap} */
+    return await import('./context/' + name)
   } finally {
     // This is not a bug: the `finally` runs after the whole `try` block, but
     // before the `return`.

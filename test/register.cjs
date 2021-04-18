@@ -17,8 +17,10 @@ test('xdm (register)', async function (t) {
   )
 
   // OMG, it works!
-  // @ts-ignore file is dynamically generated
-  var Content = require('./context/register.mdx')
+  var Content = /** @type {import('react').FC} */ (
+    /* @ts-ignore file is dynamically generated */
+    require('./context/register.mdx') // type-coverage:ignore-line
+  )
 
   t.equal(
     renderToStaticMarkup(React.createElement(Content)),

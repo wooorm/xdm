@@ -24,9 +24,10 @@ test('xdm (webpack)', async function (t) {
   })
 
   // One for ESM loading CJS, one for webpack.
-  /** @type {import('react').FunctionComponent} */
-  // @ts-ignore file is dynamically generated
-  var Content = (await import('./context/webpack.cjs')).default.default
+  var Content = /** @type {import('react').FC} */ (
+    /* @ts-ignore file is dynamically generated */
+    (await import('./context/webpack.cjs')).default.default // type-coverage:ignore-line
+  )
 
   t.equal(
     renderToStaticMarkup(React.createElement(Content)),

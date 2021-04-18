@@ -26,9 +26,10 @@ test('xdm (vue)', async function (t) {
 
   await fs.writeFile(path.join(base, 'vue.js'), js)
 
-  /** @type {import('vue').Component} */
-  // @ts-ignore file is dynamically generated
-  var Content = (await import('./context/vue.js')).default
+  var Content = /** @type {import('vue').Component} */ (
+    /* @ts-ignore file is dynamically generated */
+    (await import('./context/vue.js')).default // type-coverage:ignore-line
+  )
 
   var result = await renderToString(
     vue.createSSRApp({
@@ -38,7 +39,10 @@ test('xdm (vue)', async function (t) {
       data() {
         return {
           mdxComponents: {
-            em: (props, context) => vue.h('i', context.attrs, context.slots),
+            em: /**
+             * @param {unknown} _
+             * @param {import('vue').SetupContext} context
+             * */ (_, context) => vue.h('i', context.attrs, context.slots),
             D: () => '<3'
           }
         }

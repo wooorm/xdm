@@ -12,11 +12,12 @@ test('xdm (ESM loader)', async function (t) {
     'export const Message = () => <>World!</>\n\n# Hello, <Message />'
   )
 
+  /** @type {import('react').FC} */
   var Content
 
   try {
-    // @ts-ignore file is dynamically generated
-    Content = await import('./context/esm-loader.mdx')
+    /* @ts-ignore file is dynamically generated */
+    Content = (await import('./context/esm-loader.mdx')).default // type-coverage:ignore-line
   } catch (error) {
     if (error.code === 'ERR_UNKNOWN_FILE_EXTENSION') {
       await fs.unlink(path.join(base, 'esm-loader.mdx'))
@@ -29,7 +30,7 @@ test('xdm (ESM loader)', async function (t) {
   }
 
   t.equal(
-    renderToStaticMarkup(React.createElement(Content.default)),
+    renderToStaticMarkup(React.createElement(Content)),
     '<h1>Hello, World!</h1>',
     'should compile'
   )

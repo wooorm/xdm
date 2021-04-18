@@ -30,9 +30,10 @@ test('xdm (source maps)', async function (t) {
     String(file).replace(/\/jsx-runtime(?=["'])/g, '$&.js')
   )
 
-  /** @type {import('react').FunctionComponent<{}>} */
-  // @ts-ignore file is dynamically generated
-  var Content = (await import('./context/sourcemap.js')).default
+  var Content = /** @type {import('react').FC} */ (
+    /* @ts-ignore file is dynamically generated */
+    (await import('./context/sourcemap.js')).default // type-coverage:ignore-line
+  )
 
   try {
     renderToStaticMarkup(React.createElement(Content))

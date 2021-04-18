@@ -14,15 +14,16 @@ test('xdm (babel)', async function (t) {
   var js = (
     await babel(
       'export const Message = () => <>World!</>\n\n# Hello, <Message />',
-      {filename: 'example.mdx', plugins: [babelPluginSyntaxJsx]}
+      {filename: 'example.mdx', plugins: [babelPluginSyntaxMdx]}
     )
   ).code.replace(/\/jsx-runtime(?=["'])/g, '$&.js')
 
   await fs.writeFile(path.join(base, 'babel.js'), js)
 
-  /** @type {import('react').FunctionComponent} */
-  // @ts-ignore file is dynamically generated
-  var Content = (await import('./context/babel.js')).default
+  var Content = /** @type {import('react').FC} */ (
+    /* @ts-ignore file is dynamically generated */
+    (await import('./context/babel.js')).default // type-coverage:ignore-line
+  )
 
   t.equal(
     renderToStaticMarkup(React.createElement(Content)),
@@ -32,14 +33,21 @@ test('xdm (babel)', async function (t) {
 
   await fs.unlink(path.join(base, 'babel.js'))
 
-  function babelPluginSyntaxJsx() {
+  function babelPluginSyntaxMdx() {
     return {
+      /**
+       * @param {string} contents
+       * @param {import('@babel/parser').ParserOptions} options
+       */
       parserOverride(contents, options) {
         if (
+          // @ts-ignore Babel types are wrong babel/babel#13170
           options.sourceFileName &&
+          // @ts-ignore Babel types are wrong babel/babel#13170
           path.extname(options.sourceFileName) === '.mdx'
         ) {
           return compileSync(
+            // @ts-ignore Babel types are wrong babel/babel#13170
             {contents, path: options.sourceFileName},
             // @ts-ignore TODO find out why compiler causes TS error
             {recmaPlugins: [recmaBabel]}
@@ -51,6 +59,9 @@ test('xdm (babel)', async function (t) {
     }
   }
 
+  /**
+   * @this {import('unified').FrozenProcessor}
+   */
   function recmaBabel() {
     this.Compiler = toBabel
   }
