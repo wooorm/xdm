@@ -712,6 +712,18 @@ test('jsx', async function (t) {
     'should serialize fragments, expressions'
   )
 
+  t.match(
+    String(compileSync("{<w x='y \" z' />}", {jsx: true})),
+    /x="y &quot; z"/,
+    'should serialize double quotes in attribute values'
+  )
+
+  t.match(
+    String(compileSync('{<>a &amp; b &#123; c &lt; d</>}', {jsx: true})),
+    /a & b &#123; c &lt; d/,
+    'should serialize `<` and `{` in JSX text'
+  )
+
   t.end()
 })
 
