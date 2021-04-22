@@ -1,3 +1,7 @@
+/**
+ * @typedef {import('react').FC} FC
+ */
+
 import path from 'path'
 import {promises as fs} from 'fs'
 import test from 'tape'
@@ -12,7 +16,7 @@ test('xdm (ESM loader)', async function (t) {
     'export const Message = () => <>World!</>\n\n# Hello, <Message />'
   )
 
-  /** @type {import('react').FC} */
+  /** @type {FC} */
   var Content
 
   try {

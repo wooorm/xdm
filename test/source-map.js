@@ -1,3 +1,7 @@
+/**
+ * @typedef {import('react').FC} FC
+ */
+
 import {promises as fs} from 'fs'
 import path from 'path'
 import {compile} from '../index.js'
@@ -30,7 +34,7 @@ test('xdm (source maps)', async function (t) {
     String(file).replace(/\/jsx-runtime(?=["'])/g, '$&.js')
   )
 
-  var Content = /** @type {import('react').FC} */ (
+  var Content = /** @type {FC} */ (
     /* @ts-ignore file is dynamically generated */
     (await import('./context/sourcemap.js')).default // type-coverage:ignore-line
   )

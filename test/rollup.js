@@ -1,3 +1,7 @@
+/**
+ * @typedef {import('react').FC} FC
+ */
+
 import path from 'path'
 import {promises as fs} from 'fs'
 import test from 'tape'
@@ -28,7 +32,7 @@ test('xdm (rollup)', async function (t) {
     )
   )
 
-  var Content = /** @type {import('react').FC} */ (
+  var Content = /** @type {FC} */ (
     /* @ts-ignore file is dynamically generated */
     (await import('./context/rollup.js')).default // type-coverage:ignore-line
   )

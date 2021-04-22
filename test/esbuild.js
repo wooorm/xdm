@@ -1,3 +1,11 @@
+/**
+ * @typedef {import('react').FC} FC
+ * @typedef {import('esbuild').BuildFailure} BuildFailure
+ * @typedef {import('esbuild').Message} Message
+ * @typedef {import('unist').Parent} Parent
+ * @typedef {import('vfile').VFile} VFile
+ */
+
 import path from 'path'
 import esbuildXdm from '../esbuild.js'
 import {promises as fs} from 'fs'
@@ -8,11 +16,11 @@ import {renderToStaticMarkup} from 'react-dom/server.js'
 
 test('xdm (esbuild)', async function (t) {
   var base = path.resolve(path.join('test', 'context'))
-  /** @type {import('react').FC} */
+  /** @type {FC} */
   var Content
-  /** @type {import('esbuild').BuildFailure} */
+  /** @type {BuildFailure} */
   var result
-  /** @type {import('esbuild').Message} */
+  /** @type {Message} */
   var message
 
   // MDX.
@@ -186,8 +194,8 @@ test('xdm (esbuild)', async function (t) {
               return transform
               /**
                *
-               * @param {import('unist').Parent} tree
-               * @param {import('vfile').VFile} file
+               * @param {Parent} tree
+               * @param {VFile} file
                */
               function transform(tree, file) {
                 file.message('1')

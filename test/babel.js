@@ -1,3 +1,9 @@
+/**
+ * @typedef {import('react').FC} FC
+ * @typedef {import('@babel/parser').ParserOptions} ParserOptions
+ * @typedef {import('unified').FrozenProcessor} FrozenProcessor
+ */
+
 import {promises as fs} from 'fs'
 import path from 'path'
 import {compileSync} from '../index.js'
@@ -20,7 +26,7 @@ test('xdm (babel)', async function (t) {
 
   await fs.writeFile(path.join(base, 'babel.js'), js)
 
-  var Content = /** @type {import('react').FC} */ (
+  var Content = /** @type {FC} */ (
     /* @ts-ignore file is dynamically generated */
     (await import('./context/babel.js')).default // type-coverage:ignore-line
   )
@@ -37,7 +43,7 @@ test('xdm (babel)', async function (t) {
     return {
       /**
        * @param {string} contents
-       * @param {import('@babel/parser').ParserOptions} options
+       * @param {ParserOptions} options
        */
       parserOverride(contents, options) {
         if (
@@ -49,7 +55,7 @@ test('xdm (babel)', async function (t) {
           return compileSync(
             // @ts-ignore Babel types are wrong babel/babel#13170
             {contents, path: options.sourceFileName},
-            // @ts-ignore TODO find out why compiler causes TS error
+            // @ts-ignore To do: find out why compiler causes TS error
             {recmaPlugins: [recmaBabel]}
           ).result
         }
@@ -60,7 +66,7 @@ test('xdm (babel)', async function (t) {
   }
 
   /**
-   * @this {import('unified').FrozenProcessor}
+   * @this {FrozenProcessor}
    */
   function recmaBabel() {
     this.Compiler = toBabel

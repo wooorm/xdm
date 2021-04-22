@@ -36,6 +36,7 @@
   ],
   "dependencies": {
     "@rollup/pluginutils": "^4.0.0",
+    "@types/estree-jsx": "^0.0.1",
     "@types/loader-utils": "^2.0.0",
     "@types/source-map": "^0.5.0",
     "astring": "^1.6.0",
@@ -53,10 +54,9 @@
     "remark-rehype": "^8.1.0",
     "stringify-entities": "^4.0.0",
     "unified": "^9.0.0",
-    "unist-builder": "^3.0.0",
     "unist-util-position-from-estree": "^1.0.0",
     "unist-util-stringify-position": "^3.0.0",
-    "unist-util-visit": "^2.0.0",
+    "unist-util-visit": "^3.0.0",
     "vfile": "^4.0.0"
   },
   "devDependencies": {
@@ -104,13 +104,12 @@
     "xo": "^0.39.0"
   },
   "scripts": {
+    "prepack": "npm run build && npm run format",
+    "build": "rimraf \"{lib/**/**,test/**,script/**,}*.d.ts\" && tsc && type-coverage",
     "format": "remark . -qfo && prettier . -w --loglevel warn && xo --fix",
     "test-api": "node --no-warnings --experimental-loader=./esm-loader.js test/index.js && node test/register.cjs",
     "test-coverage": "c8 --check-coverage --branches 100 --functions 100 --lines 100 --statements 100 --reporter lcov node --no-warnings --experimental-loader=./esm-loader.js test/index.js",
-    "prebuild": "rimraf \"*.d.ts\" \"{lib,test}/**/*.d.ts\"",
-    "build": "tsc && type-coverage",
-    "test": "npm run format && npm run test-coverage && npm run build",
-    "prepublishOnly": "npm run build"
+    "test": "npm run build && npm run format && npm run test-coverage"
   },
   "prettier": {
     "tabWidth": 2,

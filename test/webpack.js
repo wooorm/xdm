@@ -1,3 +1,7 @@
+/**
+ * @typedef {import('react').FC} FC
+ */
+
 import {promisify} from 'util'
 import path from 'path'
 import {promises as fs} from 'fs'
@@ -24,7 +28,7 @@ test('xdm (webpack)', async function (t) {
   })
 
   // One for ESM loading CJS, one for webpack.
-  var Content = /** @type {import('react').FC} */ (
+  var Content = /** @type {FC} */ (
     /* @ts-ignore file is dynamically generated */
     (await import('./context/webpack.cjs')).default.default // type-coverage:ignore-line
   )

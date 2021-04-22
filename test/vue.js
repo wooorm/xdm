@@ -1,3 +1,8 @@
+/**
+ * @typedef {import('vue').Component} Component
+ * @typedef {import('vue').SetupContext} SetupContext
+ */
+
 import path from 'path'
 import {compile} from '../index.js'
 import {promises as fs} from 'fs'
@@ -26,7 +31,7 @@ test('xdm (vue)', async function (t) {
 
   await fs.writeFile(path.join(base, 'vue.js'), js)
 
-  var Content = /** @type {import('vue').Component} */ (
+  var Content = /** @type {Component} */ (
     /* @ts-ignore file is dynamically generated */
     (await import('./context/vue.js')).default // type-coverage:ignore-line
   )
@@ -41,7 +46,7 @@ test('xdm (vue)', async function (t) {
           mdxComponents: {
             em: /**
              * @param {unknown} _
-             * @param {import('vue').SetupContext} context
+             * @param {SetupContext} context
              * */ (_, context) => vue.h('i', context.attrs, context.slots),
             D: () => '<3'
           }

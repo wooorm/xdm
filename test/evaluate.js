@@ -274,7 +274,7 @@ test('xdm (evaluate)', async function (t) {
       )),
       default: undefined
     },
-    {default: undefined, number: 3.14},
+    {array: [1, 2], default: undefined, number: 3.14, object: {a: 1, b: 2}},
     'should support an `export all from` w/ `useDynamicImport`'
   )
 
@@ -288,7 +288,7 @@ test('xdm (evaluate)', async function (t) {
       )),
       default: undefined
     },
-    {default: undefined, number: 6.28},
+    {array: [1, 2], default: undefined, number: 6.28, object: {a: 1, b: 2}},
     'should support an `export all from`, but prefer explicit exports, w/ `useDynamicImport`'
   )
 

@@ -1,3 +1,7 @@
+/**
+ * @typedef {import('react').FC} FC
+ */
+
 'use strict'
 
 var path = require('path')
@@ -17,7 +21,7 @@ test('xdm (register)', async function (t) {
   )
 
   // OMG, it works!
-  var Content = /** @type {import('react').FC} */ (
+  var Content = /** @type {FC} */ (
     /* @ts-ignore file is dynamically generated */
     require('./context/register.mdx') // type-coverage:ignore-line
   )

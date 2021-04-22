@@ -1,3 +1,10 @@
+/**
+ * @typedef {import('hast').Root} Root
+ * @typedef {import('../lib/compile.js').VFileCompatible} VFileCompatible
+ * @typedef {import('../lib/evaluate.js').MDXContent} MDXContent
+ * @typedef {import('../lib/evaluate.js').ExportMap} ExportMap
+ */
+
 import path from 'path'
 import {promises as fs} from 'fs'
 import {MDXProvider} from '@mdx-js/react'
@@ -311,7 +318,7 @@ test('xdm', async function (t) {
         {
           components: {
             y: {
-              // @ts-ignore React typings do not support nested component names
+              // @ts-ignore `mdx-js/react` types do not support nested components.
               z() {
                 return React.createElement('span', {}, '!')
               }
@@ -347,6 +354,20 @@ test('xdm', async function (t) {
     ),
     '<div><p>a</p></div>',
     'should support setting the layout by passing it (as `wrapper`) to `MDXContent`'
+  )
+
+  t.equal(
+    renderToStaticMarkup(
+      React.createElement(
+        await run(
+          compileSync(
+            'import React from "react"\nexport default class extends React.Component { render() { return <>{this.props.children}</> } }\n\na'
+          )
+        )
+      )
+    ),
+    '<p>a</p>',
+    'should support setting the layout through a class component'
   )
 
   t.equal(
@@ -393,6 +414,19 @@ test('xdm', async function (t) {
     /Cannot specify multiple layouts \(previous: 1:1-1:31\)/,
     'should *not* support multiple layouts (2)'
   )
+
+  try {
+    renderToStaticMarkup(
+      React.createElement(await run(compileSync('export default a')))
+    )
+    t.fail()
+  } catch (error) {
+    t.equal(
+      error.message,
+      'a is not defined',
+      'should support an identifier as an export default'
+    )
+  }
 
   try {
     renderToStaticMarkup(React.createElement(await run(compileSync('<X />'))))
@@ -483,7 +517,7 @@ test('xdm', async function (t) {
   )
 
   try {
-    // @ts-ignore Sure the types prohibit it but what if someone does it anyway?
+    // @ts-ignore runtime.
     createProcessor({format: 'detect'})
     t.fail()
   } catch (error) {
@@ -576,7 +610,7 @@ test('xdm', async function (t) {
       await compile('a', {
         format: 'md',
         remarkPlugins: [
-          () => (/** @type {import('hast').Root} */ tree) => {
+          () => (/** @type {Root} */ tree) => {
             tree.children.unshift({
               // @ts-ignore MDXHAST.
               type: 'mdxjsEsm',
@@ -1085,6 +1119,55 @@ test('MDX (ESM)', async function (t) {
     'should support exporting w/ ESM'
   )
 
+  t.ok(
+    'a' in (await runWhole(compileSync('export var a'))),
+    'should support exporting an identifier w/o a value'
+  )
+
+  t.equal(
+    (
+      await runWhole(
+        compileSync('import {object} from "./data.js"\nexport var {a} = object')
+      )
+    ).a,
+    1,
+    'should support exporting an object pattern'
+  )
+
+  t.deepEqual(
+    (
+      await runWhole(
+        compileSync(
+          'import {object} from "./data.js"\nexport var {a, ...rest} = object'
+        )
+      )
+    ).rest,
+    {b: 2},
+    'should support exporting a rest element in an object pattern'
+  )
+
+  t.deepEqual(
+    (
+      await runWhole(
+        compileSync(
+          'import {object} from "./data.js"\nexport var {c = 3} = object'
+        )
+      )
+    ).c,
+    3,
+    'should support exporting an assignment pattern in an object pattern'
+  )
+
+  t.equal(
+    (
+      await runWhole(
+        compileSync('import {array} from "./data.js"\nexport var [a] = array')
+      )
+    ).a,
+    1,
+    'should support exporting an array pattern'
+  )
+
   t.equal(
     (
       await runWhole(
@@ -1171,7 +1254,7 @@ test('theme-ui', async function (t) {
     renderToStaticMarkup(
       React.createElement(
         ThemeProvider,
-        // @ts-ignore
+        // @ts-ignore enums being lost.
         {theme: themeUiBaseTheme},
         React.createElement(await run(String(compileSync('# h1'))), {
           components: themeUiComponents
@@ -1187,9 +1270,9 @@ test('theme-ui', async function (t) {
 
 /**
  *
- * @param {import('../lib/compile.js').VFileCompatible} input
+ * @param {VFileCompatible} input
  * @param {{keepImport?: boolean}} [options]
- * @return {Promise<import('../lib/evaluate.js').MDXContent>}
+ * @return {Promise<MDXContent>}
  */
 async function run(input, options = {}) {
   return (await runWhole(input, options)).default
@@ -1197,9 +1280,9 @@ async function run(input, options = {}) {
 
 /**
  *
- * @param {import('../lib/compile.js').VFileCompatible} input
+ * @param {VFileCompatible} input
  * @param {{keepImport?: boolean}} [options]
- * @return {Promise<import('../lib/evaluate.js').ExportMap>}
+ * @return {Promise<ExportMap>}
  */
 async function runWhole(input, options = {}) {
   var name = 'fixture-' + nanoid().toLowerCase() + '.js'
@@ -1218,7 +1301,7 @@ async function runWhole(input, options = {}) {
   await fs.writeFile(fp, doc)
 
   try {
-    /** @type {import('../lib/evaluate.js').ExportMap} */
+    /** @type {ExportMap} */
     return await import('./context/' + name)
   } finally {
     // This is not a bug: the `finally` runs after the whole `try` block, but
