@@ -168,8 +168,9 @@ test('xdm (esbuild)', async function (t) {
           suggestion: ''
         },
         notes: [],
+        pluginName: 'esbuild-xdm',
         text:
-          '[esbuild-xdm] Unexpected character `/` (U+002F) before local name, expected a character that can start a name, such as a letter, `$`, or `_` (note: to create a link in MDX, use `[text](url)`)'
+          'Unexpected character `/` (U+002F) before local name, expected a character that can start a name, such as a letter, `$`, or `_` (note: to create a link in MDX, use `[text](url)`)'
       },
       'should pass errors'
     )
@@ -234,7 +235,8 @@ test('xdm (esbuild)', async function (t) {
               suggestion: ''
             },
             notes: [],
-            text: '[esbuild-xdm] 7'
+            pluginName: 'esbuild-xdm',
+            text: '7'
           }
         ],
         warnings: [
@@ -249,7 +251,8 @@ test('xdm (esbuild)', async function (t) {
               suggestion: ''
             },
             notes: [],
-            text: '[esbuild-xdm] 1'
+            pluginName: 'esbuild-xdm',
+            text: '1'
           },
           {
             location: {
@@ -262,7 +265,8 @@ test('xdm (esbuild)', async function (t) {
               suggestion: ''
             },
             notes: [],
-            text: '[esbuild-xdm] 2'
+            pluginName: 'esbuild-xdm',
+            text: '2'
           },
           {
             location: {
@@ -275,7 +279,8 @@ test('xdm (esbuild)', async function (t) {
               suggestion: ''
             },
             notes: [],
-            text: '[esbuild-xdm] 3'
+            pluginName: 'esbuild-xdm',
+            text: '3'
           },
           {
             location: {
@@ -288,7 +293,8 @@ test('xdm (esbuild)', async function (t) {
               suggestion: ''
             },
             notes: [],
-            text: '[esbuild-xdm] 4'
+            pluginName: 'esbuild-xdm',
+            text: '4'
           },
           {
             location: {
@@ -301,7 +307,8 @@ test('xdm (esbuild)', async function (t) {
               suggestion: ''
             },
             notes: [],
-            text: '[esbuild-xdm] 5'
+            pluginName: 'esbuild-xdm',
+            text: '5'
           },
           {
             location: {
@@ -314,7 +321,8 @@ test('xdm (esbuild)', async function (t) {
               suggestion: ''
             },
             notes: [],
-            text: '[esbuild-xdm] 6'
+            pluginName: 'esbuild-xdm',
+            text: '6'
           }
         ]
       },
