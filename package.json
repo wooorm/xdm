@@ -51,7 +51,6 @@
     "periscopic": "^3.0.0",
     "remark-parse": "^9.0.0",
     "remark-rehype": "^8.1.0",
-    "stringify-entities": "^4.0.0",
     "unified": "^9.0.0",
     "unist-util-position-from-estree": "^1.0.0",
     "unist-util-stringify-position": "^3.0.0",
