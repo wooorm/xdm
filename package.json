@@ -20,14 +20,6 @@
     "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)"
   ],
   "main": "./index.js",
-  "exports": {
-    ".": "./index.js",
-    "./esbuild.js": "./esbuild.js",
-    "./rollup.js": "./rollup.js",
-    "./webpack.js": "./webpack.js",
-    "./esm-loader.js": "./esm-loader.js",
-    "./xdm-register.cjs": "./xdm-register.cjs"
-  },
   "type": "module",
   "types": "./index.d.ts",
   "sideEffects": false,
