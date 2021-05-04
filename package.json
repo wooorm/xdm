@@ -19,10 +19,10 @@
   "contributors": [
     "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)"
   ],
-  "main": "index.js",
   "type": "module",
-  "types": "./index.d.ts",
+  "main": "index.js",
   "sideEffects": false,
+  "types": "./index.d.ts",
   "files": [
     "lib/",
     "esbuild.js",
