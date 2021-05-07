@@ -1136,8 +1136,9 @@ Expressions can be empty or contain just a comment:
 All content (headings, paragraphs, etc) you write are exported as the default
 export from a compiled MDX file as a component.
 
-It’s possible to pass props in. The special prop `components` is used to
-determine how to render components.  This includes both JSX and markdown syntax.
+It’s possible to pass props in.
+The special prop `components` is used to determine how to render components.
+This includes both JSX and markdown syntax.
 Say we have a `message.mdx` file:
 
 ```mdx
