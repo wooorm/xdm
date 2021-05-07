@@ -168,8 +168,8 @@ import {Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs} from 'react/jsx-runti
 
 export var Thing = () => _jsx(_Fragment, {children: 'World!'})
 
-function MDXContent(_props) {
-  const _components = Object.assign({h1: 'h1'}, _props.components)
+function MDXContent(props) {
+  const _components = Object.assign({h1: 'h1'}, props.components)
   const {wrapper: MDXLayout} = _components
   const _content = _jsx(_Fragment, {
     children: _jsxs(_components.h1, {
@@ -177,7 +177,7 @@ function MDXContent(_props) {
     })
   })
   return MDXLayout
-    ? _jsx(MDXLayout, Object.assign({}, _props, {children: _content}))
+    ? _jsx(MDXLayout, Object.assign({}, props, {children: _content}))
     : _content
 }
 
@@ -379,14 +379,14 @@ async function main(code) {
 ```js
 import {Fragment as _Fragment, jsx as _jsx} from 'react/jsx-runtime'
 export var no = 3.14
-function MDXContent(_props) { /* … */ }
+function MDXContent(props) { /* … */ }
 export default MDXContent
 ```
 
 ```js
 const {Fragment: _Fragment, jsx: _jsx} = arguments[0]
 var no = 3.14
-function MDXContent(_props) { /* … */ }
+function MDXContent(props) { /* … */ }
 return {no, default: MDXContent}
 ```
 
@@ -434,7 +434,7 @@ console.log(String(compileSync(code, {outputFormat: 'function-body', useDynamicI
 const {Fragment: _Fragment, jsx: _jsx, jsxs: _jsxs} = arguments[0]
 const {name} = await import('./meta.js')
 const {no} = await import('./numbers.js')
-function MDXContent(_props) { /* … */ }
+function MDXContent(props) { /* … */ }
 return {no, default: MDXContent}
 ```
 
@@ -475,7 +475,7 @@ async function main() {
 ```js
 import {Fragment as _Fragment, jsx as _jsx} from 'react/jsx-runtime'
 export {number} from 'https://a.full/data.js'
-function MDXContent(_props) { /* … */ }
+function MDXContent(props) { /* … */ }
 export default MDXContent
 ```
 
@@ -548,9 +548,9 @@ compile(file, {providerImportSource: '@mdx-js/react'})
 
  export var Thing = () => React.createElement(React.Fragment, null, 'World!')
 
- function MDXContent(_props) {
--  const _components = Object.assign({h1: 'h1'}, _props.components)
-+  const _components = Object.assign({h1: 'h1'}, _provideComponents(), _props.components)
+ function MDXContent(props) {
+-  const _components = Object.assign({h1: 'h1'}, props.components)
++  const _components = Object.assign({h1: 'h1'}, _provideComponents(), props.components)
    const {wrapper: MDXLayout} = _components
    const _content = React.createElement(
      React.Fragment,
@@ -582,8 +582,8 @@ compile(file, {jsx: true})
 -export var Thing = () => React.createElement(React.Fragment, null, 'World!')
 +export var Thing = () => <>World!</>
 
- function MDXContent(_props) {
-   const _components = Object.assign({h1: 'h1'}, _props.components)
+ function MDXContent(props) {
+   const _components = Object.assign({h1: 'h1'}, props.components)
    const {wrapper: MDXLayout} = _components
 -  const _content = _jsx(_Fragment, {
 -    children: _jsxs(_components.h1, {
@@ -1136,11 +1136,14 @@ Expressions can be empty or contain just a comment:
 All content (headings, paragraphs, etc) you write are exported as the default
 export from a compiled MDX file as a component.
 
-It’s possible to pass components in.
+It’s possible to pass props in. The special prop `components` is used to
+determine how to render components.  This includes both JSX and markdown syntax.
 Say we have a `message.mdx` file:
 
 ```mdx
 # Hello, *<Planet />*!
+
+Remember when we first met {props.year}?
 ```
 
 This file could be imported from JavaScript and passed components like so:
@@ -1148,7 +1151,7 @@ This file could be imported from JavaScript and passed components like so:
 ```js
 import Message from './message.mdx' // Assumes an integration is used to compile MDX -> JS.
 
-<Message components={{Planet: () => 'Venus'}} />
+<Message components={{Planet: () => 'Venus'}} year={1962} />
 ```
 
 You can also change the things that come from markdown:
@@ -1165,6 +1168,7 @@ You can also change the things that come from markdown:
     // Pass a component.
     Planet: () => 'Venus'
   }}
+  year={1962}
 />
 ```
 
