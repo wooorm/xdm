@@ -1143,7 +1143,7 @@ Say we have a `message.mdx` file:
 ```mdx
 # Hello, *<Planet />*!
 
-Remember when we first met {props.year}?
+Remember when we first met in {props.year}?
 ```
 
 This file could be imported from JavaScript and passed components like so:
