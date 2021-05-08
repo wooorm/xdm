@@ -652,13 +652,13 @@ test('jsx', async function (t) {
     String(compileSync('*a*', {jsx: true})),
     [
       '/*@jsxRuntime automatic @jsxImportSource react*/',
-      'function MDXContent(_props) {',
+      'function MDXContent(props) {',
       '  const _components = Object.assign({',
       '    p: "p",',
       '    em: "em"',
-      '  }, _props.components), {wrapper: MDXLayout} = _components;',
+      '  }, props.components), {wrapper: MDXLayout} = _components;',
       '  const _content = <><_components.p><_components.em>{"a"}</_components.em></_components.p></>;',
-      '  return MDXLayout ? <MDXLayout {..._props}>{_content}</MDXLayout> : _content;',
+      '  return MDXLayout ? <MDXLayout {...props}>{_content}</MDXLayout> : _content;',
       '}',
       'export default MDXContent;',
       ''
@@ -670,10 +670,10 @@ test('jsx', async function (t) {
     String(compileSync('<a {...b} c d="1" e={1} />', {jsx: true})),
     [
       '/*@jsxRuntime automatic @jsxImportSource react*/',
-      'function MDXContent(_props) {',
-      '  const _components = Object.assign({}, _props.components), {wrapper: MDXLayout} = _components;',
+      'function MDXContent(props) {',
+      '  const _components = Object.assign({}, props.components), {wrapper: MDXLayout} = _components;',
       '  const _content = <><a {...b} c d="1" e={1} /></>;',
-      '  return MDXLayout ? <MDXLayout {..._props}>{_content}</MDXLayout> : _content;',
+      '  return MDXLayout ? <MDXLayout {...props}>{_content}</MDXLayout> : _content;',
       '}',
       'export default MDXContent;',
       ''
@@ -685,10 +685,10 @@ test('jsx', async function (t) {
     String(compileSync('<><a:b /><c.d/></>', {jsx: true})),
     [
       '/*@jsxRuntime automatic @jsxImportSource react*/',
-      'function MDXContent(_props) {',
-      '  const _components = Object.assign({}, _props.components), {wrapper: MDXLayout, c} = _components;',
+      'function MDXContent(props) {',
+      '  const _components = Object.assign({}, props.components), {wrapper: MDXLayout, c} = _components;',
       '  const _content = <><><a:b /><c.d /></></>;',
-      '  return MDXLayout ? <MDXLayout {..._props}>{_content}</MDXLayout> : _content;',
+      '  return MDXLayout ? <MDXLayout {...props}>{_content}</MDXLayout> : _content;',
       '}',
       'export default MDXContent;',
       ''
@@ -701,15 +701,32 @@ test('jsx', async function (t) {
     [
       '/*@jsxRuntime automatic @jsxImportSource react*/',
       '/*1*/',
-      'function MDXContent(_props) {',
-      '  const _components = Object.assign({}, _props.components), {wrapper: MDXLayout} = _components;',
+      'function MDXContent(props) {',
+      '  const _components = Object.assign({}, props.components), {wrapper: MDXLayout} = _components;',
       '  const _content = <><>{"a "}{}{" b"}</></>;',
-      '  return MDXLayout ? <MDXLayout {..._props}>{_content}</MDXLayout> : _content;',
+      '  return MDXLayout ? <MDXLayout {...props}>{_content}</MDXLayout> : _content;',
       '}',
       'export default MDXContent;',
       ''
     ].join('\n'),
     'should serialize fragments, expressions'
+  )
+
+  t.equal(
+    String(compileSync('Hello {props.name}', {jsx: true})),
+    [
+      '/*@jsxRuntime automatic @jsxImportSource react*/',
+      'function MDXContent(props) {',
+      '  const _components = Object.assign({',
+      '    p: "p"',
+      '  }, props.components), {wrapper: MDXLayout} = _components;',
+      '  const _content = <><_components.p>{"Hello "}{props.name}</_components.p></>;',
+      '  return MDXLayout ? <MDXLayout {...props}>{_content}</MDXLayout> : _content;',
+      '}',
+      'export default MDXContent;',
+      ''
+    ].join('\n'),
+    'should allow using props'
   )
 
   t.match(
