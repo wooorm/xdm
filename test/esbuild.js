@@ -13,7 +13,6 @@ import test from 'tape'
 import esbuild from 'esbuild'
 import React from 'react'
 import {renderToStaticMarkup} from 'react-dom/server.js'
-import {StringDecoder} from 'string_decoder'
 
 test('xdm (esbuild)', async function (t) {
   var base = path.resolve(path.join('test', 'context'))
@@ -338,29 +337,37 @@ test('xdm (esbuild)', async function (t) {
   const inlinePlugin = {
     name: 'inline plugin',
     setup: (build) => {
-      build.onResolve({filter: /.*/}, () => {
+      build.onResolve({filter: /index\.mdx/}, () => {
         return {
           path: path.join(process.cwd(), 'index.mdx'),
           pluginData: {
-            contents: `# Test
-            Test Contents
-            `.trim()
+            contents: `# Test`
           }
         }
       })
     }
   }
 
-  const buildResult = await esbuild.build({
+  await esbuild.build({
     entryPoints: [path.join(process.cwd(), 'index.mdx')],
     plugins: [inlinePlugin, esbuildXdm()],
-    write: false
+    define: {'process.env.NODE_ENV': '"development"'},
+    format: 'esm',
+    bundle: true,
+    outfile: path.join(base, 'esbuild-compile-from-memory.js')
   })
 
-  const decoder = new StringDecoder('utf8')
-  const code = decoder.write(Buffer.from(buildResult.outputFiles[0].contents))
+  Content =
+    /** @ts-ignore file is dynamically generated */
+    (await import('./context/esbuild-compile-from-memory.js')).default // type-coverage:ignore-line
 
-  t.match(code, /children: "Test"\n/)
+  t.equal(
+    renderToStaticMarkup(React.createElement(Content)),
+    '<h1>Test</h1>',
+    'should compile from `pluginData.content`'
+  )
+
+  await fs.unlink(path.join(base, 'esbuild-compile-from-memory.js'))
 
   t.end()
 })
