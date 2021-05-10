@@ -26,10 +26,9 @@ test('xdm (rollup)', async function (t) {
 
   await fs.writeFile(
     path.join(base, 'rollup.js'),
-    (await bundle.generate({format: 'es'})).output[0].code.replace(
-      /\/jsx-runtime(?=["'])/g,
-      '$&.js'
-    )
+    (
+      await bundle.generate({format: 'es'})
+    ).output[0].code.replace(/\/jsx-runtime(?=["'])/g, '$&.js')
   )
 
   var Content = /** @type {FC} */ (
