@@ -169,8 +169,7 @@ test('xdm (esbuild)', async function (t) {
         },
         notes: [],
         pluginName: 'esbuild-xdm',
-        text:
-          'Unexpected character `/` (U+002F) before local name, expected a character that can start a name, such as a letter, `$`, or `_` (note: to create a link in MDX, use `[text](url)`)'
+        text: 'Unexpected character `/` (U+002F) before local name, expected a character that can start a name, such as a letter, `$`, or `_` (note: to create a link in MDX, use `[text](url)`)'
       },
       'should pass errors'
     )
@@ -333,6 +332,42 @@ test('xdm (esbuild)', async function (t) {
   await fs.unlink(path.join(base, 'esbuild-warnings.mdx'))
 
   console.log('\nnote: the preceding errors and warnings are expected!\n')
+
+  /** @type import('esbuild').Plugin */
+  const inlinePlugin = {
+    name: 'inline plugin',
+    setup: (build) => {
+      build.onResolve({filter: /index\.mdx/}, () => {
+        return {
+          path: path.join(process.cwd(), 'index.mdx'),
+          pluginData: {
+            contents: `# Test`
+          }
+        }
+      })
+    }
+  }
+
+  await esbuild.build({
+    entryPoints: [path.join(process.cwd(), 'index.mdx')],
+    plugins: [inlinePlugin, esbuildXdm()],
+    define: {'process.env.NODE_ENV': '"development"'},
+    format: 'esm',
+    bundle: true,
+    outfile: path.join(base, 'esbuild-compile-from-memory.js')
+  })
+
+  Content =
+    /** @ts-ignore file is dynamically generated */
+    (await import('./context/esbuild-compile-from-memory.js')).default // type-coverage:ignore-line
+
+  t.equal(
+    renderToStaticMarkup(React.createElement(Content)),
+    '<h1>Test</h1>',
+    'should compile from `pluginData.content`'
+  )
+
+  await fs.unlink(path.join(base, 'esbuild-compile-from-memory.js'))
 
   t.end()
 })
