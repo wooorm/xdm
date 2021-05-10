@@ -13,6 +13,7 @@ import test from 'tape'
 import esbuild from 'esbuild'
 import React from 'react'
 import {renderToStaticMarkup} from 'react-dom/server.js'
+import {StringDecoder} from 'string_decoder'
 
 test('xdm (esbuild)', async function (t) {
   var base = path.resolve(path.join('test', 'context'))
@@ -169,8 +170,7 @@ test('xdm (esbuild)', async function (t) {
         },
         notes: [],
         pluginName: 'esbuild-xdm',
-        text:
-          'Unexpected character `/` (U+002F) before local name, expected a character that can start a name, such as a letter, `$`, or `_` (note: to create a link in MDX, use `[text](url)`)'
+        text: 'Unexpected character `/` (U+002F) before local name, expected a character that can start a name, such as a letter, `$`, or `_` (note: to create a link in MDX, use `[text](url)`)'
       },
       'should pass errors'
     )
@@ -333,6 +333,34 @@ test('xdm (esbuild)', async function (t) {
   await fs.unlink(path.join(base, 'esbuild-warnings.mdx'))
 
   console.log('\nnote: the preceding errors and warnings are expected!\n')
+
+  /** @type import('esbuild').Plugin */
+  const inlinePlugin = {
+    name: 'inline plugin',
+    setup: (build) => {
+      build.onResolve({filter: /.*/}, () => {
+        return {
+          path: path.join(process.cwd(), 'index.mdx'),
+          pluginData: {
+            contents: `# Test
+            Test Contents
+            `.trim()
+          }
+        }
+      })
+    }
+  }
+
+  const buildResult = await esbuild.build({
+    entryPoints: [path.join(process.cwd(), 'index.mdx')],
+    plugins: [inlinePlugin, esbuildXdm()],
+    write: false
+  })
+
+  const decoder = new StringDecoder('utf8')
+  const code = decoder.write(Buffer.from(buildResult.outputFiles[0].contents))
+
+  t.match(code, /children: "Test"\n/)
 
   t.end()
 })
