@@ -280,9 +280,9 @@ test('xdm', async function (t) {
     )
     t.fail()
   } catch (error) {
-    t.equal(
+    t.match(
       error.message,
-      'Component `Y` was not imported, exported, or given',
+      /Element type is invalid/,
       'should throw on missing components in exported components'
     )
   }
@@ -432,9 +432,9 @@ test('xdm', async function (t) {
     renderToStaticMarkup(React.createElement(await run(compileSync('<X />'))))
     t.fail()
   } catch (error) {
-    t.equal(
+    t.match(
       error.message,
-      'Component `X` was not imported, exported, or given',
+      /Element type is invalid/,
       'should throw if a required component is not passed'
     )
   }
@@ -481,9 +481,9 @@ test('xdm', async function (t) {
     )
     t.fail()
   } catch (error) {
-    t.equal(
+    t.match(
       error.message,
-      'Component `X` was not imported, exported, or given',
+      /Element type is invalid/,
       'should throw if a required component is not passed or given to `MDXProvider`'
     )
   }
