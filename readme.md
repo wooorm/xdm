@@ -1823,7 +1823,15 @@ But as the above example shows, it’s a useful place to put some extra fields.
 format of that meta string is, so it defaults to how markdown handles it: `meta`
 is ignored.
 
-But it’s possible to pass that string as a prop by writing a rehype plugin:
+The short answer is:
+use [`remark-mdx-code-meta`](https://github.com/remarkjs/remark-mdx-code-meta),
+it lets you type JSX attributes in the `meta` part and exposes them on the
+`pre` component.
+
+Or you can do it yourself, however you want, by writing a custom plugin to
+interpret the `meta` field.
+For example, it’s possible to pass that string as a prop by writing a rehype
+plugin:
 
 ```js
 function rehypeMetaAsAttribute() {
@@ -2087,6 +2095,10 @@ None yet!
 
 ###### Plugins
 
+*   [`rehype-mdx-title`](https://github.com/remcohaszing/rehype-mdx-title)
+    — expose the page title as a string
+*   [`remark-mdx-code-meta`](https://github.com/remcohaszing/remark-mdx-code-meta)
+    — interpret the code `meta` field as JSX props
 *   [`remark-mdx-images`](https://github.com/remcohaszing/remark-mdx-images)
     — change image sources to JavaScript imports
 *   [`remark-mdx-frontmatter`](https://github.com/remcohaszing/remark-mdx-frontmatter)
