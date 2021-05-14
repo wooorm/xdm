@@ -1823,11 +1823,13 @@ But as the above example shows, it’s a useful place to put some extra fields.
 format of that meta string is, so it defaults to how markdown handles it: `meta`
 is ignored.
 
-[`remark-mdx-code-meta`](https://github.com/remarkjs/remark-mdx-code-meta) can
-be used to interpret code `meta` as JSX props syntax.
+The short answer is:
+use [`remark-mdx-code-meta`](https://github.com/remarkjs/remark-mdx-code-meta),
+it lets you type JSX attributes in the `meta` part and exposes them on the
+`pre` component.
 
-It’s also possible to write a custom plugin to interpret the `meta` however you
-want.
+Or you can do it yourself, however you want, by writing a custom plugin to
+interpret the `meta` field.
 For example, it’s possible to pass that string as a prop by writing a rehype
 plugin:
 
