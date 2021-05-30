@@ -24,7 +24,7 @@ import {components as themeUiComponents, ThemeProvider} from 'theme-ui'
 import {base as themeUiBaseTheme} from '@theme-ui/preset-base'
 import {compile, compileSync, createProcessor, nodeTypes} from '../index.js'
 
-test('xdm', async function (t) {
+test('xdm', async (t) => {
   t.equal(
     renderToStaticMarkup(
       React.createElement(await run(await compile('# hi!')))
@@ -171,7 +171,7 @@ test('xdm', async function (t) {
   )
 
   t.throws(
-    function () {
+    () => {
       compileSync('import React from "react"\n\n.', {
         jsxRuntime: 'classic',
         pragmaImportSource: '@emotion/react',
@@ -220,7 +220,7 @@ test('xdm', async function (t) {
         components: {
           X: Object.assign(
             /** @param {Object.<string, unknown>} props */
-            function (props) {
+            (props) => {
               return React.createElement('span', props, '!')
             },
             {
@@ -346,7 +346,7 @@ test('xdm', async function (t) {
            * @param {Object.<string, unknown>} props
            */
           wrapper(props) {
-            var {components, ...rest} = props
+            const {components, ...rest} = props
             return React.createElement('div', rest)
           }
         }
@@ -384,7 +384,7 @@ test('xdm', async function (t) {
              * @param {Object.<string, unknown>} props
              */
             wrapper(props) {
-              var {components, ...rest} = props
+              const {components, ...rest} = props
               return React.createElement('article', rest)
             }
           }
@@ -396,7 +396,7 @@ test('xdm', async function (t) {
   )
 
   t.throws(
-    function () {
+    () => {
       compileSync(
         'export default function a() {}\n\nexport default function b() {}\n\n.'
       )
@@ -406,7 +406,7 @@ test('xdm', async function (t) {
   )
 
   t.throws(
-    function () {
+    () => {
       compileSync(
         'export default function a() {}\n\nexport {Layout as default} from "./components.js"\n\n.'
       )
@@ -647,7 +647,7 @@ test('xdm', async function (t) {
   t.end()
 })
 
-test('jsx', async function (t) {
+test('jsx', async (t) => {
   t.equal(
     String(compileSync('*a*', {jsx: true})),
     [
@@ -744,7 +744,7 @@ test('jsx', async function (t) {
   t.end()
 })
 
-test('markdown (CM)', async function (t) {
+test('markdown (CM)', async (t) => {
   t.equal(
     renderToStaticMarkup(React.createElement(await run(compileSync('[a](b)')))),
     '<p><a href="b">a</a></p>',
@@ -760,7 +760,7 @@ test('markdown (CM)', async function (t) {
   )
 
   t.throws(
-    function () {
+    () => {
       compileSync('<http://a>')
     },
     /note: to create a link in MDX, use `\[text]\(url\)/,
@@ -860,7 +860,7 @@ test('markdown (CM)', async function (t) {
   t.end()
 })
 
-test('markdown (GFM, with `remark-gfm`)', async function (t) {
+test('markdown (GFM, with `remark-gfm`)', async (t) => {
   t.equal(
     renderToStaticMarkup(
       React.createElement(
@@ -904,7 +904,7 @@ test('markdown (GFM, with `remark-gfm`)', async function (t) {
   t.end()
 })
 
-test('markdown (frontmatter, `remark-frontmatter`)', async function (t) {
+test('markdown (frontmatter, `remark-frontmatter`)', async (t) => {
   t.equal(
     renderToStaticMarkup(
       React.createElement(
@@ -934,7 +934,7 @@ test('markdown (frontmatter, `remark-frontmatter`)', async function (t) {
   t.end()
 })
 
-test('markdown (math, `remark-math`, `rehype-katex`)', async function (t) {
+test('markdown (math, `remark-math`, `rehype-katex`)', async (t) => {
   t.match(
     renderToStaticMarkup(
       React.createElement(
@@ -953,7 +953,7 @@ test('markdown (math, `remark-math`, `rehype-katex`)', async function (t) {
   t.end()
 })
 
-test('markdown (footnotes, `remark-footnotes`)', async function (t) {
+test('markdown (footnotes, `remark-footnotes`)', async (t) => {
   t.equal(
     renderToStaticMarkup(
       React.createElement(
@@ -971,7 +971,7 @@ test('markdown (footnotes, `remark-footnotes`)', async function (t) {
   t.end()
 })
 
-test('MDX (JSX)', async function (t) {
+test('MDX (JSX)', async (t) => {
   t.equal(
     renderToStaticMarkup(
       React.createElement(await run(compileSync('a <s>b</s>')))
@@ -1119,7 +1119,7 @@ test('MDX (JSX)', async function (t) {
   t.end()
 })
 
-test('MDX (ESM)', async function (t) {
+test('MDX (ESM)', async (t) => {
   t.equal(
     renderToStaticMarkup(
       React.createElement(
@@ -1278,7 +1278,7 @@ test('MDX (ESM)', async function (t) {
   t.end()
 })
 
-test('theme-ui', async function (t) {
+test('theme-ui', async (t) => {
   t.match(
     renderToStaticMarkup(
       React.createElement(
@@ -1314,9 +1314,9 @@ async function run(input, options = {}) {
  * @return {Promise<ExportMap>}
  */
 async function runWhole(input, options = {}) {
-  var name = 'fixture-' + nanoid().toLowerCase() + '.js'
-  var fp = path.join('test', 'context', name)
-  var doc = String(input)
+  const name = 'fixture-' + nanoid().toLowerCase() + '.js'
+  const fp = path.join('test', 'context', name)
+  let doc = String(input)
 
   // Extensionless imports only work in faux-ESM (webpack and such),
   // *not* in Node by default: *except* if there’s an export map defined

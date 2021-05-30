@@ -14,10 +14,10 @@ import React from 'react'
 import {renderToStaticMarkup} from 'react-dom/server.js'
 import {compileSync} from '../index.js'
 
-test('xdm (babel)', async function (t) {
-  var base = path.resolve(path.join('test', 'context'))
+test('xdm (babel)', async (t) => {
+  const base = path.resolve(path.join('test', 'context'))
 
-  var js = (
+  const js = (
     await babel(
       'export const Message = () => <>World!</>\n\n# Hello, <Message />',
       {filename: 'example.mdx', plugins: [babelPluginSyntaxMdx]}
@@ -26,7 +26,7 @@ test('xdm (babel)', async function (t) {
 
   await fs.writeFile(path.join(base, 'babel.js'), js)
 
-  var Content = /** @type {FC} */ (
+  const Content = /** @type {FC} */ (
     /* @ts-ignore file is dynamically generated */
     (await import('./context/babel.js')).default // type-coverage:ignore-line
   )

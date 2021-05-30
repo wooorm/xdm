@@ -9,7 +9,7 @@ import {compileSync as xdm} from '../index.js'
 main()
 
 async function main() {
-  var doc
+  let doc
 
   try {
     doc = String(await fs.readFile('giant.mdx'))
@@ -44,6 +44,6 @@ async function main() {
 function run(label, fn) {
   marky.mark(label)
   fn()
-  var entry = marky.stop(label)
+  const entry = marky.stop(label)
   console.log('%s: %ims', entry.name, entry.duration)
 }

@@ -10,15 +10,15 @@ import React from 'react'
 import {renderToStaticMarkup} from 'react-dom/server.js'
 import rollupXdm from '../rollup.js'
 
-test('xdm (rollup)', async function (t) {
-  var base = path.resolve(path.join('test', 'context'))
+test('xdm (rollup)', async (t) => {
+  const base = path.resolve(path.join('test', 'context'))
 
   await fs.writeFile(
     path.join(base, 'rollup.mdx'),
     'export const Message = () => <>World!</>\n\n# Hello, <Message />'
   )
 
-  var bundle = await rollup({
+  const bundle = await rollup({
     input: path.join(base, 'rollup.mdx'),
     external: ['react/jsx-runtime'],
     plugins: [rollupXdm()]
@@ -31,7 +31,7 @@ test('xdm (rollup)', async function (t) {
     ).output[0].code.replace(/\/jsx-runtime(?=["'])/g, '$&.js')
   )
 
-  var Content = /** @type {FC} */ (
+  const Content = /** @type {FC} */ (
     /* @ts-ignore file is dynamically generated */
     (await import('./context/rollup.js')).default // type-coverage:ignore-line
   )

@@ -132,12 +132,8 @@
     "rules": {
       "capitalized-comments": "off",
       "complexity": "off",
-      "import/no-mutable-exports": "off",
       "max-depth": "off",
       "new-cap": "off",
-      "no-var": "off",
-      "prefer-arrow-callback": "off",
-      "prefer-const": "off",
       "unicorn/prefer-node-protocol": "off"
     },
     "overrides": [
@@ -205,7 +201,7 @@
     ]
   },
   "typeCoverage": {
-    "atLeast": 80,
+    "atLeast": 100,
     "detail": true,
     "strict": true,
     "ignoreCatch": true,

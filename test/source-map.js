@@ -15,9 +15,9 @@ import {compile} from '../index.js'
 // So instead use a userland module.
 import 'source-map-support/register.js'
 
-test('xdm (source maps)', async function (t) {
-  var base = path.resolve(path.join('test', 'context'))
-  var file = await compile(
+test('xdm (source maps)', async (t) => {
+  const base = path.resolve(path.join('test', 'context'))
+  const file = await compile(
     ['export function Component() {', '  a()', '}', '', '<Component />'].join(
       '\n'
     ),
@@ -34,7 +34,7 @@ test('xdm (source maps)', async function (t) {
     String(file).replace(/\/jsx-runtime(?=["'])/g, '$&.js')
   )
 
-  var Content = /** @type {FC} */ (
+  const Content = /** @type {FC} */ (
     /* @ts-ignore file is dynamically generated */
     (await import('./context/sourcemap.js')).default // type-coverage:ignore-line
   )
@@ -43,8 +43,9 @@ test('xdm (source maps)', async function (t) {
     renderToStaticMarkup(React.createElement(Content))
     t.fail()
   } catch (error) {
-    var match = /at Component \(file:([^)]+)\)/.exec(error.stack)
-    var place = path.posix.join(...base.split(path.sep), 'unknown.mdx') + ':2:3'
+    const match = /at Component \(file:([^)]+)\)/.exec(error.stack)
+    const place =
+      path.posix.join(...base.split(path.sep), 'unknown.mdx') + ':2:3'
     t.equal(match[1].slice(-place.length), place, 'should support source maps')
   }
 

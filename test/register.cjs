@@ -4,16 +4,16 @@
 
 'use strict'
 
-var path = require('path')
-var fs = require('fs').promises
-var test = require('tape')
-var React = require('react')
-var {renderToStaticMarkup} = require('react-dom/server.js')
+const path = require('path')
+const fs = require('fs').promises
+const test = require('tape')
+const React = require('react')
+const {renderToStaticMarkup} = require('react-dom/server.js')
 
 require('../register.cjs')
 
-test('xdm (register)', async function (t) {
-  var base = path.resolve(path.join('test', 'context'))
+test('xdm (register)', async (t) => {
+  const base = path.resolve(path.join('test', 'context'))
 
   await fs.writeFile(
     path.join(base, 'register.mdx'),
@@ -21,7 +21,7 @@ test('xdm (register)', async function (t) {
   )
 
   // OMG, it works!
-  var Content = /** @type {FC} */ (
+  const Content = /** @type {FC} */ (
     /* @ts-ignore file is dynamically generated */
     require('./context/register.mdx') // type-coverage:ignore-line
   )

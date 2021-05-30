@@ -11,17 +11,17 @@ import vue from 'vue'
 import {renderToString} from '@vue/server-renderer'
 import {compile} from '../index.js'
 
-test('xdm (vue)', async function (t) {
-  var base = path.resolve(path.join('test', 'context'))
+test('xdm (vue)', async (t) => {
+  const base = path.resolve(path.join('test', 'context'))
 
-  var jsx = String(
+  const jsx = String(
     await compile(
       'export const C = () => <>c</>\n\n*a*, **b**, <C />, and <D />',
       {jsx: true}
     )
   )
 
-  var js = (await babel(jsx, {plugins: ['@vue/babel-plugin-jsx']})).code
+  let js = (await babel(jsx, {plugins: ['@vue/babel-plugin-jsx']})).code
 
   // Vue used to be ESM, but it recently published a minor/patch w/o that.
   js = js.replace(
@@ -31,12 +31,12 @@ test('xdm (vue)', async function (t) {
 
   await fs.writeFile(path.join(base, 'vue.js'), js)
 
-  var Content = /** @type {Component} */ (
+  const Content = /** @type {Component} */ (
     /* @ts-ignore file is dynamically generated */
     (await import('./context/vue.js')).default // type-coverage:ignore-line
   )
 
-  var result = await renderToString(
+  const result = await renderToString(
     vue.createSSRApp({
       // App components.
       components: {Content},

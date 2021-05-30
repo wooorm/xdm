@@ -10,8 +10,8 @@ import webpack from 'webpack'
 import React from 'react'
 import {renderToStaticMarkup} from 'react-dom/server.js'
 
-test('xdm (webpack)', async function (t) {
-  var base = path.resolve(path.join('test', 'context'))
+test('xdm (webpack)', async (t) => {
+  const base = path.resolve(path.join('test', 'context'))
 
   await fs.writeFile(
     path.join(base, 'webpack.mdx'),
@@ -28,7 +28,7 @@ test('xdm (webpack)', async function (t) {
   })
 
   // One for ESM loading CJS, one for webpack.
-  var Content = /** @type {FC} */ (
+  const Content = /** @type {FC} */ (
     /* @ts-ignore file is dynamically generated */
     (await import('./context/webpack.cjs')).default.default // type-coverage:ignore-line
   )

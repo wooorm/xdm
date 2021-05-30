@@ -120,7 +120,7 @@ Rollup, webpack, etc.
 Say we have an MDX document, `example.mdx`:
 
 ```mdx
-export var Thing = () => <>World!</>
+export const Thing = () => <>World!</>
 
 # Hello, <Thing />
 ```
@@ -131,7 +131,7 @@ The below is not the actual output, but it might help to form a mental model:
 ```js
 /* @jsxRuntime automatic @jsxImportSource react */
 
-export var Thing = () => <>World!</>
+export const Thing = () => <>World!</>
 
 export default function MDXContent() {
   return <h1>Hello, <Thing /></h1>
@@ -155,7 +155,7 @@ import {compile} from 'xdm'
 main()
 
 async function main() {
-  var compiled = await compile(await fs.readFile('example.mdx'))
+  const compiled = await compile(await fs.readFile('example.mdx'))
   console.log(String(compiled))
 }
 ```
@@ -166,7 +166,7 @@ The *actual* output of running `node example.js` is:
 /* @jsxRuntime automatic @jsxImportSource react */
 import {Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs} from 'react/jsx-runtime'
 
-export var Thing = () => _jsx(_Fragment, {children: 'World!'})
+export const Thing = () => _jsx(_Fragment, {children: 'World!'})
 
 function MDXContent(props) {
   const _components = Object.assign({h1: 'h1'}, props.components)
@@ -366,7 +366,7 @@ A module `example.js`:
 ```js
 import {compile} from 'xdm'
 
-main('export var no = 3.14\n\n# hi {no}')
+main('export const no = 3.14\n\n# hi {no}')
 
 async function main(code) {
   console.log(String(await compile(code, {outputFormat: 'program'}))) // Default
@@ -378,14 +378,14 @@ async function main(code) {
 
 ```js
 import {Fragment as _Fragment, jsx as _jsx} from 'react/jsx-runtime'
-export var no = 3.14
+export const no = 3.14
 function MDXContent(props) { /* … */ }
 export default MDXContent
 ```
 
 ```js
 const {Fragment: _Fragment, jsx: _jsx} = arguments[0]
-var no = 3.14
+const no = 3.14
 function MDXContent(props) { /* … */ }
 return {no, default: MDXContent}
 ```
@@ -412,15 +412,15 @@ Say we have a couple modules:
 
 ```js
 // meta.js:
-export var title = 'World'
+export const title = 'World'
 
 // numbers.js:
-export var no = 3.14
+export const no = 3.14
 
 // example.js:
 import {compileSync} from 'xdm'
 
-var code = `import {name} from './meta.js'
+const code = `import {name} from './meta.js'
 export {no} from './numbers.js'
 
 # hi {name}!`
@@ -464,8 +464,8 @@ import {compile} from 'xdm'
 main()
 
 async function main() {
-  var code = 'export {number} from "./data.js"\n\n# hi'
-  var baseUrl = 'https://a.full/url' // Typically `import.meta.url`
+  const code = 'export {number} from "./data.js"\n\n# hi'
+  const baseUrl = 'https://a.full/url' // Typically `import.meta.url`
   console.log(String(await compile(code, {baseUrl})))
 }
 ```
@@ -500,7 +500,7 @@ import {compile} from 'xdm'
 main()
 
 async function main() {
-  var file = await compile(
+  const file = await compile(
     {path: 'example.mdx', contents: await fs.readFile('example.mdx')},
     {SourceMapGenerator}
   )
@@ -546,7 +546,7 @@ compile(file, {providerImportSource: '@mdx-js/react'})
  import React from 'react'
 +import {useMDXComponents as _provideComponents} from '@mdx-js/react'
 
- export var Thing = () => React.createElement(React.Fragment, null, 'World!')
+ export const Thing = () => React.createElement(React.Fragment, null, 'World!')
 
  function MDXContent(props) {
 -  const _components = Object.assign({h1: 'h1'}, props.components)
@@ -579,8 +579,8 @@ compile(file, {jsx: true})
  /* @jsxRuntime classic @jsx React.createElement @jsxFrag React.Fragment */
 -import {Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs} from 'react/jsx-runtime'
 -
--export var Thing = () => React.createElement(React.Fragment, null, 'World!')
-+export var Thing = () => <>World!</>
+-export const Thing = () => React.createElement(React.Fragment, null, 'World!')
++export const Thing = () => <>World!</>
 
  function MDXContent(props) {
    const _components = Object.assign({h1: 'h1'}, props.components)
@@ -623,8 +623,8 @@ compile(file, {jsxRuntime: 'classic'})
 +/* @jsxRuntime classic @jsx React.createElement @jsxFrag React.Fragment */
 +import React from 'react'
 
--export var Thing = () => _jsx(_Fragment, {children: 'World!'})
-+export var Thing = () => React.createElement(React.Fragment, null, 'World!')
+-export const Thing = () => _jsx(_Fragment, {children: 'World!'})
++export const Thing = () => React.createElement(React.Fragment, null, 'World!')
 …
 ```
 
@@ -687,8 +687,8 @@ compile(file, {
 +/* @jsxRuntime classic @jsx preact.createElement @jsxFrag preact.Fragment */
 +import preact from 'preact/compat'
 
--export var Thing = () => React.createElement(React.Fragment, null, 'World!')
-+export var Thing = () => preact.createElement(preact.Fragment, null, 'World!')
+-export const Thing = () => React.createElement(React.Fragment, null, 'World!')
++export const Thing = () => preact.createElement(preact.Fragment, null, 'World!')
 …
 ```
 
@@ -726,7 +726,7 @@ import {compile} from 'xdm'
 main()
 
 async function main() {
-  var file = await compile('*like this* or _like this_?', {remarkPlugins: [preset]})
+  const file = await compile('*like this* or _like this_?', {remarkPlugins: [preset]})
   console.error(reporter(file))
 }
 ```
@@ -791,7 +791,7 @@ They come from an automatic JSX runtime that you must import yourself.
 ```js
 import * as runtime from 'react/jsx-runtime.js'
 
-var {default: Content} = await evaluate('# hi', {...runtime, ...otherOptions})
+const {default: Content} = await evaluate('# hi', {...runtime, ...otherOptions})
 ```
 
 </details>
@@ -807,7 +807,7 @@ Needed if you want to support a provider.
 import * as provider from '@mdx-js/react'
 import * as runtime from 'react/jsx-runtime.js'
 
-var {default: Content} = await evaluate('# hi', {...provider, ...runtime, ...otherOptions})
+const {default: Content} = await evaluate('# hi', {...provider, ...runtime, ...otherOptions})
 ```
 
 </details>
@@ -894,7 +894,7 @@ To pass options, you can make your own loader, such as this `my-loader.js`:
 ```js
 import {createLoader} from 'xdm/esm-loader.js'
 
-var {getFormat, transformSource} = createLoader(/* Options… */)
+const {getFormat, transformSource} = createLoader(/* Options… */)
 
 export {getFormat, transformSource}
 ```
@@ -917,9 +917,9 @@ Assuming `example.mdx` from [§ Use][use] exists, and our script `example.cjs`
 looks as follows:
 
 ```js
-var React = require('react')
-var {renderToStaticMarkup} = require('react-dom/server.js')
-var Content = require('./example.mdx')
+const React = require('react')
+const {renderToStaticMarkup} = require('react-dom/server.js')
+const Content = require('./example.mdx')
 
 console.log(renderToStaticMarkup(React.createElement(Content)))
 ```
@@ -941,7 +941,7 @@ To pass options, you can make your own hook, such as this `my-hook.cjs`:
 ```js
 'use strict'
 
-var register = require('xdm/lib/integration/require.cjs')
+const register = require('xdm/lib/integration/require.cjs')
 
 register({/* Options… */})
 ```
@@ -1094,7 +1094,7 @@ To define things from within MDX, use ESM:
 ```js
 import {External} from './some/place.js'
 
-export var Local = props => <span style={{color: 'red'}} {...props} />
+export const Local = props => <span style={{color: 'red'}} {...props} />
 
 An <External /> component and <Local>a local component</Local>.
 ```
@@ -1104,7 +1104,7 @@ ESM can also be used for other things:
 ```js
 import {MyChart} from './chart-component.js'
 import data from './population.js'
-export var pi = 3.14
+export const pi = 3.14
 
 <MyChart data={data} label={'Something with ' + pi} />
 ```
@@ -1120,7 +1120,7 @@ They can be compiled to dynamic `import()` by passing
 Braces can be used to embed JavaScript expressions in MDX:
 
 ```mdx
-export var pi = 3.14
+export const pi = 3.14
 
 Two 🍰 is: {pi * 2}
 ```
@@ -1455,7 +1455,7 @@ Now we can add our MDX content.
 Create an MDX file `Content.mdx` in the `src/` folder:
 
 ```mdx
-export var Box = () => (
+export const Box = () => (
   <div style={{padding: 20, backgroundColor: 'tomato'}} />
 )
 
@@ -1565,7 +1565,7 @@ Vue has a special way to compile JSX: **xdm** can’t do it but Babel can.
 Tell `xdm` to keep the JSX:
 
 ```js
-var jsx = String(await compile(file, {jsx: true}))
+const jsx = String(await compile(file, {jsx: true}))
 ```
 
 Then compile the JSX away with Babel and
@@ -1574,7 +1574,7 @@ Then compile the JSX away with Babel and
 ```js
 import babel from '@babel/core'
 
-var js = (await babel.transformAsync(jsx, {plugins: ['@vue/babel-plugin-jsx']})).code
+const js = (await babel.transformAsync(jsx, {plugins: ['@vue/babel-plugin-jsx']})).code
 ```
 
 You are probably already using [webpack][] and/or [Rollup][] with Vue.
@@ -1771,7 +1771,7 @@ import Post from './example.mdx' // Assumes an integration is used to compile MD
 <Post components={{code}} />
 
 function code({className, ...props}) {
-  var match = /language-(\w+)/.exec(className || '')
+  const match = /language-(\w+)/.exec(className || '')
   return match
     ? <SyntaxHighlighter language={match[1]} PreTag="div" {...props} />
     : <code className={className} {...props} />
@@ -1868,12 +1868,12 @@ Using the same rehype plugin as above, but with a different `onelement`
 function, that can be achieved:
 
 ```js
-var re = /\b([-\w]+)(?:=(?:"([^"]*)"|'([^']*)'|([^"'\s]+)))?/g
+const re = /\b([-\w]+)(?:=(?:"([^"]*)"|'([^']*)'|([^"'\s]+)))?/g
 
 // …
 
 function onelement(node) {
-  var match
+  let match
 
   if (node.tagName === 'code' && node.data && node.data.meta) {
     re.lastIndex = 0 // Reset regex.
@@ -2000,8 +2000,8 @@ alternative.
 Say we had this `post.mdx`:
 
 ```mdx
-export var name = 'World'
-export var title = 'Hi, ' + name + '!'
+export const name = 'World'
+export const title = 'Hi, ' + name + '!'
 
 # {title}
 ```

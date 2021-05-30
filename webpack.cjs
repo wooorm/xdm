@@ -9,7 +9,7 @@
  * @param {string} code
  */
 module.exports = function (code) {
-  var callback = this.async()
+  const callback = this.async()
   // Note that `import()` caches, so this should be fast enough.
   import('./lib/integration/webpack.js').then((module) =>
     module.loader.call(this, code, callback)

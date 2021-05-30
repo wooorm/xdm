@@ -14,14 +14,14 @@ import React from 'react'
 import {renderToStaticMarkup} from 'react-dom/server.js'
 import esbuildXdm from '../esbuild.js'
 
-test('xdm (esbuild)', async function (t) {
-  var base = path.resolve(path.join('test', 'context'))
+test('xdm (esbuild)', async (t) => {
+  const base = path.resolve(path.join('test', 'context'))
   /** @type {FC} */
-  var Content
+  let Content
   /** @type {BuildFailure} */
-  var result
+  let result
   /** @type {Message} */
-  var message
+  let message
 
   // MDX.
   await fs.writeFile(

@@ -8,8 +8,8 @@ import test from 'tape'
 import React from 'react'
 import {renderToStaticMarkup} from 'react-dom/server.js'
 
-test('xdm (ESM loader)', async function (t) {
-  var base = path.resolve(path.join('test', 'context'))
+test('xdm (ESM loader)', async (t) => {
+  const base = path.resolve(path.join('test', 'context'))
 
   await fs.writeFile(
     path.join(base, 'esm-loader.mdx'),
@@ -17,7 +17,7 @@ test('xdm (ESM loader)', async function (t) {
   )
 
   /** @type {FC} */
-  var Content
+  let Content
 
   try {
     /* @ts-ignore file is dynamically generated */

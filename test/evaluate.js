@@ -5,9 +5,9 @@ import {renderToStaticMarkup} from 'react-dom/server.js'
 import test from 'tape'
 import {evaluate, evaluateSync, compile} from '../index.js'
 
-test('xdm (evaluate)', async function (t) {
+test('xdm (evaluate)', async (t) => {
   t.throws(
-    function () {
+    () => {
       // @ts-expect-error
       evaluateSync('a')
     },
@@ -16,7 +16,7 @@ test('xdm (evaluate)', async function (t) {
   )
 
   t.throws(
-    function () {
+    () => {
       // @ts-expect-error
       evaluateSync('a', {Fragment: runtime.Fragment})
     },
@@ -25,7 +25,7 @@ test('xdm (evaluate)', async function (t) {
   )
 
   t.throws(
-    function () {
+    () => {
       // @ts-expect-error
       evaluateSync('a', {Fragment: runtime.Fragment, jsx: runtime.jsx})
     },
@@ -142,7 +142,7 @@ test('xdm (evaluate)', async function (t) {
   )
 
   // @ts-ignore runtime.js does not have a typing
-  var mod = await evaluate('export const a = 1\n\n{a}', runtime)
+  let mod = await evaluate('export const a = 1\n\n{a}', runtime)
 
   t.equal(
     renderToStaticMarkup(React.createElement(mod.default)),
@@ -209,7 +209,7 @@ test('xdm (evaluate)', async function (t) {
   )
 
   t.throws(
-    function () {
+    () => {
       // @ts-ignore runtime.js does not have a typing
       evaluateSync('export {a} from "b"', runtime)
     },
@@ -293,7 +293,7 @@ test('xdm (evaluate)', async function (t) {
   )
 
   t.throws(
-    function () {
+    () => {
       // @ts-ignore runtime.js does not have a typing
       evaluateSync('export * from "a"', runtime)
     },
@@ -302,7 +302,7 @@ test('xdm (evaluate)', async function (t) {
   )
 
   t.throws(
-    function () {
+    () => {
       // @ts-ignore runtime.js does not have a typing
       evaluateSync('import {a} from "b"', runtime)
     },
@@ -311,7 +311,7 @@ test('xdm (evaluate)', async function (t) {
   )
 
   t.throws(
-    function () {
+    () => {
       // @ts-ignore runtime.js does not have a typing
       evaluateSync('import a from "b"', runtime)
     },
