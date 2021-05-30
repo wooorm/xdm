@@ -7,12 +7,12 @@
  */
 
 import path from 'path'
-import esbuildXdm from '../esbuild.js'
 import {promises as fs} from 'fs'
 import test from 'tape'
 import esbuild from 'esbuild'
 import React from 'react'
 import {renderToStaticMarkup} from 'react-dom/server.js'
+import esbuildXdm from '../esbuild.js'
 
 test('xdm (esbuild)', async function (t) {
   var base = path.resolve(path.join('test', 'context'))

@@ -1,10 +1,10 @@
 import {promises as fs} from 'fs'
-import gfm from 'remark-gfm'
+import {transformSync as babel} from '@babel/core'
 import marky from 'marky'
+import gfm from 'remark-gfm'
 import {sync as mdx1} from 'mdx1'
 import {sync as mdx2} from 'mdx2'
 import {compileSync as xdm} from '../index.js'
-import {transformSync as babel} from '@babel/core'
 
 main()
 

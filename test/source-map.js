@@ -4,11 +4,11 @@
 
 import {promises as fs} from 'fs'
 import path from 'path'
-import {compile} from '../index.js'
 import React from 'react'
 import {renderToStaticMarkup} from 'react-dom/server.js'
 import {SourceMapGenerator} from 'source-map'
 import test from 'tape'
+import {compile} from '../index.js'
 
 // Note: Node has an experimental `--enable-source-maps` flag, but most of V8
 // doesn’t seem to support it.

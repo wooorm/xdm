@@ -4,12 +4,12 @@
  */
 
 import path from 'path'
-import {compile} from '../index.js'
 import {promises as fs} from 'fs'
 import test from 'tape'
 import {transformAsync as babel} from '@babel/core'
 import vue from 'vue'
 import {renderToString} from '@vue/server-renderer'
+import {compile} from '../index.js'
 
 test('xdm (vue)', async function (t) {
   var base = path.resolve(path.join('test', 'context'))

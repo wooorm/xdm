@@ -66,7 +66,7 @@
     "@babel/plugin-transform-react-jsx": "^7.0.0",
     "@emotion/react": "^11.0.0",
     "@mdx-js/react": "2.0.0-next.8",
-    "@theme-ui/preset-base": "^0.8.0",
+    "@theme-ui/preset-base": "^0.9.0",
     "@types/babel__core": "^7.0.0",
     "@types/node": "^15.0.0",
     "@types/react": "^17.0.0",
@@ -76,7 +76,7 @@
     "@vue/babel-plugin-jsx": "^1.0.0",
     "@vue/server-renderer": "^3.0.0",
     "c8": "^7.0.0",
-    "esbuild": "^0.11.0",
+    "esbuild": "^0.12.0",
     "eslint-plugin-es": "^4.0.0",
     "eslint-plugin-security": "^1.0.0",
     "estree-to-babel": "^3.0.0",
@@ -103,7 +103,7 @@
     "typescript": "^4.0.0",
     "vue": "^3.0.0",
     "webpack": "^5.0.0",
-    "xo": "^0.39.0"
+    "xo": "^0.40.0"
   },
   "scripts": {
     "prepack": "npm run build && npm run format",
@@ -137,7 +137,8 @@
       "new-cap": "off",
       "no-var": "off",
       "prefer-arrow-callback": "off",
-      "prefer-const": "off"
+      "prefer-const": "off",
+      "unicorn/prefer-node-protocol": "off"
     },
     "overrides": [
       {
@@ -150,6 +151,14 @@
         ],
         "rules": {
           "security/detect-object-injection": "off"
+        }
+      },
+      {
+        "files": [
+          "**/*.cjs"
+        ],
+        "rules": {
+          "unicorn/prefer-module": "off"
         }
       },
       {

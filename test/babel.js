@@ -6,13 +6,13 @@
 
 import {promises as fs} from 'fs'
 import path from 'path'
-import {compileSync} from '../index.js'
 import test from 'tape'
 import parser from '@babel/parser'
 import {transformAsync as babel} from '@babel/core'
 import toBabel from 'estree-to-babel'
 import React from 'react'
 import {renderToStaticMarkup} from 'react-dom/server.js'
+import {compileSync} from '../index.js'
 
 test('xdm (babel)', async function (t) {
   var base = path.resolve(path.join('test', 'context'))
