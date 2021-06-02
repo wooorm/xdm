@@ -14,16 +14,66 @@
     </TR>
   </TBODY>
 </TABLE>
+</CENTER>
 <HR>
-Hi! Welcome to xdm's web Page.
-xdm is a modern MDX compiler that focusses on two things:
+<P>
+Hi! Welcome to xdm's web page.
+xdm is a <B>really</B> good MDX.
+It focusses on two things:
 a) Compiling the MDX syntax (markdown + JSX) to JavaScript,
 b) Making it easier to use the MDX syntax in different places.
 It boasts a couple of cool features, such as source maps, ESM only, defaulting
 to an automatic JSX runtime, no Babel, smallish browser size, more docs,
 import/exports in evaluate, esbuild and Rollup plugins.<BR>
-To learn more about me, check out my <A HREF=https://github.com/wooorm/xdm>GitHub page</A>.
+To learn more about me, check out the <A HREF=https://github.com/wooorm/xdm>GitHub page</A>.
+</P>
+<P>
+MDX looks something like this (<B>input</B>):
+</P>
+<XMP>## Hello, world!
+
+<div className="note">
+  > Some notable things in a block quote!
+</div>
+</XMP>
+<P>
+xdm turns that into (<B>output</B>):
+</P>
+<XMP>/* @jsxRuntime automatic @jsxImportSource react */
+import {Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs} from 'react/jsx-runtime'
+
+export const Thing = () => _jsx(_Fragment, {children: 'World!'})
+
+function MDXContent(props) {
+  const _components = Object.assign({h1: 'h1'}, props.components)
+  const {wrapper: MDXLayout} = _components
+  const _content = _jsx(_Fragment, {
+    children: _jsxs(_components.h1, {
+      children: ['Hello, ', _jsx(Thing, {})]
+    })
+  })
+  return MDXLayout
+    ? _jsx(MDXLayout, Object.assign({}, props, {children: _content}))
+    : _content
+}
+
+export default MDXContent
+</XMP>
+<P>
+The code needed to turn <B>input</B> into <B>output</B> looks like this:
+</P>
+<XMP>import {promises as fs} from 'node:fs'
+import {compile} from 'xdm'
+
+main()
+
+async function main() {
+  const compiled = await compile(await fs.readFile('example.mdx'))
+  console.log(String(compiled))
+}
+</XMP>
 <HR>
+<CENTER>
 <TABLE>
 <TR><TD><A HREF="http://lynx.browser.org/"><IMG
 SRC="./kendrick.png" ALT="" /></A>
