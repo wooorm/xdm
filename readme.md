@@ -142,7 +142,7 @@ Some observations:
 
 *   The output is serialized JavaScript that still needs to be evaluated
 *   A comment is injected to configure how JSX is handled
-*   It’s is a complete file with import/exports
+*   It’s a complete file with import/exports
 *   A component (`MDXContent`) is exported
 
 Now for how to get the actual output.
