@@ -333,24 +333,26 @@ test('xdm (esbuild)', async (t) => {
 
   console.log('\nnote: the preceding errors and warnings are expected!\n')
 
-  /** @type import('esbuild').Plugin */
-  const inlinePlugin = {
-    name: 'inline plugin',
-    setup: (build) => {
-      build.onResolve({filter: /index\.mdx/}, () => {
-        return {
-          path: path.join(process.cwd(), 'index.mdx'),
-          pluginData: {
-            contents: `# Test`
+  /** @type {(contents: string) => import('esbuild').Plugin} */
+  const inlinePlugin = (contents) => {
+    return {
+      name: 'inline plugin',
+      setup: (build) => {
+        build.onResolve({filter: /index\.mdx/}, () => {
+          return {
+            path: path.join(process.cwd(), 'index.mdx'),
+            pluginData: {
+              contents
+            }
           }
-        }
-      })
+        })
+      }
     }
   }
 
   await esbuild.build({
     entryPoints: [path.join(process.cwd(), 'index.mdx')],
-    plugins: [inlinePlugin, esbuildXdm()],
+    plugins: [inlinePlugin(`# Test`), esbuildXdm()],
     define: {'process.env.NODE_ENV': '"development"'},
     format: 'esm',
     bundle: true,
@@ -368,6 +370,27 @@ test('xdm (esbuild)', async (t) => {
   )
 
   await fs.unlink(path.join(base, 'esbuild-compile-from-memory.js'))
+
+  await esbuild.build({
+    entryPoints: [path.join(process.cwd(), 'index.mdx')],
+    plugins: [inlinePlugin(``), esbuildXdm()],
+    define: {'process.env.NODE_ENV': '"development"'},
+    format: 'esm',
+    bundle: true,
+    outfile: path.join(base, 'esbuild-compile-from-memory-empty.js')
+  })
+
+  Content =
+    /** @ts-ignore file is dynamically generated */
+    (await import('./context/esbuild-compile-from-memory-empty.js')).default // type-coverage:ignore-line
+
+  t.equal(
+    renderToStaticMarkup(React.createElement(Content)),
+    '',
+    'should compile from `pluginData.content` when an empty string is passed'
+  )
+
+  await fs.unlink(path.join(base, 'esbuild-compile-from-memory-empty.js'))
 
   t.end()
 })
