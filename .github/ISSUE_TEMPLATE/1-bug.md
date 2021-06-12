@@ -1,41 +1,64 @@
 ---
 name: 🐛 Bug report
 about: Create a report to help us improve
-labels: bug
+---
+
 ---
 
 <!--
-Ouch, sorry you ran into a bug.  Thank for taking the time to report it!
+  Please check the needed checkboxes ([ ] -> [x]) and fill out the TODOs.
+  Leave the comments as they are: they won’t show on GitHub.
 
-Please fill in as much of the template below as you’re able.
+  Some general tips:
+  - Is this really a problem?
+  - Is this a problem here?
+  - Can this be solved in a different way?
 -->
 
-### Subject of the issue
+### Initial checklist
 
-Describe your issue here.
+*   [ ] I read the support docs <!-- https://github.com/micromark/.github/blob/main/support.md -->
+*   [ ] I read the contributing guide <!-- https://github.com/micromark/.github/blob/main/contributing.md -->
+*   [ ] I agree to follow the code of conduct <!-- https://github.com/micromark/.github/blob/main/code-of-conduct.md -->
+*   [ ] I searched issues and couldn’t find anything (or linked relevant results below) <!-- https://github.com/search?q=user%3Amicromark&type=Issues -->
 
-### Your environment
+<!--
+  Please test using the latest version of the relevant packages to make sure
+  your issue has not already been fixed. Also make sure you’re on recent versions
+  of Node and npm.
+-->
 
-*   **OS**: <!-- Name and version of operating system -->
-*   **Packages**: <!-- Names and version of required packages -->
-*   **Env**: <!-- Version of node, npm, yarn, or names and versions of browser -->
+Affected packages and versions: TODO
 
 ### Steps to reproduce
 
-Tell us how to reproduce this issue.  Please provide a working and simplified example.
-
-🎉 BONUS POINTS for creating a [minimal reproduction](https://stackoverflow.com/help/mcve) and uploading it to GitHub.  This will get you the fastest support.  🎉
-
 <!--
-Consider using a codesandbox or stackblitz to make the issue easy to replicate, here are some starters:
-https://codesandbox.io/s/xdm-create-react-app-starter-71mp9
-https://stackblitz.com/edit/xdm-create-react-app-starter
---->
+  How did this happen?
+  Please provide a minimal, reproducible example:
+  https://stackoverflow.com/help/minimal-reproducible-example
+  Issues without reproduction steps or code examples may be immediately closed
+  as not actionable.
+
+  Here is a starter codesandbox: https://codesandbox.io/s/xdm-create-react-app-starter-71mp9
+
+  Either link to runnable code (not your whole repo) or post the code inline.
+-->
+
+1.  TODO
+2.  TODO
+
+Link to code example: TODO
 
 ### Expected behavior
 
-What should happen?
+<!--What should happen?-->
+
+TODO
 
 ### Actual behavior
 
-What happens instead?
+<!--What happens instead?-->
+
+TODO
+
+<!--do not edit: bug-->

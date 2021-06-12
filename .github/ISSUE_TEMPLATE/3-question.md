@@ -1,7 +1,6 @@
 ---
 name: 🙋 Question
 about: Ask a question about the project
-labels: question
 ---
 
 <!--
@@ -24,6 +23,6 @@ Spending the extra time up front can help save everyone time in the long run.
 *   Learn about the [rubber duck debugging method](https://rubberduckdebugging.com)
 *   Avoid falling for the [XY problem](https://meta.stackexchange.com/questions/66377/what-is-the-xy-problem/66378#66378)
 *   Search on GitHub to see if a similar question has been asked
-*   If possible, provide sample code, a [CodeSandbox][], or a video
+*   If possible, provide sample code, a [CodeSandbox](https://codesandbox.io/s/xdm-create-react-app-starter-71mp9), or a video
 *   The more time you put into asking your question, the better we can help you
 -->

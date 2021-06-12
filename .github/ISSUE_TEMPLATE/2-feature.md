@@ -1,27 +1,48 @@
 ---
 name: 🚀 Feature request
-about: Suggest an idea for this project
-labels: enhancement
+about: Suggest an idea
 ---
 
 <!--
-Thank you for suggesting an idea to make this project better!
-
-Please fill in as much of the template below as you’re able.
+  Please check the needed checkboxes ([ ] -> [x]) and fill out the TODOs.
+  Leave the comments as they are: they won’t show on GitHub.
 -->
 
-### Subject of the feature
+### Initial checklist
 
-Describe your issue here.
+*   [ ] I read the support docs <!-- https://github.com/micromark/.github/blob/main/support.md -->
+*   [ ] I read the contributing guide <!-- https://github.com/micromark/.github/blob/main/contributing.md -->
+*   [ ] I agree to follow the code of conduct <!-- https://github.com/micromark/.github/blob/main/code-of-conduct.md -->
+*   [ ] I searched issues and couldn’t find anything (or linked relevant results below) <!-- https://github.com/search?q=user%3Amicromark&type=Issues -->
+
+### Subject
+
+<!--
+  Describe your issue here.
+
+  Some general tips:
+  - Is this really a problem?
+  - Is this a problem here?
+-->
+
+TODO
 
 ### Problem
 
-If the feature requests relates to a problem, please describe the problem you are trying to solve here.
+<!-- Please describe the problem you are trying to solve here. -->
 
-### Expected behavior
+TODO
 
-What should happen?  Please describe the desired behavior.
+### Solution
+
+<!-- What should happen? Please describe the desired behavior. -->
+
+TODO
 
 ### Alternatives
 
-What are the alternative solutions?  Please describe what else you have considered?
+<!-- What are the alternative solutions? Can this be solved in a different way? -->
+
+TODO
+
+<!--do not edit: feat-->
