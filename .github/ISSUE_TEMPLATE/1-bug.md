@@ -20,7 +20,7 @@ about: Create a report to help us improve
 *   [ ] I read the support docs <!-- https://github.com/micromark/.github/blob/main/support.md -->
 *   [ ] I read the contributing guide <!-- https://github.com/micromark/.github/blob/main/contributing.md -->
 *   [ ] I agree to follow the code of conduct <!-- https://github.com/micromark/.github/blob/main/code-of-conduct.md -->
-*   [ ] I searched issues and couldn’t find anything (or linked relevant results below) <!-- https://github.com/search?q=user%3Amicromark&type=Issues -->
+*   [ ] I searched issues and couldn’t find anything (or linked relevant results below) <!-- https://github.com/search?q=repo%3Awooorm%2Fxdm&type=Issues -->
 
 <!--
   Please test using the latest version of the relevant packages to make sure
