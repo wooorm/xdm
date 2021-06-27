@@ -954,6 +954,11 @@ That means `import` (and `export … from`) are not supported when requiring
 
 ## MDX syntax
 
+> **Note**!
+> You don’t have to use this syntax.
+> Or use if always.
+> With [`format`][format], you can opt-in gradually or not at all.
+
 The MDX syntax is a mix between markdown and JSX.
 Markdown often feels more natural to type than HTML (or JSX) for the common
 things (like emphasis, headings).
@@ -2315,6 +2320,8 @@ Most of the work is done by:
 [mdx-content]: #mdx-content
 
 [use]: #use
+
+[format]: #optionsformat
 
 [outputformat]: #optionsoutputformat
 
