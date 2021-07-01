@@ -2018,7 +2018,7 @@ export const title = 'Hi, ' + name + '!'
 Used like so:
 
 ```js
-import Post from './post.mdx' // Assumes an integration is used to compile MDX -> JS.
+import * as Post from './post.mdx' // Assumes an integration is used to compile MDX -> JS.
 
 console.log(Post.title) // Prints 'Hi, World!'
 ```
