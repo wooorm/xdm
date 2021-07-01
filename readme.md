@@ -1371,7 +1371,7 @@ your `vite.config.js`.
 #### WMR
 
 [WMR](https://github.com/preactjs/wmr) supports [Rollup][] plugins directly by
-[pushing them to `config.plugins`](https://github.com/preactjs/wmr#configuration-and-plugins)
+[pushing them to `config.plugins`](https://github.com/preactjs/wmr/tree/main/packages/wmr#configuration-and-plugins)
 in `wmr.config.js`.
 
 ### Compilers
