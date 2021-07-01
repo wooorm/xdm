@@ -1370,9 +1370,13 @@ your `vite.config.js`.
 
 #### WMR
 
-[WMR](https://github.com/preactjs/wmr) supports [Rollup][] plugins directly by
+~~[WMR](https://github.com/preactjs/wmr) supports [Rollup][] plugins directly by
 [pushing them to `config.plugins`](https://github.com/preactjs/wmr/tree/main/packages/wmr#configuration-and-plugins)
-in `wmr.config.js`.
+in `wmr.config.js`.~~
+
+WMR *says* it supports Rollup plugin but apparently it fails on `.mdx` files
+before the Rollup plugin.
+See [GH-62](https://github.com/wooorm/xdm/issues/62).
 
 ### Compilers
 
