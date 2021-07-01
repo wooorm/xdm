@@ -149,7 +149,7 @@ Now for how to get the actual output.
 Add some code in `example.js` to compile `example.mdx` to JavaScript:
 
 ```js
-import fs from 'fs/promises'
+import {promises as fs} from 'node:fs'
 import {compile} from 'xdm'
 
 main()
@@ -493,7 +493,7 @@ object form).
 Assuming `example.mdx` from [§ Use][use] exists, then:
 
 ```js
-import fs from 'fs/promises'
+import {promises as fs} from 'node:fs'
 import {SourceMapGenerator} from 'source-map'
 import {compile} from 'xdm'
 
@@ -1259,7 +1259,7 @@ Install `xdm` and use `xdm/rollup.js`.
 Add something along these lines to your `rollup.config.js`:
 
 ```js
-import path from 'path'
+import path from 'node:path'
 import xdm from 'xdm/rollup.js'
 
 export default {
@@ -1391,7 +1391,7 @@ Which in turn lets us choose whether to use the `xdm` or `@babel/parser`.
 This Babel plugin, `plugin.js`:
 
 ```js
-import path from 'path'
+import path from 'node:path'
 import parser from '@babel/parser'
 import estreeToBabel from 'estree-to-babel'
 import {compileSync} from 'xdm'
@@ -1664,7 +1664,7 @@ www.example.com, https://example.com, and contact@example.com.
 Then do something like this:
 
 ```js
-import fs from 'fs/promises'
+import {promises as fs} from 'node:fs'
 import gfm from 'remark-gfm'
 import {compile} from 'xdm'
 
@@ -2036,7 +2036,7 @@ Then without compiling or evaluating that file the metadata can be accessed like
 so:
 
 ```js
-import fs from 'fs/promises'
+import {promises as fs} from 'node:fs'
 import yaml from 'js-yaml'
 
 main()
@@ -2050,7 +2050,7 @@ async function main() {
 using [`remark-frontmatter`](https://github.com/remarkjs/remark-frontmatter):
 
 ```js
-import fs from 'fs/promises'
+import {promises as fs} from 'node:fs'
 import remarkFrontmatter from 'remark-frontmatter'
 import {compile} from 'xdm'
 
