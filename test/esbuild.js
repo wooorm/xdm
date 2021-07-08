@@ -105,6 +105,7 @@ test('xdm (esbuild)', async (t) => {
   await fs.writeFile(path.join(base, 'esbuild.md'), 'a')
   await fs.writeFile(path.join(base, 'esbuild.mdx'), 'a')
 
+  console.log('\nnote: the following error is expected!\n')
   try {
     await esbuild.build({
       entryPoints: [path.join(base, 'esbuild.md')],
@@ -120,6 +121,7 @@ test('xdm (esbuild)', async (t) => {
     )
   }
 
+  console.log('\nnote: the following error is expected!\n')
   try {
     await esbuild.build({
       entryPoints: [path.join(base, 'esbuild.mdx')],
@@ -202,7 +204,9 @@ test('xdm (esbuild)', async (t) => {
                 file.message('2', tree.children[1]) // EOL between both, no position.
                 file.message('3', tree)
                 file.message('4', tree.children[0]) // Export
+                // @ts-expect-error: fine.
                 file.message('5', tree.children[2].children[0]) // Text in heading
+                // @ts-expect-error: fine.
                 file.message('6', tree.children[2].children[1]) // Expression in heading
                 file.message('7', tree.children[2].position.end).fatal = true // End of heading
               }
@@ -341,9 +345,7 @@ test('xdm (esbuild)', async (t) => {
         build.onResolve({filter: /index\.mdx/}, () => {
           return {
             path: path.join(process.cwd(), 'index.mdx'),
-            pluginData: {
-              contents
-            }
+            pluginData: {contents}
           }
         })
       }
@@ -391,6 +393,62 @@ test('xdm (esbuild)', async (t) => {
   )
 
   await fs.unlink(path.join(base, 'esbuild-compile-from-memory-empty.js'))
+
+  // Remote markdown.
+  await fs.writeFile(
+    path.join(base, 'esbuild-with-remote-md.mdx'),
+    'import Content from "https://raw.githubusercontent.com/wooorm/xdm/remote-mdx/test/files/md-file.md"\n\n<Content />'
+  )
+
+  await esbuild.build({
+    bundle: true,
+    define: {'process.env.NODE_ENV': '"development"'},
+    entryPoints: [path.join(base, 'esbuild-with-remote-md.mdx')],
+    outfile: path.join(base, 'esbuild-with-remote-md.js'),
+    format: 'esm',
+    plugins: [esbuildXdm({allowDangerousRemoteMdx: true})]
+  })
+
+  Content =
+    /* @ts-ignore file is dynamically generated */
+    (await import('./context/esbuild-with-remote-md.js')).default // type-coverage:ignore-line
+
+  t.equal(
+    renderToStaticMarkup(React.createElement(Content)),
+    '<p>Some content.</p>',
+    'should compile remote markdown files w/ `allowDangerousRemoteMdx`'
+  )
+
+  await fs.unlink(path.join(base, 'esbuild-with-remote-md.mdx'))
+  await fs.unlink(path.join(base, 'esbuild-with-remote-md.js'))
+
+  // Remote MDX importing more markdown.
+  await fs.writeFile(
+    path.join(base, 'esbuild-with-remote-mdx.mdx'),
+    'import Content from "https://raw.githubusercontent.com/wooorm/xdm/remote-mdx/test/files/mdx-file-importing-markdown.mdx"\n\n<Content />'
+  )
+
+  await esbuild.build({
+    bundle: true,
+    define: {'process.env.NODE_ENV': '"development"'},
+    entryPoints: [path.join(base, 'esbuild-with-remote-mdx.mdx')],
+    outfile: path.join(base, 'esbuild-with-remote-mdx.js'),
+    format: 'esm',
+    plugins: [esbuildXdm({allowDangerousRemoteMdx: true})]
+  })
+
+  Content =
+    /* @ts-ignore file is dynamically generated */
+    (await import('./context/esbuild-with-remote-mdx.js')).default // type-coverage:ignore-line
+
+  t.equal(
+    renderToStaticMarkup(React.createElement(Content)),
+    '<h1>heading</h1>\n<p>A <span style="color:red">little pill</span>.</p>\n<p>Some content.</p>',
+    'should compile remote MD, MDX, and JS files w/ `allowDangerousRemoteMdx`'
+  )
+
+  await fs.unlink(path.join(base, 'esbuild-with-remote-mdx.mdx'))
+  await fs.unlink(path.join(base, 'esbuild-with-remote-mdx.js'))
 
   t.end()
 })

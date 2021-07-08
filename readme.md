@@ -51,6 +51,7 @@ Node 12+ is needed to use it and it must be `import`ed instead of `require`d.
 *   [👩‍🔬 Lab](#-lab)
     *   [Importing `.mdx` files directly](#importing-mdx-files-directly)
     *   [Requiring `.mdx` files directly](#requiring-mdx-files-directly)
+    *   [Importing `.md` and `.mdx` files from the web in esbuild](#importing-md-and-mdx-files-from-the-web-in-esbuild)
 *   [MDX syntax](#mdx-syntax)
     *   [Markdown](#markdown)
     *   [JSX](#jsx)
@@ -952,6 +953,46 @@ The register hook uses [`evaluateSync`][eval].
 That means `import` (and `export … from`) are not supported when requiring
 `.mdx` files.
 
+### Importing `.md` and `.mdx` files from the web in esbuild
+
+When passing `allowDangerousRemoteMdx` to the esbuild loader, MD(X) and JS files
+can be imported from `http:` and `https:` urls.
+Take this `index.mdx` file:
+
+```jsx
+import Readme from 'https://raw.githubusercontent.com/wooorm/xdm/main/readme.md'
+
+Embed the xdm readme like so:
+
+<Readme />
+```
+
+And a module `build.js`:
+
+```js
+import xdm from 'xdm/esbuild.js'
+import esbuild from 'esbuild'
+
+await esbuild.build({
+  entryPoints: ['index.mdx'],
+  outfile: 'output.js',
+  format: 'esm',
+  plugins: [xdm({allowDangerousRemoteMdx: true, /* Other options… */})]
+})
+```
+
+Running that (`node build.js`) and evaluating `output.js` (depends on how you
+evaluate React stuff) would give:
+
+```jsx
+<p>Embed the xdm readme like so:</p>
+<h1>xdm</h1>
+// …
+<p><a href="https://github.com/wooorm/xdm/blob/main/license">MIT</a> © …</p>
+```
+
+> ⚠️ Note that this evaluates any JavaScript and MDX found over the wire!
+
 ## MDX syntax
 
 > **Note**!
@@ -1252,6 +1293,17 @@ esbuild takes care of turning modern JavaScript features into syntax that works
 wherever you want it to.
 No Babel needed.
 See esbuild’s docs for more info.
+
+`options` are the same as from [`compile`][compile] with the addition of:
+
+###### `options.allowDangerousRemoteMdx`
+
+Whether to allow importing from `http:` and `https:` URLs (`boolean`, default:
+`false`).
+See [§ Importing `.md` and `.mdx` files from the web in
+esbuild][import-from-web].
+
+> ⚠️ Note that this evaluates any JavaScript and MDX found over the wire!
 
 #### Rollup
 
@@ -2157,6 +2209,7 @@ None yet!
 
 *   Add support for `import Content from './file.mdx'` in Node
 *   Add support for `require('./file.mdx')` in Node
+*   Add support `allowDangerousRemoteMdx` in esbuild to load MD(X) from the web
 
 ## Architecture
 
@@ -2352,3 +2405,5 @@ Most of the work is done by:
 [pico]: https://github.com/micromatch/picomatch#globbing-features
 
 [lab]: #-lab
+
+[import-from-web]: #importing-md-and-mdx-files-from-the-web-in-esbuild
