@@ -397,7 +397,7 @@ test('xdm (esbuild)', async (t) => {
   // Remote markdown.
   await fs.writeFile(
     path.join(base, 'esbuild-with-remote-md.mdx'),
-    'import Content from "https://raw.githubusercontent.com/wooorm/xdm/remote-mdx/test/files/md-file.md"\n\n<Content />'
+    'import Content from "https://raw.githubusercontent.com/wooorm/xdm/main/test/files/md-file.md"\n\n<Content />'
   )
 
   await esbuild.build({
@@ -425,7 +425,7 @@ test('xdm (esbuild)', async (t) => {
   // Remote MDX importing more markdown.
   await fs.writeFile(
     path.join(base, 'esbuild-with-remote-mdx.mdx'),
-    'import Content from "https://raw.githubusercontent.com/wooorm/xdm/remote-mdx/test/files/mdx-file-importing-markdown.mdx"\n\n<Content />'
+    'import Content from "https://raw.githubusercontent.com/wooorm/xdm/main/test/files/mdx-file-importing-markdown.mdx"\n\n<Content />'
   )
 
   await esbuild.build({
