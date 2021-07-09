@@ -272,6 +272,8 @@ test('xdm', async (t) => {
     'should *not* support overwriting components in exports'
   )
 
+  console.log('\nnote: the next warning is expected!\n')
+
   try {
     renderToStaticMarkup(
       React.createElement(
@@ -428,6 +430,8 @@ test('xdm', async (t) => {
     )
   }
 
+  console.log('\nnote: the next warning is expected!\n')
+
   try {
     renderToStaticMarkup(React.createElement(await run(compileSync('<X />'))))
     t.fail()
@@ -472,6 +476,8 @@ test('xdm', async (t) => {
     '<p><i>z</i></p>',
     'should support setting components through context with a `providerImportSource`'
   )
+
+  console.log('\nnote: the next warning is expected!\n')
 
   try {
     renderToStaticMarkup(
