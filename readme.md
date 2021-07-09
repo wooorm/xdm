@@ -955,6 +955,10 @@ That means `import` (and `export … from`) are not supported when requiring
 
 ### Importing `.md` and `.mdx` files from the web in esbuild
 
+> ⚠️ Note that this includes remote code in your bundle.
+> Make sure you trust it!
+> See [§ Security][security] for more info.
+
 When passing `allowDangerousRemoteMdx` to the esbuild loader, MD(X) and JS files
 can be imported from `http:` and `https:` urls.
 Take this `index.mdx` file:
@@ -987,11 +991,9 @@ evaluate React stuff) would give:
 ```jsx
 <p>Embed the xdm readme like so:</p>
 <h1>xdm</h1>
-// …
+{/* … */}
 <p><a href="https://github.com/wooorm/xdm/blob/main/license">MIT</a> © …</p>
 ```
-
-> ⚠️ Note that this evaluates any JavaScript and MDX found over the wire!
 
 ## MDX syntax
 
@@ -2407,3 +2409,5 @@ Most of the work is done by:
 [lab]: #-lab
 
 [import-from-web]: #importing-md-and-mdx-files-from-the-web-in-esbuild
+
+[security]: #security
