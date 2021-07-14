@@ -1428,7 +1428,7 @@ your `vite.config.js`.
 [adding them to `plugins`](https://wmr.dev/docs/plugins)
 in `wmr.config.mjs`.
 
-```
+```js
 import { defineConfig } from 'wmr';
 import xdm from 'xdm/rollup.js';
 
