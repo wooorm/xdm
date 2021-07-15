@@ -1429,14 +1429,14 @@ your `vite.config.js`.
 in `wmr.config.mjs`.
 
 ```js
-import { defineConfig } from 'wmr';
-import xdm from 'xdm/rollup.js';
+import {defineConfig} from 'wmr'
+import xdm from 'xdm/rollup.js'
 
 export default defineConfig({
-   plugins: [
-       xdm({ /* Options... */ })
-   ]
-});
+  plugins: [
+    xdm({/* Options… */})
+  ]
+})
 ```
 
 ### Compilers
