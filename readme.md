@@ -1439,6 +1439,8 @@ export default defineConfig({
 })
 ```
 
+See [§ Preact](https://github.com/wooorm/xdm#preact) if you want to use Preact.
+
 ### Compilers
 
 #### Babel
