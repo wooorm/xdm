@@ -338,19 +338,15 @@ test('xdm (esbuild)', async (t) => {
   console.log('\nnote: the preceding errors and warnings are expected!\n')
 
   /** @type {(contents: string) => import('esbuild').Plugin} */
-  const inlinePlugin = (contents) => {
-    return {
-      name: 'inline plugin',
-      setup: (build) => {
-        build.onResolve({filter: /index\.mdx/}, () => {
-          return {
-            path: path.join(process.cwd(), 'index.mdx'),
-            pluginData: {contents}
-          }
-        })
-      }
+  const inlinePlugin = (contents) => ({
+    name: 'inline plugin',
+    setup: (build) => {
+      build.onResolve({filter: /index\.mdx/}, () => ({
+        path: path.join(process.cwd(), 'index.mdx'),
+        pluginData: {contents}
+      }))
     }
-  }
+  })
 
   await esbuild.build({
     entryPoints: [path.join(process.cwd(), 'index.mdx')],

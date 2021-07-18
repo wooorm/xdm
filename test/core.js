@@ -220,9 +220,7 @@ test('xdm', async (t) => {
         components: {
           X: Object.assign(
             /** @param {Object.<string, unknown>} props */
-            (props) => {
-              return React.createElement('span', props, '!')
-            },
+            (props) => React.createElement('span', props, '!'),
             {
               /** @param {Object.<string, unknown>} props */
               Y(props) {
