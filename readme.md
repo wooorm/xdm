@@ -108,7 +108,7 @@ See?
 Most of markdown works!
 Those XML-like things are not HTML though: they’re JSX.
 Note that there are some differences in how JSX should be authored: for example,
-React and Preact expect `className`, whereas Vue expects `class`.
+React expects `className`, whereas Vue expects `class`.
 See [§ MDX syntax][mdx-syntax] below for more on how the format works.
 
 ## Use
