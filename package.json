@@ -1,6 +1,6 @@
 {
   "name": "xdm",
-  "version": "1.12.1",
+  "version": "1.12.2",
   "description": "an MDX compiler",
   "license": "MIT",
   "keywords": [
