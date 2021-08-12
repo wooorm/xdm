@@ -19,7 +19,7 @@ test('xdm (webpack)', async (t) => {
   )
 
   await promisify(webpack)({
-    // @ts-ignore context does not exist on the webpack options type
+    // @ts-expect-error context does not exist on the webpack options type
     context: base,
     entry: './webpack.mdx',
     mode: 'none',
@@ -29,7 +29,7 @@ test('xdm (webpack)', async (t) => {
 
   // One for ESM loading CJS, one for webpack.
   const Content = /** @type {FC} */ (
-    /* @ts-ignore file is dynamically generated */
+    /* @ts-expect-error file is dynamically generated */
     (await import('./context/webpack.cjs')).default.default // type-coverage:ignore-line
   )
 

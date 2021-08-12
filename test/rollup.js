@@ -32,7 +32,7 @@ test('xdm (rollup)', async (t) => {
   )
 
   const Content = /** @type {FC} */ (
-    /* @ts-ignore file is dynamically generated */
+    /* @ts-expect-error file is dynamically generated */
     (await import('./context/rollup.js')).default // type-coverage:ignore-line
   )
 

@@ -1491,7 +1491,7 @@ function babelParserWithMdx(value, options) {
 // This plugin defines `'estree-to-babel'` as the compiler, which means that
 // the resulting Babel tree is given back by `compileSync`.
 function recmaBabel() {
-  this.Compiler = estreeToBabel
+  Object.assign(this, {Compiler: estreeToBabel})
 }
 ```
 

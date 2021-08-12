@@ -22,7 +22,7 @@ test('xdm (register)', async (t) => {
 
   // OMG, it works!
   const Content = /** @type {FC} */ (
-    /* @ts-ignore file is dynamically generated */
+    /* @ts-expect-error file is dynamically generated */
     require('./context/register.mdx') // type-coverage:ignore-line
   )
 

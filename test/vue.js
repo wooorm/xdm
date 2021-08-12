@@ -21,7 +21,9 @@ test('xdm (vue)', async (t) => {
     )
   )
 
-  let js = (await babel(jsx, {plugins: ['@vue/babel-plugin-jsx']})).code
+  const fileResult = await babel(jsx, {plugins: ['@vue/babel-plugin-jsx']})
+
+  let js = (fileResult || {code: null}).code || ''
 
   // Vue used to be ESM, but it recently published a minor/patch w/o that.
   js = js.replace(
@@ -32,7 +34,7 @@ test('xdm (vue)', async (t) => {
   await fs.writeFile(path.join(base, 'vue.js'), js)
 
   const Content = /** @type {Component} */ (
-    /* @ts-ignore file is dynamically generated */
+    /* @ts-expect-error file is dynamically generated */
     (await import('./context/vue.js')).default // type-coverage:ignore-line
   )
 

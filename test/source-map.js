@@ -36,7 +36,7 @@ test('xdm (source maps)', async (t) => {
   )
 
   const Content = /** @type {FC} */ (
-    /* @ts-ignore file is dynamically generated */
+    /* @ts-expect-error file is dynamically generated */
     (await import('./context/sourcemap.js')).default // type-coverage:ignore-line
   )
 
@@ -47,7 +47,12 @@ test('xdm (source maps)', async (t) => {
     const match = /at Component \(file:([^)]+)\)/.exec(error.stack)
     const place =
       path.posix.join(...base.split(path.sep), 'unknown.mdx') + ':2:3'
-    t.equal(match[1].slice(-place.length), place, 'should support source maps')
+
+    t.equal(
+      match && match[1].slice(-place.length),
+      place,
+      'should support source maps'
+    )
   }
 
   await fs.unlink(path.join(base, 'sourcemap.js'))

@@ -9,6 +9,7 @@ import {compileSync as xdm} from '../index.js'
 main()
 
 async function main() {
+  /** @type {string} */
   let doc
 
   try {

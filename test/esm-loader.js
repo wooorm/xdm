@@ -20,7 +20,7 @@ test('xdm (ESM loader)', async (t) => {
   let Content
 
   try {
-    /* @ts-ignore file is dynamically generated */
+    /* @ts-expect-error file is dynamically generated */
     Content = (await import('./context/esm-loader.mdx')).default // type-coverage:ignore-line
   } catch (error) {
     if (error.code === 'ERR_UNKNOWN_FILE_EXTENSION') {

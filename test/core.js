@@ -175,7 +175,7 @@ test('xdm', async (t) => {
       compileSync('import React from "react"\n\n.', {
         jsxRuntime: 'classic',
         pragmaImportSource: '@emotion/react',
-        pragma: null
+        pragma: ''
       })
     },
     /Missing `pragma` in classic runtime with `pragmaImportSource`/,
@@ -318,7 +318,7 @@ test('xdm', async (t) => {
         {
           components: {
             y: {
-              // @ts-ignore `mdx-js/react` types do not support nested components.
+              // @ts-expect-error `mdx-js/react` types do not support nested components.
               z() {
                 return React.createElement('span', {}, '!')
               }
@@ -521,7 +521,7 @@ test('xdm', async (t) => {
   )
 
   try {
-    // @ts-ignore runtime.
+    // @ts-expect-error runtime.
     createProcessor({format: 'detect'})
     t.fail()
   } catch (error) {
@@ -612,7 +612,7 @@ test('xdm', async (t) => {
         remarkPlugins: [
           () => (/** @type {Root} */ tree) => {
             tree.children.unshift({
-              // @ts-ignore MDXHAST.
+              // @ts-expect-error MDXHAST.
               type: 'mdxjsEsm',
               value: '',
               data: {
@@ -1283,7 +1283,7 @@ test('theme-ui', async (t) => {
     renderToStaticMarkup(
       React.createElement(
         ThemeProvider,
-        // @ts-ignore enums being lost.
+        // @ts-expect-error enums being lost.
         {theme: themeUiBaseTheme},
         React.createElement(await run(String(compileSync('# h1'))), {
           components: themeUiComponents

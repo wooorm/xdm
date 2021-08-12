@@ -16,12 +16,6 @@ import esbuildXdm from '../esbuild.js'
 
 test('xdm (esbuild)', async (t) => {
   const base = path.resolve(path.join('test', 'context'))
-  /** @type {FC} */
-  let Content
-  /** @type {BuildFailure} */
-  let result
-  /** @type {Message} */
-  let message
 
   // MDX.
   await fs.writeFile(
@@ -38,8 +32,9 @@ test('xdm (esbuild)', async (t) => {
     plugins: [esbuildXdm()]
   })
 
-  Content =
-    /* @ts-ignore file is dynamically generated */
+  /** @type {FC} */
+  let Content =
+    /* @ts-expect-error file is dynamically generated */
     (await import('./context/esbuild.js')).default // type-coverage:ignore-line
 
   t.equal(
@@ -64,7 +59,7 @@ test('xdm (esbuild)', async (t) => {
   })
 
   Content =
-    /* @ts-ignore file is dynamically generated */
+    /* @ts-expect-error file is dynamically generated */
     (await import('./context/esbuild-md.js')).default // type-coverage:ignore-line
 
   t.equal(
@@ -89,7 +84,7 @@ test('xdm (esbuild)', async (t) => {
   })
 
   Content =
-    /* @ts-ignore file is dynamically generated */
+    /* @ts-expect-error file is dynamically generated */
     (await import('./context/esbuild-md-as-mdx.js')).default // type-coverage:ignore-line
 
   t.equal(
@@ -155,7 +150,7 @@ test('xdm (esbuild)', async (t) => {
     })
     t.fail('esbuild should throw')
   } catch (error) {
-    message = error.errors[0]
+    const message = error.errors[0]
     delete message.detail
     t.deepEqual(
       message,
@@ -208,6 +203,7 @@ test('xdm (esbuild)', async (t) => {
                 file.message('5', tree.children[2].children[0]) // Text in heading
                 // @ts-expect-error: fine.
                 file.message('6', tree.children[2].children[1]) // Expression in heading
+                // @ts-expect-error: fine.
                 file.message('7', tree.children[2].position.end).fatal = true // End of heading
               }
             }
@@ -217,9 +213,10 @@ test('xdm (esbuild)', async (t) => {
     })
     t.fail('esbuild should throw')
   } catch (error) {
-    result = JSON.parse(JSON.stringify(error))
+    /** @type {BuildFailure} */
+    const result = JSON.parse(JSON.stringify(error))
 
-    for (message of [...result.errors, ...result.warnings]) {
+    for (const message of [...result.errors, ...result.warnings]) {
       delete message.detail
     }
 
@@ -358,7 +355,7 @@ test('xdm (esbuild)', async (t) => {
   })
 
   Content =
-    /** @ts-ignore file is dynamically generated */
+    /** @ts-expect-error file is dynamically generated */
     (await import('./context/esbuild-compile-from-memory.js')).default // type-coverage:ignore-line
 
   t.equal(
@@ -379,7 +376,7 @@ test('xdm (esbuild)', async (t) => {
   })
 
   Content =
-    /** @ts-ignore file is dynamically generated */
+    /** @ts-expect-error file is dynamically generated */
     (await import('./context/esbuild-compile-from-memory-empty.js')).default // type-coverage:ignore-line
 
   t.equal(
@@ -406,7 +403,7 @@ test('xdm (esbuild)', async (t) => {
   })
 
   Content =
-    /* @ts-ignore file is dynamically generated */
+    /* @ts-expect-error file is dynamically generated */
     (await import('./context/esbuild-with-remote-md.js')).default // type-coverage:ignore-line
 
   t.equal(
@@ -434,7 +431,7 @@ test('xdm (esbuild)', async (t) => {
   })
 
   Content =
-    /* @ts-ignore file is dynamically generated */
+    /* @ts-expect-error file is dynamically generated */
     (await import('./context/esbuild-with-remote-mdx.js')).default // type-coverage:ignore-line
 
   t.equal(
