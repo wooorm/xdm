@@ -233,13 +233,13 @@ or anything that can be given to `vfile`).
 <summary>Example</summary>
 
 ```js
-import vfile from 'vfile'
+import {VFile} from 'vfile'
 import {compile} from 'xdm'
 
 await compile(':)')
 await compile(Buffer.from(':-)'))
-await compile({path: 'path/to/file.mdx', contents: '🥳'})
-await compile(vfile({path: 'path/to/file.mdx', contents: '🤭'}))
+await compile({path: 'path/to/file.mdx', value: '🥳'})
+await compile(new VFile({path: 'path/to/file.mdx', value: '🤭'}))
 ```
 
 </details>
@@ -320,13 +320,13 @@ So pass a full vfile (with `path`) or an object with a path.
 <summary>Example</summary>
 
 ```js
-compile({contents: '…'}) // Seen as MDX
-compile({contents: '…'}, {format: 'md'}) // Seen as markdown
-compile({contents: '…', path: 'readme.md'}) // Seen as markdown
+compile({value: '…'}) // Seen as MDX
+compile({value: '…'}, {format: 'md'}) // Seen as markdown
+compile({value: '…', path: 'readme.md'}) // Seen as markdown
 
 // Please do not use `.md` for MDX as other tools won’t know how to handle it.
-compile({contents: '…', path: 'readme.md'}, {format: 'mdx'}) // Seen as MDX
-compile({contents: '…', path: 'readme.md'}, {mdExtensions: []}) // Seen as MDX
+compile({value: '…', path: 'readme.md'}, {format: 'mdx'}) // Seen as MDX
+compile({value: '…', path: 'readme.md'}, {mdExtensions: []}) // Seen as MDX
 ```
 
 </details>
@@ -502,7 +502,7 @@ main()
 
 async function main() {
   const file = await compile(
-    {path: 'example.mdx', contents: await fs.readFile('example.mdx')},
+    {path: 'example.mdx', value: await fs.readFile('example.mdx')},
     {SourceMapGenerator}
   )
 
@@ -720,14 +720,14 @@ See `options.pragma` for an example.
 <summary>Example</summary>
 
 ```js
-import preset from 'remark-preset-lint-consistent' // Lint rules to check for consistent markdown.
-import reporter from 'vfile-reporter'
+import remarkPresetLintConsistent from 'remark-preset-lint-consistent' // Lint rules to check for consistent markdown.
+import {reporter} from 'vfile-reporter'
 import {compile} from 'xdm'
 
 main()
 
 async function main() {
-  const file = await compile('*like this* or _like this_?', {remarkPlugins: [preset]})
+  const file = await compile('*like this* or _like this_?', {remarkPlugins: [remarkPresetLintConsistent]})
   console.error(reporter(file))
 }
 ```
@@ -1470,20 +1470,20 @@ export function babelPluginSyntaxMdx() {
 
 // A Babel parser that parses `.mdx` files with xdm and passes any other things
 // through to the normal Babel parser.
-function babelParserWithMdx(contents, options) {
+function babelParserWithMdx(value, options) {
   if (
     options.sourceFileName &&
     path.extname(options.sourceFileName) === '.mdx'
   ) {
     // Babel does not support async parsers, unfortunately.
     return compileSync(
-      {contents, path: options.sourceFileName},
+      {value, path: options.sourceFileName},
       // Tell xdm to return a Babel tree instead of serialized JS.
       {recmaPlugins: [recmaBabel]}
     ).result
   }
 
-  return parser.parse(contents, options)
+  return parser.parse(value, options)
 }
 
 // A “recma” plugin is a unified plugin that runs on the estree (used by xdm
@@ -1732,7 +1732,7 @@ Then do something like this:
 
 ```js
 import {promises as fs} from 'node:fs'
-import gfm from 'remark-gfm'
+import remarkGfm from 'remark-gfm'
 import {compile} from 'xdm'
 
 main()
@@ -1740,7 +1740,7 @@ main()
 async function main() {
   console.log(
     String(
-      await compile(await fs.readFile('example.mdx'), {remarkPlugins: [gfm]})
+      await compile(await fs.readFile('example.mdx'), {remarkPlugins: [remarkGfm]})
     )
   )
 }
@@ -1800,7 +1800,7 @@ Use either [`rehype-highlight`](https://github.com/rehypejs/rehype-highlight)
 (Prism) by doing something like this:
 
 ```js
-import highlight from 'rehype-highlight'
+import rehypeHighlight from 'rehype-highlight'
 import {compile} from 'xdm'
 
 main(`~~~js
@@ -1809,7 +1809,7 @@ console.log(1)
 
 async function main(code) {
   console.log(
-    String(await compile(code, {rehypePlugins: [highlight]}))
+    String(await compile(code, {rehypePlugins: [rehypeHighlight]}))
   )
 }
 ```
@@ -1981,8 +1981,8 @@ and either
 (MathJax) by doing something like this:
 
 ```js
-import katex from 'rehype-katex'
-import math from 'remark-math'
+import rehypeKatex from 'rehype-katex'
+import remarkMath from 'remark-math'
 import {compile} from 'xdm'
 
 main()
@@ -1993,8 +1993,8 @@ async function main() {
       // You only need one backslash in an MDX file but because this is JS wrapping it,
       // a double backslash is needed.
       await compile('# $\\sqrt{a^2 + b^2}$', {
-        remarkPlugins: [math],
-        rehypePlugins: [katex]
+        remarkPlugins: [remarkMath],
+        rehypePlugins: [rehypeKatex]
       })
     )
   )
@@ -2028,7 +2028,7 @@ Use
 by doing something like this:
 
 ```js
-import footnotes from 'remark-footnotes'
+import remarkFootnotes from 'remark-footnotes'
 import {compile} from 'xdm'
 
 main(`Hi[^1]
@@ -2036,7 +2036,7 @@ main(`Hi[^1]
 [^1]: World!`)
 
 async function main(file) {
-  console.log(String(await compile(file, {remarkPlugins: [footnotes]})))
+  console.log(String(await compile(file, {remarkPlugins: [remarkFootnotes]})))
 }
 ```
 
@@ -2046,19 +2046,19 @@ async function main(file) {
 ```js
 <p>
   Hi
-  <sup id="fnref-1">
-    <a href="#fn-1" className="footnote-ref">1</a>
-  </sup>
+  <a href="#fn1" className="footnote-ref" id="fnref1" role="doc-noteref">
+    <sup>1</sup>
+  </a>
 </p>
-<div className="footnotes">
+<section className="footnotes" role="doc-endnotes">
   <hr />
   <ol>
-    <li id="fn-1">
+    <li id="fn1" role="doc-endnote">
       World!
-      <a href="#fnref-1" className="footnote-backref">↩</a>
+      <a href="#fnref1" className="footnote-back" role="doc-backlink">↩</a>
     </li>
   </ol>
-</div>
+</section>
 ```
 
 </details>

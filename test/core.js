@@ -534,7 +534,7 @@ test('xdm', async (t) => {
 
   t.equal(
     renderToStaticMarkup(
-      React.createElement(await run(await compile({contents: '\tx'})))
+      React.createElement(await run(await compile({value: '\tx'})))
     ),
     '<p>x</p>',
     'should detect as `mdx` by default'
@@ -543,7 +543,7 @@ test('xdm', async (t) => {
   t.equal(
     renderToStaticMarkup(
       React.createElement(
-        await run(await compile({contents: '\tx', path: 'y.md'}))
+        await run(await compile({value: '\tx', path: 'y.md'}))
       )
     ),
     '<pre><code>x\n</code></pre>',
@@ -553,7 +553,7 @@ test('xdm', async (t) => {
   t.equal(
     renderToStaticMarkup(
       React.createElement(
-        await run(await compile({contents: '\tx', path: 'y.mdx'}))
+        await run(await compile({value: '\tx', path: 'y.mdx'}))
       )
     ),
     '<p>x</p>',
@@ -563,9 +563,7 @@ test('xdm', async (t) => {
   t.equal(
     renderToStaticMarkup(
       React.createElement(
-        await run(
-          await compile({contents: '\tx', path: 'y.md'}, {format: 'mdx'})
-        )
+        await run(await compile({value: '\tx', path: 'y.md'}, {format: 'mdx'}))
       )
     ),
     '<p>x</p>',
@@ -575,9 +573,7 @@ test('xdm', async (t) => {
   t.equal(
     renderToStaticMarkup(
       React.createElement(
-        await run(
-          await compile({contents: '\tx', path: 'y.mdx'}, {format: 'md'})
-        )
+        await run(await compile({value: '\tx', path: 'y.mdx'}, {format: 'md'}))
       )
     ),
     '<pre><code>x\n</code></pre>',
@@ -587,7 +583,7 @@ test('xdm', async (t) => {
   t.equal(
     renderToStaticMarkup(
       React.createElement(
-        await run(await compile({contents: '<q>r</q>', path: 's.md'}))
+        await run(await compile({value: '<q>r</q>', path: 's.md'}))
       )
     ),
     '<p>r</p>',
@@ -599,7 +595,7 @@ test('xdm', async (t) => {
       React.createElement(
         await run(
           await compile(
-            {contents: '<q>r</q>', path: 's.md'},
+            {value: '<q>r</q>', path: 's.md'},
             {rehypePlugins: [rehypeRaw]}
           )
         )
@@ -968,7 +964,7 @@ test('markdown (footnotes, `remark-footnotes`)', async (t) => {
         )
       )
     ),
-    '<p><sup id="fnref-1"><a href="#fn-1" class="footnote-ref">1</a></sup></p>\n<div class="footnotes">\n<hr/>\n<ol>\n<li id="fn-1">note<a href="#fnref-1" class="footnote-backref">↩</a></li>\n</ol>\n</div>',
+    '<p><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>\n<section class="footnotes" role="doc-endnotes">\n<hr/>\n<ol>\n<li id="fn1" role="doc-endnote">note<a href="#fnref1" class="footnote-back" role="doc-backlink">↩</a></li>\n</ol>\n</section>',
     'should support footnotes'
   )
 

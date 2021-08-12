@@ -24,8 +24,9 @@ test('xdm (source maps)', async (t) => {
     {SourceMapGenerator}
   )
 
-  file.contents +=
+  file.value +=
     '\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,' +
+    // @ts-expect-error: source map.
     Buffer.from(JSON.stringify(file.map)).toString('base64') +
     '\n'
 

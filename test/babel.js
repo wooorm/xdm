@@ -42,10 +42,10 @@ test('xdm (babel)', async (t) => {
   function babelPluginSyntaxMdx() {
     return {
       /**
-       * @param {string} contents
+       * @param {string} value
        * @param {ParserOptions} options
        */
-      parserOverride(contents, options) {
+      parserOverride(value, options) {
         if (
           // @ts-ignore Babel types are wrong babel/babel#13170
           options.sourceFileName &&
@@ -54,13 +54,13 @@ test('xdm (babel)', async (t) => {
         ) {
           return compileSync(
             // @ts-ignore Babel types are wrong babel/babel#13170
-            {contents, path: options.sourceFileName},
+            {value, path: options.sourceFileName},
             // @ts-ignore To do: find out why compiler causes TS error
             {recmaPlugins: [recmaBabel]}
           ).result
         }
 
-        return parser.parse(contents, options)
+        return parser.parse(value, options)
       }
     }
   }
