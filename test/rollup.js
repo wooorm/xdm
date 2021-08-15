@@ -2,8 +2,8 @@
  * @typedef {import('react').FC} FC
  */
 
-import path from 'path'
-import {promises as fs} from 'fs'
+import path from 'node:path'
+import {promises as fs} from 'node:fs'
 import test from 'tape'
 import {rollup} from 'rollup'
 import React from 'react'

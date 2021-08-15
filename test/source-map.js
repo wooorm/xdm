@@ -2,8 +2,9 @@
  * @typedef {import('react').FC} FC
  */
 
-import {promises as fs} from 'fs'
-import path from 'path'
+import {promises as fs} from 'node:fs'
+import path from 'node:path'
+import {Buffer} from 'node:buffer'
 import React from 'react'
 import {renderToStaticMarkup} from 'react-dom/server.js'
 import {SourceMapGenerator} from 'source-map'

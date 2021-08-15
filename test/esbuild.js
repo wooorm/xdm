@@ -6,8 +6,9 @@
  * @typedef {import('vfile').VFile} VFile
  */
 
-import path from 'path'
-import {promises as fs} from 'fs'
+import {promises as fs} from 'node:fs'
+import path from 'node:path'
+import process from 'node:process'
 import test from 'tape'
 import esbuild from 'esbuild'
 import React from 'react'

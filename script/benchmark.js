@@ -1,4 +1,4 @@
-import {promises as fs} from 'fs'
+import {promises as fs} from 'node:fs'
 import {transformSync as babel} from '@babel/core'
 import marky from 'marky'
 import gfm from 'remark-gfm'

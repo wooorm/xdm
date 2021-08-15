@@ -3,8 +3,8 @@
  * @typedef {import('vue').SetupContext} SetupContext
  */
 
-import path from 'path'
-import {promises as fs} from 'fs'
+import path from 'node:path'
+import {promises as fs} from 'node:fs'
 import test from 'tape'
 import {transformAsync as babel} from '@babel/core'
 import vue from 'vue'

@@ -2,9 +2,9 @@
  * @typedef {import('react').FC} FC
  */
 
-import {promisify} from 'util'
-import path from 'path'
-import {promises as fs} from 'fs'
+import {promisify} from 'node:util'
+import path from 'node:path'
+import {promises as fs} from 'node:fs'
 import test from 'tape'
 import webpack from 'webpack'
 import React from 'react'

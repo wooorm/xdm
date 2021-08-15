@@ -4,8 +4,8 @@
  * @typedef {import('estree-jsx').Program} Program
  */
 
-import {promises as fs} from 'fs'
-import path from 'path'
+import {promises as fs} from 'node:fs'
+import path from 'node:path'
 import test from 'tape'
 import parser from '@babel/parser'
 import {transformAsync as babel} from '@babel/core'
