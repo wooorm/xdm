@@ -279,9 +279,10 @@ test('xdm', async (t) => {
       )
     )
     t.fail()
-  } catch (error) {
+  } catch (/** @type {unknown} */ error) {
+    const exception = /** @type {Error} */ (error)
     t.match(
-      error.message,
+      exception.message,
       /Element type is invalid/,
       'should throw on missing components in exported components'
     )
@@ -420,9 +421,10 @@ test('xdm', async (t) => {
       React.createElement(await run(compileSync('export default a')))
     )
     t.fail()
-  } catch (error) {
+  } catch (/** @type {unknown} */ error) {
+    const exception = /** @type {Error} */ (error)
     t.equal(
-      error.message,
+      exception.message,
       'a is not defined',
       'should support an identifier as an export default'
     )
@@ -433,9 +435,10 @@ test('xdm', async (t) => {
   try {
     renderToStaticMarkup(React.createElement(await run(compileSync('<X />'))))
     t.fail()
-  } catch (error) {
+  } catch (/** @type {unknown} */ error) {
+    const exception = /** @type {Error} */ (error)
     t.match(
-      error.message,
+      exception.message,
       /Element type is invalid/,
       'should throw if a required component is not passed'
     )
@@ -444,9 +447,10 @@ test('xdm', async (t) => {
   try {
     renderToStaticMarkup(React.createElement(await run(compileSync('<a.b />'))))
     t.fail()
-  } catch (error) {
+  } catch (/** @type {unknown} */ error) {
+    const exception = /** @type {Error} */ (error)
     t.equal(
-      error.message,
+      exception.message,
       "Cannot read property 'b' of undefined",
       'should throw if a required member is not passed'
     )
@@ -484,9 +488,10 @@ test('xdm', async (t) => {
       )
     )
     t.fail()
-  } catch (error) {
+  } catch (/** @type {unknown} */ error) {
+    const exception = /** @type {Error} */ (error)
     t.match(
-      error.message,
+      exception.message,
       /Element type is invalid/,
       'should throw if a required component is not passed or given to `MDXProvider`'
     )
@@ -524,9 +529,10 @@ test('xdm', async (t) => {
     // @ts-expect-error runtime.
     createProcessor({format: 'detect'})
     t.fail()
-  } catch (error) {
+  } catch (/** @type {unknown} */ error) {
+    const exception = /** @type {Error} */ (error)
     t.equal(
-      error.message,
+      exception.message,
       "Incorrect `format: 'detect'`: `createProcessor` can support either `md` or `mdx`; it does not support detecting the format",
       'should not support `format: detect`'
     )

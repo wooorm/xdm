@@ -27,7 +27,6 @@ test('xdm (source maps)', async (t) => {
 
   file.value +=
     '\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,' +
-    // @ts-expect-error: source map.
     Buffer.from(JSON.stringify(file.map)).toString('base64') +
     '\n'
 
@@ -45,7 +44,8 @@ test('xdm (source maps)', async (t) => {
     renderToStaticMarkup(React.createElement(Content))
     t.fail()
   } catch (error) {
-    const match = /at Component \(file:([^)]+)\)/.exec(error.stack)
+    const exception = /** @type {Error} */ (error)
+    const match = /at Component \(file:([^)]+)\)/.exec(String(exception.stack))
     const place =
       path.posix.join(...base.split(path.sep), 'unknown.mdx') + ':2:3'
 

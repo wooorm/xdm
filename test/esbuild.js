@@ -151,7 +151,8 @@ test('xdm (esbuild)', async (t) => {
     })
     t.fail('esbuild should throw')
   } catch (error) {
-    const message = error.errors[0]
+    const exception = /** @type {BuildFailure} */ (error)
+    const message = exception.errors[0]
     delete message.detail
     t.deepEqual(
       message,

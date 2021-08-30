@@ -23,7 +23,8 @@ test('xdm (ESM loader)', async (t) => {
     /* @ts-expect-error file is dynamically generated */
     Content = (await import('./context/esm-loader.mdx')).default // type-coverage:ignore-line
   } catch (error) {
-    if (error.code === 'ERR_UNKNOWN_FILE_EXTENSION') {
+    const exception = /** @type {NodeJS.ErrnoException} */ (error)
+    if (exception.code === 'ERR_UNKNOWN_FILE_EXTENSION') {
       await fs.unlink(path.join(base, 'esm-loader.mdx'))
       throw new Error(
         'Please run Node with `--experimental-loader=./esm-loader.js` to test the ESM loader'
