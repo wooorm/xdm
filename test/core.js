@@ -883,7 +883,7 @@ test('markdown (GFM, with `remark-gfm`)', async (t) => {
         await run(compileSync('| a |\n| - |', {remarkPlugins: [remarkGfm]}))
       )
     ),
-    '<table>\n<thead>\n<tr>\n<th>a</th>\n</tr>\n</thead>\n</table>',
+    '<table><thead><tr><th>a</th></tr></thead></table>',
     'should support tables (`| a |` -> `<table>...`)'
   )
 
