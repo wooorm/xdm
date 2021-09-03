@@ -51,14 +51,11 @@ test('xdm (babel)', async (t) => {
        */
       parserOverride(value, options) {
         if (
-          // @ts-expect-error Babel types are wrong babel/babel#13170
-          options.sourceFileName &&
-          // @ts-expect-error Babel types are wrong babel/babel#13170
-          path.extname(options.sourceFileName) === '.mdx'
+          options.sourceFilename &&
+          path.extname(options.sourceFilename) === '.mdx'
         ) {
           return compileSync(
-            // @ts-expect-error Babel types are wrong babel/babel#13170
-            {value, path: options.sourceFileName},
+            {value, path: options.sourceFilename},
             {recmaPlugins: [recmaBabel]}
           ).result
         }

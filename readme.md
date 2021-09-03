@@ -1472,12 +1472,12 @@ export function babelPluginSyntaxMdx() {
 // through to the normal Babel parser.
 function babelParserWithMdx(value, options) {
   if (
-    options.sourceFileName &&
-    path.extname(options.sourceFileName) === '.mdx'
+    options.sourceFilename &&
+    path.extname(options.sourceFilename) === '.mdx'
   ) {
     // Babel does not support async parsers, unfortunately.
     return compileSync(
-      {value, path: options.sourceFileName},
+      {value, path: options.sourceFilename},
       // Tell xdm to return a Babel tree instead of serialized JS.
       {recmaPlugins: [recmaBabel]}
     ).result
