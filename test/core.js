@@ -449,9 +449,9 @@ test('xdm', async (t) => {
     t.fail()
   } catch (/** @type {unknown} */ error) {
     const exception = /** @type {Error} */ (error)
-    t.equal(
+    t.match(
       exception.message,
-      "Cannot read property 'b' of undefined",
+      /Cannot read propert/,
       'should throw if a required member is not passed'
     )
   }
