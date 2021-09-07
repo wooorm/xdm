@@ -51,8 +51,11 @@ test('xdm (babel)', async (t) => {
        */
       parserOverride(value, options) {
         if (
-          options.sourceFilename &&
-          path.extname(options.sourceFilename) === '.mdx'
+          // @ts-expect-error: types accept one of them.
+          (options.sourceFileName || options.sourceFilename) &&
+          // @ts-expect-error: types accept one of them.
+          path.extname(options.sourceFileName || options.sourceFilename) ===
+            '.mdx'
         ) {
           return compileSync(
             {value, path: options.sourceFilename},
