@@ -169,7 +169,7 @@ import {Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs} from 'react/jsx-runti
 
 export const Thing = () => _jsx(_Fragment, {children: 'World!'})
 
-function MDXContent(props) {
+function MDXContent(props = {}) {
   const _components = Object.assign({h1: 'h1'}, props.components)
   const {wrapper: MDXLayout} = _components
   const _content = _jsx(_Fragment, {
@@ -380,14 +380,14 @@ async function main(code) {
 ```js
 import {Fragment as _Fragment, jsx as _jsx} from 'react/jsx-runtime'
 export const no = 3.14
-function MDXContent(props) { /* … */ }
+function MDXContent(props = {}) { /* … */ }
 export default MDXContent
 ```
 
 ```js
 const {Fragment: _Fragment, jsx: _jsx} = arguments[0]
 const no = 3.14
-function MDXContent(props) { /* … */ }
+function MDXContent(props = {}) { /* … */ }
 return {no, default: MDXContent}
 ```
 
@@ -435,7 +435,7 @@ console.log(String(compileSync(code, {outputFormat: 'function-body', useDynamicI
 const {Fragment: _Fragment, jsx: _jsx, jsxs: _jsxs} = arguments[0]
 const {name} = await import('./meta.js')
 const {no} = await import('./numbers.js')
-function MDXContent(props) { /* … */ }
+function MDXContent(props = {}) { /* … */ }
 return {no, default: MDXContent}
 ```
 
@@ -476,7 +476,7 @@ async function main() {
 ```js
 import {Fragment as _Fragment, jsx as _jsx} from 'react/jsx-runtime'
 export {number} from 'https://a.full/data.js'
-function MDXContent(props) { /* … */ }
+function MDXContent(props = {}) { /* … */ }
 export default MDXContent
 ```
 
@@ -549,7 +549,7 @@ compile(file, {providerImportSource: '@mdx-js/react'})
 
  export const Thing = () => React.createElement(React.Fragment, null, 'World!')
 
- function MDXContent(props) {
+ function MDXContent(props = {}) {
 -  const _components = Object.assign({h1: 'h1'}, props.components)
 +  const _components = Object.assign({h1: 'h1'}, _provideComponents(), props.components)
    const {wrapper: MDXLayout} = _components
@@ -583,7 +583,7 @@ compile(file, {jsx: true})
 -export const Thing = () => React.createElement(React.Fragment, null, 'World!')
 +export const Thing = () => <>World!</>
 
- function MDXContent(props) {
+ function MDXContent(props = {}) {
    const _components = Object.assign({h1: 'h1'}, props.components)
    const {wrapper: MDXLayout} = _components
 -  const _content = _jsx(_Fragment, {
