@@ -1256,7 +1256,9 @@ Layouts are components that wrap the whole content.
 They can be defined from within MDX using a default export:
 
 ```js
-export default function Layout({children}) => <main>{children}</main>
+export default function Layout({ children }) {
+  return <main>{children}</main>;
+}
 
 All the things.
 ```
