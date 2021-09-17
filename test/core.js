@@ -1289,7 +1289,6 @@ test('theme-ui', async (t) => {
     renderToStaticMarkup(
       React.createElement(
         ThemeProvider,
-        // @ts-expect-error enums being lost.
         {theme: themeUiBaseTheme},
         React.createElement(await run(String(compileSync('# h1'))), {
           components: themeUiComponents
