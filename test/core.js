@@ -270,8 +270,6 @@ test('xdm', async (t) => {
     'should *not* support overwriting components in exports'
   )
 
-  console.log('\nnote: the next warning is expected!\n')
-
   try {
     renderToStaticMarkup(
       React.createElement(
@@ -283,7 +281,7 @@ test('xdm', async (t) => {
     const exception = /** @type {Error} */ (error)
     t.match(
       exception.message,
-      /Element type is invalid/,
+      /Y is not defined/,
       'should throw on missing components in exported components'
     )
   }
@@ -310,6 +308,20 @@ test('xdm', async (t) => {
     ),
     '<span>!</span>',
     'should support provided components in exported components'
+  )
+
+  t.equal(
+    renderToStaticMarkup(
+      React.createElement(
+        await run(
+          compileSync(
+            'export function Foo({Box = "div"}) { return <Box>a</Box>; }\n\n<Foo />'
+          )
+        )
+      )
+    ),
+    '<div>a</div>',
+    'should support custom components in exported components'
   )
 
   t.equal(

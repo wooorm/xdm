@@ -861,7 +861,7 @@ These do not adhere to semver and could break at any time!
 
 ### Importing `.mdx` files directly
 
-[ESM loaders](https://nodejs.org/api/esm.html#esm_loaders) are an experimental
+[ESM loaders](https://nodejs.org/api/esm.html#esm\_loaders) are an experimental
 feature in Node, slated to change.
 Still, they let projects “hijack” imports, to do all sorts of fancy things!
 **xdm** comes with experimental support for importing `.mdx` files with
@@ -908,7 +908,7 @@ multiple loaders with
 
 ### Requiring `.mdx` files directly
 
-[`require.extensions`](https://nodejs.org/api/modules.html#modules_require_extensions)
+[`require.extensions`](https://nodejs.org/api/modules.html#modules\_require\_extensions)
 is a deprecated feature in Node.
 Still, it lets projects “hijack” `require` calls to do fancy things.
 **xdm** comes with support for requiring `.mdx` files with on-the-fly
