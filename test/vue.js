@@ -7,7 +7,7 @@ import path from 'node:path'
 import {promises as fs} from 'node:fs'
 import test from 'tape'
 import {transformAsync as babel} from '@babel/core'
-import vue from 'vue'
+import * as vue from 'vue'
 import {renderToString} from '@vue/server-renderer'
 import {compile} from '../index.js'
 
@@ -28,7 +28,7 @@ test('xdm (vue)', async (t) => {
   // Vue used to be ESM, but it recently published a minor/patch w/o that.
   js = js.replace(
     /import {[^}]+} from "vue";/,
-    'import vue from "vue"; const {isVNode: _isVNode, createVNode: _createVNode, createTextVNode: _createTextVNode, Fragment: _Fragment} = vue'
+    'import * as vue from "vue"; const {isVNode: _isVNode, createVNode: _createVNode, createTextVNode: _createTextVNode, Fragment: _Fragment} = vue'
   )
 
   await fs.writeFile(path.join(base, 'vue.js'), js)
