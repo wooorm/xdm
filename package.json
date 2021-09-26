@@ -107,7 +107,7 @@
   },
   "scripts": {
     "prepack": "npm run build && npm run format",
-    "build": "rimraf \"{lib/**/**,test/**,script/**,}*.d.ts\" && tsc && type-coverage",
+    "build": "rimraf \"{lib/**/**,test/**/**,script/**,}*.d.ts\" && tsc && type-coverage",
     "format": "remark . -qfo && prettier . -w --loglevel warn && xo --fix",
     "test-api": "node --no-warnings --experimental-loader=./esm-loader.js test/index.js && node test/register.cjs",
     "test-coverage": "c8 --check-coverage --branches 100 --functions 100 --lines 100 --statements 100 --reporter lcov node --no-warnings --experimental-loader=./esm-loader.js test/index.js",

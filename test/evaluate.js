@@ -114,6 +114,22 @@ test('xdm (evaluate)', async (t) => {
       React.createElement(
         (
           await evaluate(
+            'import * as x from "./context/components.js"\n\n<x.Pill>Hi!</x.Pill>',
+            // @ts-expect-error runtime.js does not have a typing
+            {baseUrl: import.meta.url, useDynamicImport: true, ...runtime}
+          )
+        ).default
+      )
+    ),
+    /<span style="color:red">Hi!<\/span>/,
+    'should support a namespace import w/ `useDynamicImport`'
+  )
+
+  t.match(
+    renderToStaticMarkup(
+      React.createElement(
+        (
+          await evaluate(
             'import x from "theme-ui"\n\n<x.Text>Hi!</x.Text>',
             // @ts-expect-error runtime.js does not have a typing
             {baseUrl: import.meta.url, useDynamicImport: true, ...runtime}
