@@ -2183,8 +2183,8 @@ types), and then import `xdm/registry`.
 
 ```js
 /**
- * @typedef {import('react')} */
- * @typedef {import('xdm/registry')} */
+ * @typedef {import('react')}
+ * @typedef {import('xdm/registry')}
  */
 
 import Post from './example.mdx'
