@@ -74,6 +74,7 @@ Node 12+ is needed to use it and it must be `import`ed instead of `require`d.
     *   [Footnotes](#footnotes)
     *   [Frontmatter](#frontmatter)
 *   [Plugins](#plugins)
+*   [Types](#types)
 *   [Differences from `@mdx-js/mdx`](#differences-from-mdx-jsmdx)
 *   [Architecture](#architecture)
 *   [Security](#security)
@@ -2171,6 +2172,34 @@ None yet!
     — change image sources to JavaScript imports
 *   [`remark-mdx-frontmatter`](https://github.com/remcohaszing/remark-mdx-frontmatter)
     — change frontmatter (YAML) metadata to exports
+
+## Types
+
+This package is fully typed with [TypeScript](https://www.typescriptlang.org).
+
+To enable types for imported `.mdx`, `.md`, etcetera files, first make sure
+the TypeScript `JSX` namespace is typed (such as by importing the `react`
+types), and then import `xdm/registry`.
+
+```js
+/**
+ * @typedef {import('react')} */
+ * @typedef {import('xdm/registry')} */
+ */
+
+import Post from './example.mdx'
+// `Post` is now typed.
+```
+
+Alternatively, in TypeScript, do:
+
+```ts
+/// <reference types="react" />
+/// <reference types="xdm/registry" />
+
+import Post from './example.mdx'
+// `Post` is now typed.
+```
 
 ## Differences from `@mdx-js/mdx`
 
