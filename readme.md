@@ -947,7 +947,7 @@ const register = require('xdm/lib/integration/require.cjs')
 register({/* Options… */})
 ```
 
-Which can then be used with `node -r ./my-hook.js`.
+Which can then be used with `node -r ./my-hook.cjs`.
 
 The register hook uses [`evaluateSync`][eval].
 That means `import` (and `export … from`) are not supported when requiring
@@ -999,7 +999,7 @@ evaluate React stuff) would give:
 
 > **Note**!
 > You don’t have to use this syntax.
-> Or use if always.
+> Or use it always.
 > With [`format`][format], you can opt-in gradually or not at all.
 
 The MDX syntax is a mix between markdown and JSX.
@@ -1070,7 +1070,7 @@ Some other features often used with markdown are:
 *   **Syntax highlighting**
     ([see guide below](#syntax-highlighting))
 
-These are many more things possible by configuring
+There are many more things possible by configuring
 [remark plugins][remark-plugins] and [rehype plugins][rehype-plugins].
 
 There are also a couple specific remark/rehype/recma plugins that work with
@@ -1156,12 +1156,6 @@ export const pi = 3.14
 
 <MyChart data={data} label={'Something with ' + pi} />
 ```
-
-Typically, `import` (or `export … from`) do not work here.
-They can be compiled to dynamic `import()` by passing
-[`options.useDynamicImport`][usedynamicimport].
-
-`export`s do work and they are returned.
 
 ### Expressions
 
@@ -1256,7 +1250,7 @@ Layouts are components that wrap the whole content.
 They can be defined from within MDX using a default export:
 
 ```js
-export default function Layout({ children }) {
+export default function Layout({children}) {
   return <main>{children}</main>;
 }
 
