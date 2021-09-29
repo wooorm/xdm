@@ -1,8 +1,9 @@
 /**
  * @typedef {import('hast').Root} Root
  * @typedef {import('../lib/compile.js').VFileCompatible} VFileCompatible
- * @typedef {import('../lib/evaluate.js').MDXContent} MDXContent
- * @typedef {import('../lib/evaluate.js').ExportMap} ExportMap
+ * @typedef {import('../complex-types').MdxContent} MdxContent
+ * @typedef {import('../complex-types').MdxModule} MdxModule
+ * @typedef {import('../complex-types').Components} Components
  */
 
 import path from 'node:path'
@@ -115,7 +116,8 @@ test('xdm', async (t) => {
 
   t.equal(
     render(
-      h(await run(compileSync('?', {jsxImportSource: 'preact/compat'})), {})
+      // @ts-expect-error: Preact types do not accept `JSX.Element`.
+      h(await run(compileSync('?', {jsxImportSource: 'preact/compat'})), {}, [])
     ),
     '<p>?</p>',
     'should support an import source (`@jsxImportSource`)'
@@ -124,6 +126,7 @@ test('xdm', async (t) => {
   t.equal(
     render(
       h(
+        // @ts-expect-error: Preact types do not accept `JSX.Element`.
         await run(
           compileSync('<>%</>', {
             jsxRuntime: 'classic',
@@ -142,6 +145,7 @@ test('xdm', async (t) => {
   t.equal(
     render(
       h(
+        // @ts-expect-error: Preact types do not accept `JSX.Element`.
         await run(compileSync('<>1</>', {jsxImportSource: 'preact'}), {
           keepImport: true
         }),
@@ -202,7 +206,7 @@ test('xdm', async (t) => {
       React.createElement(await run(compileSync('<x.y />')), {
         components: {
           x: {
-            /** @param {Object.<string, unknown>} props */
+            /** @param {object} props */
             y(props) {
               return React.createElement('span', props, '?')
             }
@@ -239,7 +243,6 @@ test('xdm', async (t) => {
     renderToStaticMarkup(
       React.createElement(await run(compileSync('*a*')), {
         components: {
-          /** @param {Object.<string, unknown>} props */
           em(props) {
             return React.createElement('i', props)
           }
@@ -258,7 +261,6 @@ test('xdm', async (t) => {
         ),
         {
           components: {
-            /** @param {Object.<string, unknown>} props */
             em(props) {
               return React.createElement('i', props)
             }
@@ -538,7 +540,7 @@ test('xdm', async (t) => {
   )
 
   try {
-    // @ts-expect-error runtime.
+    // @ts-expect-error runtime does not accept `detect`.
     createProcessor({format: 'detect'})
     t.fail()
   } catch (/** @type {unknown} */ error) {
@@ -1318,7 +1320,7 @@ test('theme-ui', async (t) => {
  *
  * @param {VFileCompatible} input
  * @param {{keepImport?: boolean}} [options]
- * @return {Promise<MDXContent>}
+ * @return {Promise<MdxContent>}
  */
 async function run(input, options = {}) {
   return (await runWhole(input, options)).default
@@ -1328,7 +1330,7 @@ async function run(input, options = {}) {
  *
  * @param {VFileCompatible} input
  * @param {{keepImport?: boolean}} [options]
- * @return {Promise<ExportMap>}
+ * @return {Promise<MdxModule>}
  */
 async function runWhole(input, options = {}) {
   const name = 'fixture-' + nanoid().toLowerCase() + '.js'
@@ -1347,7 +1349,7 @@ async function runWhole(input, options = {}) {
   await fs.writeFile(fp, doc)
 
   try {
-    /** @type {ExportMap} */
+    /** @type {MdxModule} */
     return await import('./context/' + name)
   } finally {
     // This is not a bug: the `finally` runs after the whole `try` block, but

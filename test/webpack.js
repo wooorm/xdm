@@ -1,5 +1,5 @@
 /**
- * @typedef {import('react').FC} FC
+ * @typedef {import('../complex-types').MdxContent} MdxContent
  */
 
 import {promisify} from 'node:util'
@@ -28,7 +28,7 @@ test('xdm (webpack)', async (t) => {
   })
 
   // One for ESM loading CJS, one for webpack.
-  const Content = /** @type {FC} */ (
+  const Content = /** @type {MdxContent} */ (
     /* @ts-expect-error file is dynamically generated */
     (await import('./context/webpack.cjs')).default.default // type-coverage:ignore-line
   )

@@ -1,5 +1,5 @@
 /**
- * @typedef {import('react').FC} FC
+ * @typedef {import('../complex-types').MdxContent} MdxContent
  */
 
 import path from 'node:path'
@@ -31,7 +31,7 @@ test('xdm (rollup)', async (t) => {
     ).output[0].code.replace(/\/jsx-runtime(?=["'])/g, '$&.js')
   )
 
-  const Content = /** @type {FC} */ (
+  const Content = /** @type {MdxContent} */ (
     /* @ts-expect-error file is dynamically generated */
     (await import('./context/rollup.js')).default // type-coverage:ignore-line
   )

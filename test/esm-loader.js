@@ -1,5 +1,5 @@
 /**
- * @typedef {import('react').FC} FC
+ * @typedef {import('../complex-types').MdxContent} MdxContent
  */
 
 import path from 'node:path'
@@ -16,11 +16,10 @@ test('xdm (ESM loader)', async (t) => {
     'export const Message = () => <>World!</>\n\n# Hello, <Message />'
   )
 
-  /** @type {FC} */
+  /** @type {MdxContent} */
   let Content
 
   try {
-    /* @ts-expect-error file is dynamically generated */
     Content = (await import('./context/esm-loader.mdx')).default // type-coverage:ignore-line
   } catch (error) {
     const exception = /** @type {NodeJS.ErrnoException} */ (error)

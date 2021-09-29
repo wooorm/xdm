@@ -18,6 +18,7 @@
     "emitDeclarationOnly": true,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
-    "strict": true
+    "strict": true,
+    "jsx": "react-jsx"
   }
 }

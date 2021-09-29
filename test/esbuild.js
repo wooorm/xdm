@@ -1,9 +1,9 @@
 /**
- * @typedef {import('react').FC} FC
  * @typedef {import('esbuild').BuildFailure} BuildFailure
  * @typedef {import('esbuild').Message} Message
  * @typedef {import('unist').Parent} Parent
  * @typedef {import('vfile').VFile} VFile
+ * @typedef {import('../complex-types').MdxContent} MdxContent
  */
 
 import {promises as fs} from 'node:fs'
@@ -33,7 +33,7 @@ test('xdm (esbuild)', async (t) => {
     plugins: [esbuildXdm()]
   })
 
-  /** @type {FC} */
+  /** @type {MdxContent} */
   let Content =
     /* @ts-expect-error file is dynamically generated */
     (await import('./context/esbuild.js')).default // type-coverage:ignore-line

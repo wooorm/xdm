@@ -4,4 +4,10 @@ coverage/
 node_modules/
 giant.mdx
 yarn.lock
-*.d.ts
+lib/**/*.d.ts
+script/**/*.d.ts
+test/**/*.d.ts
+esbuild.d.ts
+esm-loader.d.ts
+rollup.d.ts
+index.d.ts
