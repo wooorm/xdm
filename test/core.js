@@ -16,7 +16,6 @@ import React from 'react'
 import {renderToStaticMarkup} from 'react-dom/server.js'
 import rehypeKatex from 'rehype-katex'
 import rehypeRaw from 'rehype-raw'
-import remarkFootnotes from 'remark-footnotes'
 import remarkFrontmatter from 'remark-frontmatter'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
@@ -894,6 +893,16 @@ test('markdown (GFM, with `remark-gfm`)', async (t) => {
   t.equal(
     renderToStaticMarkup(
       React.createElement(
+        await run(compileSync('[^1]\n[^1]: a', {remarkPlugins: [remarkGfm]}))
+      )
+    ),
+    '<p><sup><a href="#user-content-fn-1" id="user-content-fnref-1" data-footnote-ref="true" aria-describedby="footnote-label">1</a></sup></p>\n<section data-footnotes="true" class="footnotes"><h2 id="footnote-label" class="sr-only">Footnotes</h2>\n<ol>\n<li id="user-content-fn-1">\n<p>a <a href="#user-content-fnref-1" data-footnote-backref="true" class="data-footnote-backref" aria-label="Back to content">↩</a></p>\n</li>\n</ol>\n</section>',
+    'should support footnotes (`[^1]` -> `<sup><a…`)'
+  )
+
+  t.equal(
+    renderToStaticMarkup(
+      React.createElement(
         await run(compileSync('| a |\n| - |', {remarkPlugins: [remarkGfm]}))
       )
     ),
@@ -968,24 +977,6 @@ test('markdown (math, `remark-math`, `rehype-katex`)', async (t) => {
     ),
     /<math/,
     'should support math (LaTeX)'
-  )
-
-  t.end()
-})
-
-test('markdown (footnotes, `remark-footnotes`)', async (t) => {
-  t.equal(
-    renderToStaticMarkup(
-      React.createElement(
-        await run(
-          compileSync('^[note]', {
-            remarkPlugins: [[remarkFootnotes, {inlineNotes: true}]]
-          })
-        )
-      )
-    ),
-    '<p><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>\n<section class="footnotes" role="doc-endnotes">\n<hr/>\n<ol>\n<li id="fn1" role="doc-endnote">note<a href="#fnref1" class="footnote-back" role="doc-backlink">↩</a></li>\n</ol>\n</section>',
-    'should support footnotes'
   )
 
   t.end()

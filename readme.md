@@ -71,7 +71,6 @@ Node 12+ is needed to use it and it must be `import`ed instead of `require`d.
     *   [GitHub flavored markdown (GFM)](#github-flavored-markdown-gfm)
     *   [Syntax highlighting](#syntax-highlighting)
     *   [Math](#math)
-    *   [Footnotes](#footnotes)
     *   [Frontmatter](#frontmatter)
 *   [Plugins](#plugins)
 *   [Types](#types)
@@ -1064,8 +1063,6 @@ Some other features often used with markdown are:
     ([see guide below](#github-flavored-markdown-gfm))
 *   **Frontmatter** — YAML
     ([see guide below](#frontmatter))
-*   **Footnotes**
-    ([see guide below](#footnotes))
 *   **Math**
     ([see guide below](#math))
 *   **Syntax highlighting**
@@ -1232,7 +1229,8 @@ The following keys can be passed in `components`:
 `h2`, `h3`, `h4`, `h5`, `h6`, `hr`, `img`, `li`, `ol`, `p`, `pre`, `strong`, and
 `ul`.
 With [`remark-gfm`][gfm] ([see guide below](#github-flavored-markdown-gfm)), you
-can also use: `del`, `table`, `tbody`, `td`, `th`, `thead`, and `tr`.
+can also use: `del`, `section`, `sup`, `table`, `tbody`, `td`, `th`, `thead`,
+and `tr`.
 Other remark plugins that add support for new constructs and advertise that they
 work with rehype, will also work with **xdm**.
 
@@ -1710,6 +1708,12 @@ Say we have an MDX file like this:
 
 www.example.com, https://example.com, and contact@example.com.
 
+## Footnote
+
+A note[^1]
+
+[^1]: Big note.
+
 ## Strikethrough
 
 ~one~ or ~~two~~ tildes.
@@ -1754,6 +1758,8 @@ async function main() {
   <a href="https://example.com">https://example.com</a>, and
   <a href="mailto:contact@example.com">contact@example.com</a>.
 </p>
+<h2>Footnote</h2>
+<p>A note<sup><a href="#user-content-fn-1" id="user-content-fnref-1" data-footnote-ref aria-describedby="footnote-label">1</a></sup></p>
 <h2>Strikethrough</h2>
 <p>
   <del>one</del> or <del>two</del> tildes.
@@ -1778,6 +1784,17 @@ async function main() {
     <input type="checkbox" checked disabled /> done
   </li>
 </ul>
+<section data-footnotes className="footnotes">
+<h2 id="footnote-label" className="sr-only">Footnotes</h2>
+<ol>
+  <li id="user-content-fn-1">
+    <p>
+      Big note.
+      <a href="#user-content-fnref-1" data-footnote-backref className="data-footnote-backref" aria-label="Back to content">↩</a>
+    </p>
+  </li>
+</ol>
+</section>
 ```
 
 </details>
@@ -2014,48 +2031,6 @@ async function main() {
     </span>
   </span>
 </h1>
-```
-
-</details>
-
-### Footnotes
-
-Use
-[`remark-footnotes`](https://github.com/remarkjs/remark-footnotes)
-by doing something like this:
-
-```js
-import remarkFootnotes from 'remark-footnotes'
-import {compile} from 'xdm'
-
-main(`Hi[^1]
-
-[^1]: World!`)
-
-async function main(file) {
-  console.log(String(await compile(file, {remarkPlugins: [remarkFootnotes]})))
-}
-```
-
-<details>
-<summary>Show equivalent JSX</summary>
-
-```js
-<p>
-  Hi
-  <a href="#fn1" className="footnote-ref" id="fnref1" role="doc-noteref">
-    <sup>1</sup>
-  </a>
-</p>
-<section className="footnotes" role="doc-endnotes">
-  <hr />
-  <ol>
-    <li id="fn1" role="doc-endnote">
-      World!
-      <a href="#fnref1" className="footnote-back" role="doc-backlink">↩</a>
-    </li>
-  </ol>
-</section>
 ```
 
 </details>
