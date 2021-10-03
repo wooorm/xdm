@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/naming-convention */
+
 declare module '*.mdx' {
   /**
    * MDX Content.
