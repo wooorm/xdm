@@ -1225,9 +1225,9 @@ The following keys can be passed in `components`:
     `<So />` or `<like.so />`, note that locally defined components take
     precedence)**‡**
 
-**†** Normally, in markdown, those are: `a`, `blockquote`, `code`, `em`, `h1`,
-`h2`, `h3`, `h4`, `h5`, `h6`, `hr`, `img`, `li`, `ol`, `p`, `pre`, `strong`, and
-`ul`.
+**†** Normally, in markdown, those are: `a`, `blockquote`, `br`, `code`, `em`,
+`h1`, `h2`, `h3`, `h4`, `h5`, `h6`, `hr`, `img`, `li`, `ol`, `p`, `pre`,
+`strong`, and `ul`.
 With [`remark-gfm`][gfm] ([see guide below](#github-flavored-markdown-gfm)), you
 can also use: `del`, `section`, `sup`, `table`, `tbody`, `td`, `th`, `thead`,
 and `tr`.
