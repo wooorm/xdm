@@ -1335,7 +1335,7 @@ export default {
     xdm({/* Options… */}),
     babel({
       // Also run on what used to be `.mdx` (but is now JS):
-      extensions: ['.js', '.jsx', '.es6', '.es', '.mjs', '.mdx'],
+      extensions: ['.js', '.jsx', '.es6', '.es', '.mjs', '.mdx', '.md'],
       // Other options…
     })
   ]
@@ -1364,7 +1364,7 @@ module.exports = {
     // …
     rules: [
       // …
-      {test: /\.mdx$/, use: [{loader: 'xdm/webpack.cjs', options: {}}]}
+      {test: /\.mdx?$/, use: [{loader: 'xdm/webpack.cjs', options: {}}]}
     ]
   }
 }
@@ -1468,7 +1468,7 @@ export function babelPluginSyntaxMdx() {
 function babelParserWithMdx(value, options) {
   if (
     options.sourceFilename &&
-    path.extname(options.sourceFilename) === '.mdx'
+    /\.mdx?$/.test(path.extname(options.sourceFilename))
   ) {
     // Babel does not support async parsers, unfortunately.
     return compileSync(
@@ -1552,7 +1552,7 @@ To start the development server run:
 yarn start
 ```
 
-#### Next
+#### Next.js
 
 Next uses webpack.
 Install `xdm` and extend
@@ -1562,12 +1562,12 @@ in a `next.config.js` file like so:
 ```js
 module.exports = {
   // Support MDX files as pages:
-  pageExtensions: ['mdx', 'tsx', 'ts', 'jsx', 'js'],
+  pageExtensions: ['mdx', 'md', 'tsx', 'ts', 'jsx', 'js'],
   // Support loading `.mdx`:
   webpack(config) {
     config.module.rules.push({
-      test: /\.mdx$/,
-      use: [{loader: 'xdm/webpack.cjs', options: {}}]
+      test: /\.mdx?$/,
+      use: [{loader: 'xdm/webpack.cjs', options: {/* Options… */}}]
     })
 
     return config
