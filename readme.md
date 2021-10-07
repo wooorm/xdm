@@ -1910,7 +1910,7 @@ format of that meta string is, so it defaults to how markdown handles it: `meta`
 is ignored.
 
 The short answer is:
-use [`remark-mdx-code-meta`](https://github.com/remarkjs/remark-mdx-code-meta),
+use [`remark-mdx-code-meta`](https://github.com/remcohaszing/remark-mdx-code-meta),
 it lets you type JSX attributes in the `meta` part and exposes them on the
 `pre` component.
 
