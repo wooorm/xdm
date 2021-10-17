@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
 declare module '*.mdx' {
+  import {MDXProps} from 'mdx/types'
+
   /**
    * MDX Content.
    *
    * @see https://v2.mdxjs.com/mdx/
    */
-  declare const Content: import('./complex-types').MdxContent
-  export default Content
+  export default function MDXContent(props: MDXProps): JSX.Element
 }
 
 declare module '*.md' {
@@ -16,8 +17,7 @@ declare module '*.md' {
    *
    * @see https://spec.commonmark.org
    */
-  declare const Content: import('./complex-types').MdxContent
-  export default Content
+  export {default} from '*.mdx'
 }
 
 declare module '*.markdown' {
@@ -26,8 +26,7 @@ declare module '*.markdown' {
    *
    * @see https://spec.commonmark.org
    */
-  declare const Content: import('./complex-types').MdxContent
-  export default Content
+  export {default} from '*.mdx'
 }
 
 declare module '*.mdown' {
@@ -36,8 +35,7 @@ declare module '*.mdown' {
    *
    * @see https://spec.commonmark.org
    */
-  declare const Content: import('./complex-types').MdxContent
-  export default Content
+  export {default} from '*.mdx'
 }
 
 declare module '*.mkdn' {
@@ -46,8 +44,7 @@ declare module '*.mkdn' {
    *
    * @see https://spec.commonmark.org
    */
-  declare const Content: import('./complex-types').MdxContent
-  export default Content
+  export {default} from '*.mdx'
 }
 
 declare module '*.mkd' {
@@ -56,8 +53,7 @@ declare module '*.mkd' {
    *
    * @see https://spec.commonmark.org
    */
-  declare const Content: import('./complex-types').MdxContent
-  export default Content
+  export {default} from '*.mdx'
 }
 
 declare module '*.mdwn' {
@@ -66,8 +62,7 @@ declare module '*.mdwn' {
    *
    * @see https://spec.commonmark.org
    */
-  declare const Content: import('./complex-types').MdxContent
-  export default Content
+  export {default} from '*.mdx'
 }
 
 declare module '*.mkdown' {
@@ -76,8 +71,7 @@ declare module '*.mkdown' {
    *
    * @see https://spec.commonmark.org
    */
-  declare const Content: import('./complex-types').MdxContent
-  export default Content
+  export {default} from '*.mdx'
 }
 
 declare module '*.ron' {
@@ -86,6 +80,5 @@ declare module '*.ron' {
    *
    * @see https://spec.commonmark.org
    */
-  declare const Content: import('./complex-types').MdxContent
-  export default Content
+  export {default} from '*.mdx'
 }

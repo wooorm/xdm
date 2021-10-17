@@ -3,7 +3,7 @@
  * @typedef {import('esbuild').Message} Message
  * @typedef {import('unist').Parent} Parent
  * @typedef {import('vfile').VFile} VFile
- * @typedef {import('../complex-types').MdxContent} MdxContent
+ * @typedef {import('mdx/types').MDXContent} MdxContent
  */
 
 import {promises as fs} from 'node:fs'

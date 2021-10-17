@@ -1,9 +1,9 @@
 /**
  * @typedef {import('hast').Root} Root
  * @typedef {import('../lib/compile.js').VFileCompatible} VFileCompatible
- * @typedef {import('../complex-types').MdxContent} MdxContent
- * @typedef {import('../complex-types').MdxModule} MdxModule
- * @typedef {import('../complex-types').Components} Components
+ * @typedef {import('mdx/types').MDXContent} MdxContent
+ * @typedef {import('mdx/types').MDXModule} MdxModule
+ * @typedef {import('mdx/types').MDXComponents} Components
  */
 
 import path from 'node:path'
