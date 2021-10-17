@@ -336,6 +336,64 @@ test('xdm (esbuild)', async (t) => {
 
   console.log('\nnote: the preceding errors and warnings are expected!\n')
 
+  await fs.writeFile(path.join(base, 'esbuild-plugin-crash.mdx'), '# hi')
+
+  try {
+    await esbuild.build({
+      entryPoints: [path.join(base, 'esbuild-plugin-crash.mdx')],
+      outfile: path.join(base, 'esbuild-plugin-crash.js'),
+      format: 'esm',
+      plugins: [
+        esbuildXdm({
+          rehypePlugins: [
+            function () {
+              return () => {
+                throw new Error('Something went wrong')
+              }
+            }
+          ]
+        })
+      ]
+    })
+    t.fail('esbuild should throw')
+  } catch (error) {
+    /** @type {BuildFailure} */
+    const result = JSON.parse(JSON.stringify(error))
+
+    for (const message of [...result.errors, ...result.warnings]) {
+      delete message.detail
+      message.text = message.text.split('\n')[0]
+    }
+
+    t.deepEqual(
+      result,
+      {
+        errors: [
+          {
+            location: {
+              column: 0,
+              file: 'test/context/esbuild-plugin-crash.mdx',
+              length: 0,
+              line: 0,
+              lineText: '# hi',
+              namespace: 'file',
+              suggestion: ''
+            },
+            notes: [],
+            pluginName: 'esbuild-xdm',
+            text: 'Error: Something went wrong'
+          }
+        ],
+        warnings: []
+      },
+      'should pass errors'
+    )
+  }
+
+  await fs.unlink(path.join(base, 'esbuild-plugin-crash.mdx'))
+
+  console.log('\nnote: the preceding errors and warnings are expected!\n')
+
   /** @type {(contents: string) => import('esbuild').Plugin} */
   const inlinePlugin = (contents) => ({
     name: 'inline plugin',
