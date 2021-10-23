@@ -895,9 +895,10 @@ To pass options, you can make your own loader, such as this `my-loader.js`:
 ```js
 import {createLoader} from 'xdm/esm-loader.js'
 
-const {getFormat, transformSource} = createLoader(/* Options… */)
+// Load is for Node 17+, the rest for 12, 14, 16.
+const {load, getFormat, transformSource} = createLoader(/* Options… */)
 
-export {getFormat, transformSource}
+export {load, getFormat, transformSource}
 ```
 
 Which can then be used with `node --experimental-loader=./my-loader.js`.

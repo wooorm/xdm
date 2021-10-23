@@ -115,8 +115,14 @@ test('xdm', async (t) => {
 
   t.equal(
     render(
-      // @ts-expect-error: Preact types do not accept `JSX.Element`.
-      h(await run(compileSync('?', {jsxImportSource: 'preact/compat'})), {}, [])
+      h(
+        // @ts-expect-error: React and Preact interferring.
+        await run(compileSync('?', {jsxImportSource: 'preact'}), {
+          keepImport: true
+        }),
+        {},
+        []
+      )
     ),
     '<p>?</p>',
     'should support an import source (`@jsxImportSource`)'

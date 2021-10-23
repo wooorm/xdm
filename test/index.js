@@ -6,4 +6,6 @@ import './evaluate.js'
 import './rollup.js'
 import './source-map.js'
 import './vue.js'
-import './webpack.js'
+// Can’t test webpack on Node 17 for now:
+// <https://github.com/webpack/webpack/issues/14532>
+// import './webpack.js'

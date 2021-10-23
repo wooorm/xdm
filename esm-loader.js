@@ -1,5 +1,5 @@
 import {createLoader} from './lib/integration/node.js'
 
-const {getFormat, transformSource} = createLoader()
+const {load, getFormat, transformSource} = createLoader()
 
-export {getFormat, transformSource, createLoader}
+export {load, getFormat, transformSource, createLoader}
