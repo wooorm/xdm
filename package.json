@@ -86,8 +86,8 @@
     "preact": "^10.0.0",
     "preact-render-to-string": "^5.0.0",
     "prettier": "^2.0.0",
-    "react": "^17.0.0",
-    "react-dom": "^17.0.0",
+    "react": "^18.0.0-alpha-3c4c1c470-20211021",
+    "react-dom": "^18.0.0-alpha-3c4c1c470-20211021",
     "rehype-katex": "^6.0.0",
     "rehype-raw": "^6.0.0",
     "remark-cli": "^10.0.0",
@@ -109,8 +109,8 @@
     "prepack": "npm run build && npm run format",
     "build": "rimraf \"{lib/**/**,test/**/**,script/**}*.d.ts\" \"{esbuild,esm-loader,index,rollup}.d.ts\" && tsc && type-coverage",
     "format": "remark . -qfo && prettier . -w --loglevel warn && xo --fix",
-    "test-api": "node --experimental-loader=./esm-loader.js test/index.js && node test/register.cjs",
-    "test-coverage": "c8 --check-coverage --branches 100 --functions 100 --lines 100 --statements 100 --reporter lcov node --experimental-loader=./esm-loader.js test/index.js",
+    "test-api": "node --experimental-loader=./test/react-18-esm-loader.js test/index.js && node test/register.cjs",
+    "test-coverage": "c8 --check-coverage --branches 100 --functions 100 --lines 100 --statements 100 --reporter lcov node --experimental-loader=./test/react-18-esm-loader.js test/index.js",
     "test": "npm run build && npm run format && npm run test-coverage"
   },
   "prettier": {
@@ -169,6 +169,7 @@
           "test/**/*.js"
         ],
         "rules": {
+          "node/file-extension-in-import": "off",
           "import/no-unassigned-import": "off"
         }
       },

@@ -30,10 +30,7 @@ test('xdm (source maps)', async (t) => {
     Buffer.from(JSON.stringify(file.map)).toString('base64') +
     '\n'
 
-  await fs.writeFile(
-    path.join(base, 'sourcemap.js'),
-    String(file).replace(/\/jsx-runtime(?=["'])/g, '$&.js')
-  )
+  await fs.writeFile(path.join(base, 'sourcemap.js'), String(file))
 
   const Content = /** @type {MDXContent} */ (
     /* @ts-expect-error file is dynamically generated */

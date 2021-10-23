@@ -28,7 +28,7 @@ test('xdm (rollup)', async (t) => {
     path.join(base, 'rollup.js'),
     (
       await bundle.generate({format: 'es'})
-    ).output[0].code.replace(/\/jsx-runtime(?=["'])/g, '$&.js')
+    ).output[0].code
   )
 
   const Content = /** @type {MDXContent} */ (

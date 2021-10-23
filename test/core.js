@@ -170,8 +170,7 @@ test('xdm', async (t) => {
           ).replace(
             /\/jsx-runtime(?=["'])/g,
             '$&/dist/emotion-react-jsx-runtime.cjs.prod.js'
-          ),
-          {keepImport: true}
+          )
         )
       )
     ),
@@ -929,7 +928,7 @@ test('markdown (GFM, with `remark-gfm`)', async (t) => {
         await run(compileSync('* [x] a\n* [ ] b', {remarkPlugins: [remarkGfm]}))
       )
     ),
-    '<ul class="contains-task-list">\n<li class="task-list-item"><input type="checkbox" checked="" disabled=""/> a</li>\n<li class="task-list-item"><input type="checkbox" disabled=""/> b</li>\n</ul>',
+    '<ul class="contains-task-list">\n<li class="task-list-item"><input type="checkbox" disabled="" checked=""/> a</li>\n<li class="task-list-item"><input type="checkbox" disabled=""/> b</li>\n</ul>',
     'should support tasklists (`* [x]` -> `input`)'
   )
 
@@ -1323,34 +1322,21 @@ test('theme-ui', async (t) => {
 /**
  *
  * @param {VFileCompatible} input
- * @param {{keepImport?: boolean}} [options]
  * @return {Promise<MDXContent>}
  */
-async function run(input, options = {}) {
-  return (await runWhole(input, options)).default
+async function run(input) {
+  return (await runWhole(input)).default
 }
 
 /**
  *
  * @param {VFileCompatible} input
- * @param {{keepImport?: boolean}} [options]
  * @return {Promise<MDXModule>}
  */
-async function runWhole(input, options = {}) {
+async function runWhole(input) {
   const name = 'fixture-' + nanoid().toLowerCase() + '.js'
   const fp = path.join('test', 'context', name)
-  let doc = String(input)
-
-  // Extensionless imports only work in faux-ESM (webpack and such),
-  // *not* in Node by default: *except* if there’s an export map defined
-  // in `package.json`.
-  // React doesn’t have one yet (it’s on `master` but not yet released), so add
-  // the extension for ’em:
-  if (!options.keepImport) {
-    doc = doc.replace(/\/jsx-runtime(?=["'])/g, '$&.js')
-  }
-
-  await fs.writeFile(fp, doc)
+  await fs.writeFile(fp, String(input))
 
   try {
     /** @type {MDXModule} */

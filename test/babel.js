@@ -23,11 +23,7 @@ test('xdm (babel)', async (t) => {
     {filename: 'example.mdx', plugins: [babelPluginSyntaxMdx]}
   )
 
-  const js = ((result || {code: undefined}).code || '').replace(
-    /\/jsx-runtime(?=["'])/g,
-    '$&.js'
-  )
-
+  const js = (result || {code: undefined}).code || ''
   await fs.writeFile(path.join(base, 'babel.js'), js)
 
   const Content = /** @type {MDXContent} */ (
