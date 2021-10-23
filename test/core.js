@@ -386,6 +386,27 @@ test('xdm', async (t) => {
       React.createElement(
         await run(
           compileSync(
+            `import { MDXProvider } from '@mdx-js/react'
+
+export default function Layout({children}) {
+  return <MDXProvider components={{h1: 'h2'}}>{children}</MDXProvider>
+}
+
+# hi`,
+            {providerImportSource: '@mdx-js/react'}
+          )
+        )
+      )
+    ),
+    '<h2>hi</h2>',
+    'should support providing components in a layout'
+  )
+
+  t.equal(
+    renderToStaticMarkup(
+      React.createElement(
+        await run(
+          compileSync(
             'import React from "react"\nexport default class extends React.Component { render() { return <>{this.props.children}</> } }\n\na'
           )
         )
@@ -684,12 +705,15 @@ test('jsx', async (t) => {
     [
       '/*@jsxRuntime automatic @jsxImportSource react*/',
       'function MDXContent(props = {}) {',
-      '  const _components = Object.assign({',
-      '    p: "p",',
-      '    em: "em"',
-      '  }, props.components), {wrapper: MDXLayout} = _components;',
-      '  const _content = <><_components.p><_components.em>{"a"}</_components.em></_components.p></>;',
-      '  return MDXLayout ? <MDXLayout {...props}>{_content}</MDXLayout> : _content;',
+      '  const {wrapper: MDXLayout} = props.components || ({});',
+      '  return MDXLayout ? <MDXLayout {...props}><_createMdxContent /></MDXLayout> : _createMdxContent();',
+      '  function _createMdxContent() {',
+      '    const _components = Object.assign({',
+      '      p: "p",',
+      '      em: "em"',
+      '    }, props.components);',
+      '    return <_components.p><_components.em>{"a"}</_components.em></_components.p>;',
+      '  }',
       '}',
       'export default MDXContent;',
       ''
@@ -702,9 +726,11 @@ test('jsx', async (t) => {
     [
       '/*@jsxRuntime automatic @jsxImportSource react*/',
       'function MDXContent(props = {}) {',
-      '  const _components = Object.assign({}, props.components), {wrapper: MDXLayout} = _components;',
-      '  const _content = <><a {...b} c d="1" e={1} /></>;',
-      '  return MDXLayout ? <MDXLayout {...props}>{_content}</MDXLayout> : _content;',
+      '  const {wrapper: MDXLayout} = props.components || ({});',
+      '  return MDXLayout ? <MDXLayout {...props}><_createMdxContent /></MDXLayout> : _createMdxContent();',
+      '  function _createMdxContent() {',
+      '    return <a {...b} c d="1" e={1} />;',
+      '  }',
       '}',
       'export default MDXContent;',
       ''
@@ -717,9 +743,12 @@ test('jsx', async (t) => {
     [
       '/*@jsxRuntime automatic @jsxImportSource react*/',
       'function MDXContent(props = {}) {',
-      '  const _components = Object.assign({}, props.components), {wrapper: MDXLayout, c} = _components;',
-      '  const _content = <><><a:b /><c.d /></></>;',
-      '  return MDXLayout ? <MDXLayout {...props}>{_content}</MDXLayout> : _content;',
+      '  const {wrapper: MDXLayout} = props.components || ({});',
+      '  return MDXLayout ? <MDXLayout {...props}><_createMdxContent /></MDXLayout> : _createMdxContent();',
+      '  function _createMdxContent() {',
+      '    const {c} = props.components || ({});',
+      '    return <><><a:b /><c.d /></></>;',
+      '  }',
       '}',
       'export default MDXContent;',
       ''
@@ -733,9 +762,11 @@ test('jsx', async (t) => {
       '/*@jsxRuntime automatic @jsxImportSource react*/',
       '/*1*/',
       'function MDXContent(props = {}) {',
-      '  const _components = Object.assign({}, props.components), {wrapper: MDXLayout} = _components;',
-      '  const _content = <><>{"a "}{}{" b"}</></>;',
-      '  return MDXLayout ? <MDXLayout {...props}>{_content}</MDXLayout> : _content;',
+      '  const {wrapper: MDXLayout} = props.components || ({});',
+      '  return MDXLayout ? <MDXLayout {...props}><_createMdxContent /></MDXLayout> : _createMdxContent();',
+      '  function _createMdxContent() {',
+      '    return <><>{"a "}{}{" b"}</></>;',
+      '  }',
       '}',
       'export default MDXContent;',
       ''
@@ -748,11 +779,14 @@ test('jsx', async (t) => {
     [
       '/*@jsxRuntime automatic @jsxImportSource react*/',
       'function MDXContent(props = {}) {',
-      '  const _components = Object.assign({',
-      '    p: "p"',
-      '  }, props.components), {wrapper: MDXLayout} = _components;',
-      '  const _content = <><_components.p>{"Hello "}{props.name}</_components.p></>;',
-      '  return MDXLayout ? <MDXLayout {...props}>{_content}</MDXLayout> : _content;',
+      '  const {wrapper: MDXLayout} = props.components || ({});',
+      '  return MDXLayout ? <MDXLayout {...props}><_createMdxContent /></MDXLayout> : _createMdxContent();',
+      '  function _createMdxContent() {',
+      '    const _components = Object.assign({',
+      '      p: "p"',
+      '    }, props.components);',
+      '    return <_components.p>{"Hello "}{props.name}</_components.p>;',
+      '  }',
       '}',
       'export default MDXContent;',
       ''
