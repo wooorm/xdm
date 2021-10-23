@@ -1343,7 +1343,8 @@ export default {
 }
 ```
 
-Source maps are supported when [`SourceMapGenerator`][sm] is passed in.
+Source maps are supported.
+You do not need to pass `options.SourceMapGenerator`.
 
 `options` are the same as from [`compile`][compile], with the additions of:
 
@@ -2384,8 +2385,6 @@ Most of the work is done by:
 [baseurl]: #optionsbaseurl
 
 [usedynamicimport]: #optionsusedynamicimport
-
-[sm]: #optionssourcemapgenerator
 
 [esbuild]: #esbuild
 
