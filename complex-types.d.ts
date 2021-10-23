@@ -6,7 +6,6 @@ export type Components = import('mdx/types').MDXComponents
  * The `components` prop is special: it defines what to use for components
  * inside the content.
  */
-// type-coverage:ignore-next-line
 export type MdxContentProps = import('mdx/types').MDXProps
 
 /**

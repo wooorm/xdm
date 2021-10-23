@@ -1,5 +1,5 @@
 /**
- * @typedef {import('mdx/types').MDXContent} MdxContent
+ * @typedef {import('mdx/types').MDXContent} MDXContent
  */
 
 import {promises as fs} from 'node:fs'
@@ -35,7 +35,7 @@ test('xdm (source maps)', async (t) => {
     String(file).replace(/\/jsx-runtime(?=["'])/g, '$&.js')
   )
 
-  const Content = /** @type {MdxContent} */ (
+  const Content = /** @type {MDXContent} */ (
     /* @ts-expect-error file is dynamically generated */
     (await import('./context/sourcemap.js')).default // type-coverage:ignore-line
   )

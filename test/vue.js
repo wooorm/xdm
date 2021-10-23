@@ -1,6 +1,6 @@
 /**
  * @typedef {import('vue').SetupContext} SetupContext
- * @typedef {import('mdx/types').MDXContent} MdxContent
+ * @typedef {import('mdx/types').MDXContent} MDXContent
  */
 
 import path from 'node:path'
@@ -33,7 +33,7 @@ test('xdm (vue)', async (t) => {
 
   await fs.writeFile(path.join(base, 'vue.js'), js)
 
-  const Content = /** @type {MdxContent} */ (
+  const Content = /** @type {MDXContent} */ (
     /* @ts-expect-error file is dynamically generated */
     (await import('./context/vue.js')).default // type-coverage:ignore-line
   )

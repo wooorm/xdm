@@ -3,7 +3,7 @@
  * @typedef {import('esbuild').Message} Message
  * @typedef {import('unist').Parent} Parent
  * @typedef {import('vfile').VFile} VFile
- * @typedef {import('mdx/types').MDXContent} MdxContent
+ * @typedef {import('mdx/types').MDXContent} MDXContent
  */
 
 import {promises as fs} from 'node:fs'
@@ -33,7 +33,7 @@ test('xdm (esbuild)', async (t) => {
     plugins: [esbuildXdm()]
   })
 
-  /** @type {MdxContent} */
+  /** @type {MDXContent} */
   let Content =
     /* @ts-expect-error file is dynamically generated */
     (await import('./context/esbuild.js')).default // type-coverage:ignore-line

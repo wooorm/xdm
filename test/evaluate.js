@@ -340,6 +340,7 @@ test('xdm (evaluate)', async (t) => {
       // @ts-expect-error runtime.js does not have a typing
       React.createElement((await evaluate('<X/>', runtime)).default, {
         components: {
+          // @ts-expect-error: React and Preact interfering.
           X() {
             return React.createElement('span', {}, '!')
           }
