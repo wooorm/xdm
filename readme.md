@@ -2155,26 +2155,12 @@ This package is fully typed with [TypeScript](https://www.typescriptlang.org).
 
 To enable types for imported `.mdx`, `.md`, etcetera files, first make sure
 the TypeScript `JSX` namespace is typed (such as by importing the `react`
-types), and then import `xdm/registry`.
+types).
+Then install `@types/mdx`, which adds types to import statements of supported
+files.
 
 ```js
-/**
- * @typedef {import('react')}
- * @typedef {import('xdm/registry')}
- */
-
-import Post from './example.mdx'
-// `Post` is now typed.
-```
-
-Alternatively, in TypeScript, do:
-
-```ts
-/// <reference types="react" />
-/// <reference types="xdm/registry" />
-
-import Post from './example.mdx'
-// `Post` is now typed.
+import Post from './post.mdx' // `Post` is now typed.
 ```
 
 ## Differences from `@mdx-js/mdx`
