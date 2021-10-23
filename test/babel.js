@@ -1,7 +1,7 @@
 /**
  * @typedef {import('@babel/parser').ParserOptions} ParserOptions
  * @typedef {import('estree-jsx').Program} Program
- * @typedef {import('../complex-types').MdxContent} MdxContent
+ * @typedef {import('mdx/types').MDXContent} MDXContent
  */
 
 import {promises as fs} from 'node:fs'
@@ -30,7 +30,7 @@ test('xdm (babel)', async (t) => {
 
   await fs.writeFile(path.join(base, 'babel.js'), js)
 
-  const Content = /** @type {MdxContent} */ (
+  const Content = /** @type {MDXContent} */ (
     /* @ts-expect-error file is dynamically generated */
     (await import('./context/babel.js')).default // type-coverage:ignore-line
   )

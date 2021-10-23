@@ -1,5 +1,5 @@
 /**
- * @typedef {import('../complex-types').MdxContent} MdxContent
+ * @typedef {import('mdx/types').MDXContent} MDXContent
  */
 
 'use strict'
@@ -21,7 +21,7 @@ test('xdm (register)', async (t) => {
   )
 
   // OMG, it works!
-  const Content = /** @type {MdxContent} */ (
+  const Content = /** @type {MDXContent} */ (
     /* @ts-expect-error file is dynamically generated */
     require('./context/register.mdx') // type-coverage:ignore-line
   )

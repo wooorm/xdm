@@ -1,9 +1,9 @@
 /**
  * @typedef {import('hast').Root} Root
  * @typedef {import('../lib/compile.js').VFileCompatible} VFileCompatible
- * @typedef {import('../complex-types').MdxContent} MdxContent
- * @typedef {import('../complex-types').MdxModule} MdxModule
- * @typedef {import('../complex-types').Components} Components
+ * @typedef {import('mdx/types').MDXContent} MDXContent
+ * @typedef {import('mdx/types').MDXModule} MDXModule
+ * @typedef {import('mdx/types').MDXComponents} Components
  */
 
 import path from 'node:path'
@@ -196,6 +196,7 @@ test('xdm', async (t) => {
       React.createElement(await run(compileSync('<X />')), {
         components: {
           /** @param {Object.<string, unknown>} props */
+          // @ts-expect-error: React and Preact interfering.
           X(props) {
             return React.createElement('span', props, '!')
           }
@@ -212,6 +213,7 @@ test('xdm', async (t) => {
         components: {
           x: {
             /** @param {object} props */
+            // @ts-expect-error: React and Preact interfering.
             y(props) {
               return React.createElement('span', props, '?')
             }
@@ -227,6 +229,7 @@ test('xdm', async (t) => {
     renderToStaticMarkup(
       React.createElement(await run(compileSync('<X /> and <X.Y />')), {
         components: {
+          // @ts-expect-error: React and Preact interfering.
           X: Object.assign(
             /** @param {Object.<string, unknown>} props */
             (props) => React.createElement('span', props, '!'),
@@ -248,6 +251,7 @@ test('xdm', async (t) => {
     renderToStaticMarkup(
       React.createElement(await run(compileSync('*a*')), {
         components: {
+          // @ts-expect-error: React and Preact interfering.
           em(props) {
             return React.createElement('i', props)
           }
@@ -266,6 +270,7 @@ test('xdm', async (t) => {
         ),
         {
           components: {
+            // @ts-expect-error: React and Preact interfering.
             em(props) {
               return React.createElement('i', props)
             }
@@ -365,6 +370,7 @@ test('xdm', async (t) => {
           /**
            * @param {Object.<string, unknown>} props
            */
+           // @ts-expect-error: React and Preact interfering.
           wrapper(props) {
             const {components, ...rest} = props
             return React.createElement('div', rest)
@@ -403,6 +409,7 @@ test('xdm', async (t) => {
             /**
              * @param {Object.<string, unknown>} props
              */
+             // @ts-expect-error: React and Preact interfering.
             wrapper(props) {
               const {components, ...rest} = props
               return React.createElement('article', rest)
@@ -1317,7 +1324,7 @@ test('theme-ui', async (t) => {
  *
  * @param {VFileCompatible} input
  * @param {{keepImport?: boolean}} [options]
- * @return {Promise<MdxContent>}
+ * @return {Promise<MDXContent>}
  */
 async function run(input, options = {}) {
   return (await runWhole(input, options)).default
@@ -1327,7 +1334,7 @@ async function run(input, options = {}) {
  *
  * @param {VFileCompatible} input
  * @param {{keepImport?: boolean}} [options]
- * @return {Promise<MdxModule>}
+ * @return {Promise<MDXModule>}
  */
 async function runWhole(input, options = {}) {
   const name = 'fixture-' + nanoid().toLowerCase() + '.js'
@@ -1346,7 +1353,7 @@ async function runWhole(input, options = {}) {
   await fs.writeFile(fp, doc)
 
   try {
-    /** @type {MdxModule} */
+    /** @type {MDXModule} */
     return await import('./context/' + name)
   } finally {
     // This is not a bug: the `finally` runs after the whole `try` block, but

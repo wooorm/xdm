@@ -1,5 +1,5 @@
 /**
- * @typedef {import('../complex-types').MdxContent} MdxContent
+ * @typedef {import('mdx/types').MDXContent} MDXContent
  */
 
 import path from 'node:path'
@@ -16,7 +16,7 @@ test('xdm (ESM loader)', async (t) => {
     'export const Message = () => <>World!</>\n\n# Hello, <Message />'
   )
 
-  /** @type {MdxContent} */
+  /** @type {MDXContent} */
   let Content
 
   try {

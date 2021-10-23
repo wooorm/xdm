@@ -1,5 +1,5 @@
 /**
- * @typedef {import('../complex-types').MdxContent} MdxContent
+ * @typedef {import('mdx/types').MDXContent} MDXContent
  */
 
 import path from 'node:path'
@@ -31,7 +31,7 @@ test('xdm (rollup)', async (t) => {
     ).output[0].code.replace(/\/jsx-runtime(?=["'])/g, '$&.js')
   )
 
-  const Content = /** @type {MdxContent} */ (
+  const Content = /** @type {MDXContent} */ (
     /* @ts-expect-error file is dynamically generated */
     (await import('./context/rollup.js')).default // type-coverage:ignore-line
   )
