@@ -369,7 +369,7 @@ test('xdm', async (t) => {
           /**
            * @param {Object.<string, unknown>} props
            */
-           // @ts-expect-error: React and Preact interfering.
+          // @ts-expect-error: React and Preact interfering.
           wrapper(props) {
             const {components, ...rest} = props
             return React.createElement('div', rest)
@@ -408,7 +408,7 @@ test('xdm', async (t) => {
             /**
              * @param {Object.<string, unknown>} props
              */
-             // @ts-expect-error: React and Preact interfering.
+            // @ts-expect-error: React and Preact interfering.
             wrapper(props) {
               const {components, ...rest} = props
               return React.createElement('article', rest)

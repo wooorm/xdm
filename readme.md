@@ -1371,7 +1371,8 @@ module.exports = {
 }
 ```
 
-Source maps are supported when [`SourceMapGenerator`][sm] is passed in.
+Source maps are supported based on how you configure webpack.
+You do not need to pass `options.SourceMapGenerator`.
 
 If you use modern JavaScript features you might want to use Babel through
 [`babel-loader`](https://webpack.js.org/loaders/babel-loader/) to compile to
