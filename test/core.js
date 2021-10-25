@@ -476,8 +476,6 @@ export default function Layout({children}) {
     )
   }
 
-  console.log('\nnote: the next warning is expected!\n')
-
   try {
     renderToStaticMarkup(React.createElement(await run(compileSync('<X />'))))
     t.fail()
@@ -485,7 +483,7 @@ export default function Layout({children}) {
     const exception = /** @type {Error} */ (error)
     t.match(
       exception.message,
-      /Element type is invalid/,
+      /Expected component `X` to be defined: you likely forgot to import, pass, or provide it./,
       'should throw if a required component is not passed'
     )
   }
@@ -497,8 +495,44 @@ export default function Layout({children}) {
     const exception = /** @type {Error} */ (error)
     t.match(
       exception.message,
-      /Cannot read propert/,
+      /Expected object `a` to be defined: you likely forgot to import, pass, or provide it/,
       'should throw if a required member is not passed'
+    )
+  }
+
+  try {
+    renderToStaticMarkup(
+      React.createElement(await run(compileSync('<X />', {development: true})))
+    )
+    t.fail()
+  } catch (/** @type {unknown} */ error) {
+    const exception = /** @type {Error} */ (error)
+    t.match(
+      exception.message,
+      /It’s referenced in your code at `1:1-1:6/,
+      'should pass more info to errors w/ `development: true`'
+    )
+  }
+
+  try {
+    renderToStaticMarkup(
+      React.createElement(
+        await run(
+          compileSync(
+            {value: 'asd <a.b />', path: 'folder/example.mdx'},
+            {development: true}
+          )
+        )
+      )
+    )
+    t.fail()
+  } catch (/** @type {unknown} */ error) {
+    console.log(error)
+    const exception = /** @type {Error} */ (error)
+    t.match(
+      exception.message,
+      /It’s referenced in your code at `1:5-1:12` in `folder\/example.mdx`/,
+      'should show what file contains the error w/ `development: true`, and `path`'
     )
   }
 
@@ -525,8 +559,6 @@ export default function Layout({children}) {
     'should support setting components through context with a `providerImportSource`'
   )
 
-  console.log('\nnote: the next warning is expected!\n')
-
   try {
     renderToStaticMarkup(
       React.createElement(
@@ -538,7 +570,7 @@ export default function Layout({children}) {
     const exception = /** @type {Error} */ (error)
     t.match(
       exception.message,
-      /Element type is invalid/,
+      /Expected component `X` to be defined: you likely forgot to import, pass, or provide it/,
       'should throw if a required component is not passed or given to `MDXProvider`'
     )
   }
@@ -747,10 +779,15 @@ test('jsx', async (t) => {
       '  return MDXLayout ? <MDXLayout {...props}><_createMdxContent /></MDXLayout> : _createMdxContent();',
       '  function _createMdxContent() {',
       '    const {c} = props.components || ({});',
+      '    if (!c) _missingMdxReference("c", false);',
+      '    if (!c.d) _missingMdxReference("c.d", true);',
       '    return <><><a:b /><c.d /></></>;',
       '  }',
       '}',
       'export default MDXContent;',
+      'function _missingMdxReference(id, component) {',
+      '  throw new Error("Expected " + (component ? "component" : "object") + " `" + id + "` to be defined: you likely forgot to import, pass, or provide it.");',
+      '}',
       ''
     ].join('\n'),
     'should serialize fragments, namespaces, members'

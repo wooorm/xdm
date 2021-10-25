@@ -23,6 +23,12 @@
   "main": "index.js",
   "sideEffects": false,
   "types": "./index.d.ts",
+  "browser": {
+    "./lib/condition.js": "./lib/condition.browser.js"
+  },
+  "react-native": {
+    "./lib/condition.js": "./lib/condition.browser.js"
+  },
   "files": [
     "lib/",
     "complex-types.d.ts",
