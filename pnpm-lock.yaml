@@ -53,6 +53,7 @@ specifiers:
   rimraf: ^3.0.0
   rollup: ^2.0.0
   source-map: ^0.7.0
+  stringify-entities: ^4.0.2
   tape: ^5.0.0
   theme-ui: ^0.11.0
   type-coverage: ^2.0.0
@@ -129,6 +130,7 @@ devDependencies:
   remark-preset-wooorm: 9.1.0
   rimraf: 3.0.2
   rollup: 2.59.0
+  stringify-entities: 4.0.2
   tape: 5.3.1
   theme-ui: 0.11.3_793a74aac5cf12ca937af03a551a62e3
   type-coverage: 2.18.3_typescript@4.4.4
@@ -1750,7 +1752,6 @@ packages:
 
   /character-entities-html4/2.1.0:
     resolution: {integrity: sha512-1v7fgQRj6hnSwFpq1Eu0ynr/CDEw0rXo2B61qXrLNdHZmPKgb7fqS1a2JwF0rISo9q77jDI8VMEHoApn8qDoZA==}
-    dev: false
 
   /character-entities-legacy/3.0.0:
     resolution: {integrity: sha512-RpPp0asT/6ufRm//AJVwpViZbGM/MkjQFxJccQRHmISF/22NBtsHqAWmL+/pmkPWoIUJdWyeVleTl1wydHATVQ==}
@@ -6522,7 +6523,6 @@ packages:
     dependencies:
       character-entities-html4: 2.1.0
       character-entities-legacy: 3.0.0
-    dev: false
 
   /strip-ansi/6.0.1:
     resolution: {integrity: sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==}
