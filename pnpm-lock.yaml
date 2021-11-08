@@ -25,7 +25,6 @@ specifiers:
   eslint-plugin-es: ^4.0.0
   eslint-plugin-security: ^1.0.0
   estree-to-babel: ^3.0.0
-  estree-util-build-jsx: ^2.0.0
   estree-util-is-identifier-name: ^2.0.0
   estree-walker: ^3.0.0
   got: ^11.0.0
@@ -34,7 +33,6 @@ specifiers:
   mdast-util-mdx: ^1.0.0
   micromark-extension-mdxjs: ^1.0.0
   nanoid: ^3.0.0
-  periscopic: ^3.0.0
   preact: ^10.0.0
   preact-render-to-string: ^5.0.0
   prettier: ^2.0.0
@@ -42,7 +40,6 @@ specifiers:
   react-dom: ^18.0.0-alpha-3c4c1c470-20211021
   rehype-katex: ^6.0.0
   rehype-raw: ^6.0.0
-  rehype-stringify: ^9.0.2
   remark-cli: ^10.0.0
   remark-frontmatter: ^4.0.0
   remark-gfm: ^3.0.0
@@ -59,8 +56,6 @@ specifiers:
   type-coverage: ^2.0.0
   typescript: ^4.0.0
   unified: ^10.0.0
-  unist-util-position-from-estree: ^1.0.0
-  unist-util-stringify-position: ^3.0.0
   unist-util-visit: ^4.0.0
   vfile: ^5.0.0
   vfile-message: ^3.0.2
@@ -73,7 +68,6 @@ dependencies:
   '@types/estree-jsx': 0.0.1
   '@types/mdx': 2.0.1
   astring: 1.7.5
-  estree-util-build-jsx: 2.0.0
   estree-util-is-identifier-name: 2.0.0
   estree-walker: 3.0.0
   got: 11.8.2
@@ -81,14 +75,10 @@ dependencies:
   markdown-extensions: 1.1.1
   mdast-util-mdx: 1.1.0
   micromark-extension-mdxjs: 1.0.0
-  periscopic: 3.0.4
-  rehype-stringify: 9.0.2
   remark-parse: 10.0.0
   remark-rehype: 10.0.0
   source-map: 0.7.3
   unified: 10.1.0
-  unist-util-position-from-estree: 1.1.1
-  unist-util-stringify-position: 3.0.0
   unist-util-visit: 4.1.0
   vfile: 5.2.0
 
@@ -1732,6 +1722,7 @@ packages:
 
   /ccount/2.0.1:
     resolution: {integrity: sha512-eyrF0jiFpY+3drT6383f1qhkbGsLSifNAjA61IUjZjmLCWjItY6LB9ft9YhoDgwfmclB2zhu51Lc7+95b8NRAg==}
+    dev: true
 
   /chalk/2.4.2:
     resolution: {integrity: sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==}
@@ -2741,14 +2732,6 @@ packages:
       '@types/estree': 0.0.46
     dev: false
 
-  /estree-util-build-jsx/2.0.0:
-    resolution: {integrity: sha512-d49hPGqBCJF/bF06g1Ywg7zjH1mrrUdPPrixBlKBxcX4WvMYlUUJ8BkrwlzWc8/fm6XqGgk5jilhgeZBDEGwOQ==}
-    dependencies:
-      '@types/estree-jsx': 0.0.1
-      estree-util-is-identifier-name: 2.0.0
-      estree-walker: 3.0.0
-    dev: false
-
   /estree-util-is-identifier-name/2.0.0:
     resolution: {integrity: sha512-aXXZFVMnBBDRP81vS4YtAYJ0hUkgEsXea7lNKWCOeaAquGb1Jm2rcONPB5fpzwgbNxulTvrWuKnp9UElUGAKeQ==}
     dev: false
@@ -3177,6 +3160,7 @@ packages:
     dependencies:
       '@types/hast': 2.3.4
       '@types/unist': 2.0.6
+    dev: true
 
   /hast-util-parse-selector/3.1.0:
     resolution: {integrity: sha512-AyjlI2pTAZEOeu7GeBPZhROx0RHBnydkQIXlhnFzDi0qfXTmGUWoCYZtomHbrdrheV4VFUlPcfJ6LMF5T6sQzg==}
@@ -3219,21 +3203,6 @@ packages:
       zwitch: 2.0.2
     transitivePeerDependencies:
       - supports-color
-    dev: false
-
-  /hast-util-to-html/8.0.3:
-    resolution: {integrity: sha512-/D/E5ymdPYhHpPkuTHOUkSatxr4w1ZKrZsG0Zv/3C2SRVT0JFJG53VS45AMrBtYk0wp5A7ksEhiC8QaOZM95+A==}
-    dependencies:
-      '@types/hast': 2.3.4
-      ccount: 2.0.1
-      comma-separated-tokens: 2.0.2
-      hast-util-is-element: 2.1.1
-      hast-util-whitespace: 2.0.0
-      html-void-elements: 2.0.1
-      property-information: 6.1.0
-      space-separated-tokens: 2.0.1
-      stringify-entities: 4.0.2
-      unist-util-is: 5.1.1
     dev: false
 
   /hast-util-to-parse5/7.0.0:
@@ -3297,6 +3266,7 @@ packages:
 
   /html-void-elements/2.0.1:
     resolution: {integrity: sha512-0quDb7s97CfemeJAnW9wC0hw78MtW7NU3hqtCD75g2vFlDLt36llsYD7uB7SUzojLMP24N5IatXf7ylGXiGG9A==}
+    dev: true
 
   /http-cache-semantics/4.1.0:
     resolution: {integrity: sha512-carPklcUh7ROWRK7Cv27RPtdhYhUsela/ue5/jKzjegVvXDqM2ILE9Q2BGn9JZJh1g87cp56su/FgQSzcWS8cQ==}
@@ -3569,12 +3539,6 @@ packages:
       lowercase-keys: 1.0.1
       proto-props: 2.0.0
     dev: true
-
-  /is-reference/3.0.0:
-    resolution: {integrity: sha512-Eo1W3wUoHWoCoVM4GVl/a+K0IgiqE5aIo4kJABFyMum1ZORlPkC+UC357sSQUL5w5QCE5kCC9upl75b7+7CY/Q==}
-    dependencies:
-      '@types/estree': 0.0.50
-    dev: false
 
   /is-regex/1.1.4:
     resolution: {integrity: sha512-kvRdxDsxZjhzUX07ZnLydzS1TU/TJlTUHHY4YLL87e37oUA49DfkLqgy+VjFocowy29cKvcSiu+kIv728jTTVg==}
@@ -4964,13 +4928,6 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /periscopic/3.0.4:
-    resolution: {integrity: sha512-SFx68DxCv0Iyo6APZuw/AKewkkThGwssmU0QWtTlvov3VAtPX+QJ4CadwSaz8nrT5jPIuxdvJWB4PnD2KNDxQg==}
-    dependencies:
-      estree-walker: 3.0.0
-      is-reference: 3.0.0
-    dev: false
-
   /picocolors/1.0.0:
     resolution: {integrity: sha512-1fygroTLlHu66zi26VoTDv8yRgm0Fccecssto+MhsZ0D/DGW2sm8E8AjW7NU5VVTRt5GxbeZ5qBuJr+HyLYkjQ==}
     dev: true
@@ -5063,10 +5020,6 @@ packages:
 
   /property-information/6.0.1:
     resolution: {integrity: sha512-F4WUUAF7fMeF4/JUFHNBWDaKDXi2jbvqBW/y6o5wsf3j19wTZ7S60TmtB5HoBhtgw7NKQRMWuz5vk2PR0CygUg==}
-
-  /property-information/6.1.0:
-    resolution: {integrity: sha512-aTSKXRnBlDpqo6cHVuZ88oaW1XGjABV10cV8RhK7AwBRjX+/D/LqspUF9f+TFSprZwXAsdJhx3KaJCdj8xZygw==}
-    dev: false
 
   /propose/0.0.5:
     resolution: {integrity: sha1-SKBl2ex9TIZn9AULFcSi2F28pWs=}
@@ -5245,14 +5198,6 @@ packages:
       hast-util-raw: 7.2.0
       unified: 10.1.0
     dev: true
-
-  /rehype-stringify/9.0.2:
-    resolution: {integrity: sha512-BuVA6lAEYtOpXO2xuHLohAzz8UNoQAxAqYRqh4QEEtU39Co+P1JBZhw6wXA9hMWp+JLcmrxWH8+UKcNSr443Fw==}
-    dependencies:
-      '@types/hast': 2.3.4
-      hast-util-to-html: 8.0.3
-      unified: 10.1.0
-    dev: false
 
   /remark-cli/10.0.0:
     resolution: {integrity: sha512-Yc5kLsJ5vgiQJl6xMLLJHqPac6OSAC5DOqKQrtmzJxSdJby2Jgr+OpIAkWQYwvbNHEspNagyoQnuwK2UCWg73g==}
