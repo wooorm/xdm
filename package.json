@@ -115,7 +115,8 @@
     "prepack": "npm run build && npm run format",
     "build": "rimraf \"{lib/**/**,test/**/**,script/**}*.d.ts\" \"{esbuild,esm-loader,index,rollup}.d.ts\" && tsc && type-coverage",
     "format": "remark . -qfo && prettier . -w --loglevel warn && xo --fix",
-    "test-api": "node --experimental-loader=./test/react-18-esm-loader.js test/index.js && node test/register.cjs",
+    "#": "to do: test `node test/register.cjs` when `deasync` works on Node 17",
+    "test-api": "node --experimental-loader=./test/react-18-esm-loader.js test/index.js",
     "test-coverage": "c8 --check-coverage --branches 100 --functions 100 --lines 100 --statements 100 --reporter lcov node --experimental-loader=./test/react-18-esm-loader.js test/index.js",
     "test": "npm run build && npm run format && npm run test-coverage"
   },
