@@ -117,9 +117,7 @@ test('xdm', async (t) => {
     render(
       h(
         // @ts-expect-error: React and Preact interferring.
-        await run(compileSync('?', {jsxImportSource: 'preact'}), {
-          keepImport: true
-        }),
+        await run(compileSync('?', {jsxImportSource: 'preact'})),
         {},
         []
       )
@@ -151,9 +149,7 @@ test('xdm', async (t) => {
     render(
       h(
         // @ts-expect-error: Preact types do not accept `JSX.Element`.
-        await run(compileSync('<>1</>', {jsxImportSource: 'preact'}), {
-          keepImport: true
-        }),
+        await run(compileSync('<>1</>', {jsxImportSource: 'preact'})),
         {}
       )
     ),
@@ -303,6 +299,7 @@ test('xdm', async (t) => {
         MDXProvider,
         {
           components: {
+            // @ts-expect-error: React and Preact interferring.
             Y() {
               return React.createElement('span', {}, '!')
             }
@@ -545,6 +542,7 @@ export default function Layout({children}) {
             /**
              * @param {Object.<string, unknown>} props
              */
+            // @ts-expect-error: React and Preact interferring.
             em(props) {
               return React.createElement('i', props)
             }

@@ -357,6 +357,7 @@ test('xdm (evaluate)', async (t) => {
         provider.MDXProvider,
         {
           components: {
+            // @ts-expect-error: React and Preact interferring.
             X() {
               return React.createElement('span', {}, '!')
             }
