@@ -190,7 +190,7 @@ test('xdm', async (t) => {
     renderToStaticMarkup(
       React.createElement(await run(compileSync('<X />')), {
         components: {
-          /** @param {Object.<string, unknown>} props */
+          /** @param {Record<string, unknown>} props */
           // @ts-expect-error: React and Preact interfering.
           X(props) {
             return React.createElement('span', props, '!')
@@ -226,10 +226,10 @@ test('xdm', async (t) => {
         components: {
           // @ts-expect-error: React and Preact interfering.
           X: Object.assign(
-            /** @param {Object.<string, unknown>} props */
+            /** @param {Record<string, unknown>} props */
             (props) => React.createElement('span', props, '!'),
             {
-              /** @param {Object.<string, unknown>} props */
+              /** @param {Record<string, unknown>} props */
               Y(props) {
                 return React.createElement('span', props, '?')
               }
@@ -364,7 +364,7 @@ test('xdm', async (t) => {
       React.createElement(await run(compileSync('a')), {
         components: {
           /**
-           * @param {Object.<string, unknown>} props
+           * @param {Record<string, unknown>} props
            */
           // @ts-expect-error: React and Preact interfering.
           wrapper(props) {
@@ -424,7 +424,7 @@ export default function Layout({children}) {
         {
           components: {
             /**
-             * @param {Object.<string, unknown>} props
+             * @param {Record<string, unknown>} props
              */
             // @ts-expect-error: React and Preact interfering.
             wrapper(props) {
@@ -540,7 +540,7 @@ export default function Layout({children}) {
         {
           components: {
             /**
-             * @param {Object.<string, unknown>} props
+             * @param {Record<string, unknown>} props
              */
             // @ts-expect-error: React and Preact interferring.
             em(props) {

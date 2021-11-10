@@ -795,7 +795,7 @@ See `options.pragma` for an example.
 
 ###### Returns
 
-`Promise.<VFile>` — Promise that resolves to the compiled JS as a [vfile][].
+`Promise<VFile>` — Promise that resolves to the compiled JS as a [vfile][].
 
 <details>
 <summary>Example</summary>
@@ -893,7 +893,7 @@ const {default: Content} = await evaluate('# hi', {...provider, ...runtime, ...o
 
 ###### Returns
 
-`Promise.<Object>` — Promise that resolves to something that looks a bit like a
+`Promise<Module>` — Promise that resolves to something that looks a bit like a
 module: an object with a `default` field set to the component and anything else
 that was exported from the MDX file available too.
 
@@ -942,7 +942,7 @@ All other options have to be passed to `compile` instead.
 
 ###### Returns
 
-`Promise.<Object>` — See `evaluate`
+`Promise<Module>` — See `evaluate`
 
 <details>
 <summary>Example</summary>
@@ -1490,7 +1490,7 @@ You do not need to pass `options.SourceMapGenerator`.
 ###### `options.exclude`
 
 List of [`picomatch`][pico] patterns to include and/or exclude
-(`string`, `RegExp`, `(string|RegExp)[]`, default: `[]`).
+(`string`, `RegExp`, `Array<string|RegExp>`, default: `[]`).
 
 #### Webpack
 
