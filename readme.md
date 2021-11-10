@@ -47,6 +47,8 @@ Node 12+ is needed to use it and it must be `import`ed instead of `require`d.
     *   [`compileSync(file, options?)`](#compilesyncfile-options)
     *   [`evaluate(file, options)`](#evaluatefile-options)
     *   [`evaluateSync(file, options)`](#evaluatesyncfile-options)
+    *   [`run(functionBody, options)`](#runfunctionbody-options)
+    *   [`runSync(functionBody, options)`](#runsyncfunctionbody-options)
     *   [`createProcessor(options)`](#createprocessoroptions)
 *   [👩‍🔬 Lab](#-lab)
     *   [Importing `.mdx` files directly](#importing-mdx-files-directly)
@@ -203,7 +205,9 @@ See [§ MDX content][mdx-content] below on how to use the result.
 [`compile`][compile],
 [`compileSync`](#compilesyncfile-options),
 [`evaluate`][eval],
-[`evaluateSync`](#evaluatesyncfile-options), and
+[`evaluateSync`](#evaluatesyncfile-options),
+[`run`][run],
+[`runSync`](#runsyncfunctionbody-options), and
 [`createProcessor`](#createprocessoroptions).
 There is no default export.
 
@@ -342,7 +346,7 @@ it affects *which* files are “registered”:
 Output format to generate (`'program' | 'function-body'`, default: `'program'`).
 In most cases `'program'` should be used, as it results in a whole program.
 Internally, [`evaluate`][eval] uses `outputFormat: 'function-body'` to compile
-to code that can be `eval`ed.
+to code that can be `eval`ed with [`run`][run].
 In some cases, you might want to do what `evaluate` does in separate steps
 yourself, such as when compiling on the server and running on the client.
 
@@ -827,15 +831,12 @@ When possible please use the async `compile`.
 
 ### `evaluate(file, options)`
 
-Compile and run MDX.
-☢️ It’s called **evaluate** because it `eval`s JavaScript.
+> ☢️ **Danger**: It’s called **evaluate** because it `eval`s JavaScript.
+
+Compile and [run][] MDX.
 When possible, please use `compile`, write to a file, and then run with Node or
 bundle with [esbuild][]/[Rollup][]/[webpack][].
 But if you trust your content, `evaluate` can work.
-
-`evaluate` wraps code in an [`AsyncFunction`][async-function], `evaluateSync`
-uses a normal [`Function`][function].
-That means that `evaluate` also supports top-level await.
 
 Typically, `import` (or `export … from`) do not work here.
 They can be compiled to dynamic `import()` by passing
@@ -918,9 +919,68 @@ console.log(await evaluate(file, {...runtime}))
 
 ### `evaluateSync(file, options)`
 
+> ☢️ **Danger**: It’s called **evaluate** because it `eval`s JavaScript.
+
 Compile and run MDX.
 Synchronous version of [`evaluate`][eval].
 When possible please use the async `evaluate`.
+
+### `run(functionBody, options)`
+
+> ☢️ **Danger**: This `eval`s JavaScript.
+
+Run MDX compiled as [`options.outputFormat: 'function-body'`][outputformat].
+
+###### `options`
+
+You can pass `jsx`, `jsxs`, and `Fragment` from an automatic JSX runtime as
+`options`.
+You can pass `useMDXComponents` from a provider in options as well if the MDX
+is compiled with `options.providerImportSource: '#'` (the exact value of this
+option doesn’t matter).
+All other options have to be passed to `compile` instead.
+
+###### Returns
+
+`Promise.<Object>` — See `evaluate`
+
+<details>
+<summary>Example</summary>
+
+On the server:
+
+```js
+import {compile} from 'xdm'
+
+const code = String(await compile('# hi', {outputFormat: 'function-body'}))
+```
+
+On the client:
+
+```js
+import {run} from 'xdm'
+import * as runtime from 'react/jsx-runtime'
+
+const code = '' // To do: get `code` from server somehow.
+
+const {default: Content} = await run(code, runtime)
+```
+
+…yields:
+
+```js
+[Function: MDXContent]
+```
+
+</details>
+
+### `runSync(functionBody, options)`
+
+> ☢️ **Danger**: This `eval`s JavaScript.
+
+Run MDX.
+Synchronous version of [`run`][run].
+When possible please use the async `run`.
 
 ### `createProcessor(options)`
 
@@ -2439,13 +2499,11 @@ Most of the work is done by:
 
 [gfm]: https://github.com/remarkjs/remark-gfm
 
-[async-function]: https://developer.mozilla.org/docs/JavaScript/Reference/Global_Objects/AsyncFunction
-
-[function]: https://developer.mozilla.org/docs/JavaScript/Reference/Global_Objects/Function
-
 [compile]: #compilefile-options
 
 [eval]: #evaluatefile-options
+
+[run]: #runfunctionbody-options
 
 [integrations]: #integrations
 
