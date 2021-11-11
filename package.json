@@ -1,6 +1,6 @@
 {
   "name": "@eduardo-exists/xdm",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "description": "an MDX compiler",
   "license": "MIT",
   "keywords": [
