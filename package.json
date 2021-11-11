@@ -1,5 +1,5 @@
 {
-  "name": "xdm",
+  "name": "@eduardo-exists/xdm",
   "version": "3.2.0",
   "description": "an MDX compiler",
   "license": "MIT",
@@ -9,8 +9,13 @@
     "markdown",
     "jsx"
   ],
-  "repository": "wooorm/xdm",
-  "bugs": "https://github.com/wooorm/xdm/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eduardo-exists/xdm.git"
+  },
+  "bugs": {
+    "url": "https://github.com/wooorm/xdm/issues"
+  },
   "funding": {
     "type": "github",
     "url": "https://github.com/sponsors/wooorm"
@@ -57,6 +62,7 @@
     "mdast-util-mdx": "^1.0.0",
     "micromark-extension-mdxjs": "^1.0.0",
     "periscopic": "^3.0.0",
+    "rehype-parse": "^8.0.3",
     "remark-parse": "^10.0.0",
     "remark-rehype": "^10.0.0",
     "source-map": "^0.7.0",
@@ -215,5 +221,10 @@
     "ignoreFiles": [
       "lib/util/resolve-evaluate-options.{d.ts,js}"
     ]
+  },
+  "homepage": "https://github.com/wooorm/xdm#readme",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
   }
 }
