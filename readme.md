@@ -172,12 +172,12 @@ import {Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs} from 'react/jsx-runti
 export const Thing = () => _jsx(_Fragment, {children: 'World!'})
 
 function MDXContent(props = {}) {
-  const {wrapper: MDXLayout} = props.components || ({})
+  let {wrapper: MDXLayout} = props.components || ({})
   return MDXLayout
     ? _jsx(MDXLayout, Object.assign({}, props, {children: _jsx(_createMdxContent, {})}))
     : _createMdxContent()
   function _createMdxContent() {
-    const _components = Object.assign({h1: 'h1'}, props.components)
+    let _components = Object.assign({h1: 'h1'}, props.components)
     return _jsxs(_components.h1, {children: ['Hello, ', _jsx(Thing, {})]})
   }
 }
@@ -623,14 +623,14 @@ compile(file, {providerImportSource: '@mdx-js/react'})
  export const Thing = () => _jsx(_Fragment, {children: 'World!'})
 
  function MDXContent(props = {}) {
--  const {wrapper: MDXLayout} = props.components || ({})
-+  const {wrapper: MDXLayout} = Object.assign({}, _provideComponents(), props.components)
+-  let {wrapper: MDXLayout} = props.components || ({})
++  let {wrapper: MDXLayout} = Object.assign({}, _provideComponents(), props.components)
    return MDXLayout
      ? _jsx(MDXLayout, Object.assign({}, props, {children: _jsx(_createMdxContent, {})}))
      : _createMdxContent()
    function _createMdxContent() {
--    const _components = Object.assign({h1: 'h1'}, props.components)
-+    const _components = Object.assign({h1: 'h1'}, _provideComponents(), props.components)
+-    let _components = Object.assign({h1: 'h1'}, props.components)
++    let _components = Object.assign({h1: 'h1'}, _provideComponents(), props.components)
      return _jsxs(_components.h1, {children: ['Hello, ', _jsx(Thing, {})]})
    }
  }
@@ -665,13 +665,13 @@ compile(file, {jsx: true})
 +export const Thing = () => <>World!</>
 
  function MDXContent(props = {}) {
-   const {wrapper: MDXLayout} = props.components || ({})
+   let {wrapper: MDXLayout} = props.components || ({})
    return MDXLayout
 -    ? _jsx(MDXLayout, Object.assign({}, props, {children: _jsx(_createMdxContent, {})}))
 +    ? <MDXLayout {...props}><_createMdxContent /></MDXLayout>
      : _createMdxContent()
    function _createMdxContent() {
-     const _components = Object.assign({h1: 'h1'}, props.components)
+     let _components = Object.assign({h1: 'h1'}, props.components)
 -    return _jsxs(_components.h1, {children: ['Hello, ', _jsx(Thing, {})]})
 +    return <_components.h1>{"Hello, "}<Thing /></_components.h1>
    }
