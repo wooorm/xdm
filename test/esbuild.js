@@ -47,6 +47,43 @@ test('xdm (esbuild)', async (t) => {
   await fs.unlink(path.join(base, 'esbuild.mdx'))
   await fs.unlink(path.join(base, 'esbuild.js'))
 
+  // Resolve directory.
+  await fs.writeFile(
+    path.join(base, 'esbuild-resolve.mdx'),
+    'import Content from "./folder/file.mdx"\n\n<Content/>'
+  )
+  await fs.mkdir(path.join(base, 'folder'))
+  await fs.writeFile(
+    path.join(base, 'folder', 'file.mdx'),
+    'import {data} from "./file.js"\n\n{data}'
+  )
+  await fs.writeFile(
+    path.join(base, 'folder', 'file.js'),
+    'export const data = 0.1'
+  )
+  await esbuild.build({
+    bundle: true,
+    define: {'process.env.NODE_ENV': '"development"'},
+    entryPoints: [path.join(base, 'esbuild-resolve.mdx')],
+    outfile: path.join(base, 'esbuild-resolve.js'),
+    format: 'esm',
+    plugins: [esbuildXdm()]
+  })
+  /** @type {MDXContent} */
+  Content =
+    /* @ts-expect-error file is dynamically generated */
+    (await import('./context/esbuild-resolve.js')).default // type-coverage:ignore-line
+
+  t.equal(
+    renderToStaticMarkup(React.createElement(Content)),
+    '0.1',
+    'should compile'
+  )
+
+  await fs.unlink(path.join(base, 'esbuild-resolve.mdx'))
+  await fs.unlink(path.join(base, 'esbuild-resolve.js'))
+  await fs.rmdir(path.join(base, 'folder'), {recursive: true})
+
   // Markdown.
   await fs.writeFile(path.join(base, 'esbuild.md'), '\ta')
 
