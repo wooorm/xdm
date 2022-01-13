@@ -106,6 +106,22 @@ test('xdm', async (t) => {
   t.equal(
     renderToStaticMarkup(
       React.createElement(
+        await run(
+          compileSync('y', {
+            rehypePlugins: [
+              () => () => ({type: 'element', tagName: 'a-b', children: []})
+            ]
+          })
+        )
+      )
+    ),
+    '<a-b></a-b>',
+    'should compile custom elements'
+  )
+
+  t.equal(
+    renderToStaticMarkup(
+      React.createElement(
         await run(compileSync('!', {jsxRuntime: 'automatic'}))
       )
     ),
