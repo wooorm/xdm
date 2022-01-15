@@ -540,7 +540,6 @@ export default function Layout({children}) {
     )
     t.fail()
   } catch (/** @type {unknown} */ error) {
-    console.log(error)
     const exception = /** @type {Error} */ (error)
     t.match(
       exception.message,
