@@ -825,6 +825,26 @@ test('jsx', async (t) => {
   )
 
   t.equal(
+    String(compileSync('{<a-b></a-b>}', {jsx: true})),
+    [
+      '/*@jsxRuntime automatic @jsxImportSource react*/',
+      'function MDXContent(props = {}) {',
+      '  let {wrapper: MDXLayout} = props.components || ({});',
+      '  return MDXLayout ? <MDXLayout {...props}><_createMdxContent /></MDXLayout> : _createMdxContent();',
+      '  function _createMdxContent() {',
+      '    let _components = Object.assign({',
+      '      "a-b": "a-b"',
+      '    }, props.components);',
+      '    return <>{<_components.a-b></_components.a-b>}</>;',
+      '  }',
+      '}',
+      'export default MDXContent;',
+      ''
+    ].join('\n'),
+    'should serialize custom elements inside expressions'
+  )
+
+  t.equal(
     String(compileSync('Hello {props.name}', {jsx: true})),
     [
       '/*@jsxRuntime automatic @jsxImportSource react*/',
