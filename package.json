@@ -138,6 +138,7 @@
     "prettier": true,
     "rules": {
       "unicorn/no-await-expression-member": "off",
+      "unicorn/prefer-code-point": "off",
       "capitalized-comments": "off",
       "complexity": "off",
       "max-depth": "off",
