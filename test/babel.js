@@ -64,7 +64,7 @@ test('xdm (babel)', async (t) => {
     }
   }
 
-  /** @type {import('unified').Plugin<void[], Program, string>} */
+  /** @type {import('unified').Plugin<Array<void>, Program, string>} */
   function recmaBabel() {
     Object.assign(this, {Compiler: toBabel})
   }
