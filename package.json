@@ -54,7 +54,7 @@
     "got": "^11.0.0",
     "hast-util-to-estree": "^2.0.0",
     "markdown-extensions": "^1.0.0",
-    "mdast-util-mdx": "^1.0.0",
+    "mdast-util-mdx": "^2.0.0",
     "micromark-extension-mdxjs": "^1.0.0",
     "periscopic": "^3.0.0",
     "remark-parse": "^10.0.0",

@@ -709,13 +709,13 @@ export default function Layout({children}) {
         remarkPlugins: [
           () => (/** @type {Root} */ tree) => {
             tree.children.unshift({
-              // @ts-expect-error MDXHAST.
               type: 'mdxjsEsm',
               value: '',
               data: {
                 estree: {
                   type: 'Program',
                   comments: [],
+                  sourceType: 'module',
                   body: [
                     {
                       type: 'VariableDeclaration',
