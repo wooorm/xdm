@@ -1098,6 +1098,35 @@ test('markdown (math, `remark-math`, `rehype-katex`)', async (t) => {
   t.end()
 })
 
+test('remark-rehype options', async (t) => {
+  t.equal(
+    renderToStaticMarkup(
+      React.createElement(
+        await run(
+          compileSync('Text[^1]\n\n[^1]: Note.', {
+            remarkPlugins: [remarkGfm],
+            remarkRehypeOptions: {
+              footnoteLabel: 'Notes',
+              footnoteBackLabel: 'Back'
+            }
+          })
+        )
+      )
+    ),
+    `<p>Text<sup><a href="#user-content-fn-1" id="user-content-fnref-1" data-footnote-ref="true" aria-describedby="footnote-label">1</a></sup></p>
+<section data-footnotes="true" class="footnotes"><h2 id="footnote-label" class="sr-only">Notes</h2>
+<ol>
+<li id="user-content-fn-1">
+<p>Note. <a href="#user-content-fnref-1" data-footnote-backref="true" class="data-footnote-backref" aria-label="Back">↩</a></p>
+</li>
+</ol>
+</section>`,
+    'should pass options to remark-rehype'
+  )
+
+  t.end()
+})
+
 test('MDX (JSX)', async (t) => {
   t.equal(
     renderToStaticMarkup(
