@@ -5,6 +5,12 @@
 [![Downloads][downloads-badge]][downloads]
 [![Size][size-badge]][size]
 
+xdm was a fork (complete rewrite?) that envisioned how `mdx-js/mdx` could work.
+All of xdm has now been ported into `mdx-js/mdx` making xdm no longer needed.
+Use [`mdx-js/mdx`][mdxjs] instead.
+
+<details><summary>Read the original readme</summary>
+
 **xdm** is an MDX compiler that focusses on two things:
 
 1.  Compiling the MDX syntax (markdown + JSX) to JavaScript
@@ -2467,6 +2473,8 @@ Most of the work is done by:
 ## License
 
 [MIT][license] © [Titus Wormer][author], Compositor, and Vercel, Inc.
+
+</details>
 
 <!-- Definitions -->
 
