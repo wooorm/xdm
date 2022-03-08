@@ -434,7 +434,7 @@ test('xdm (esbuild)', async (t) => {
   /** @type {(contents: string) => import('esbuild').Plugin} */
   const inlinePlugin = (contents) => ({
     name: 'inline plugin',
-    setup: (build) => {
+    setup(build) {
       build.onResolve({filter: /index\.mdx/}, () => ({
         path: path.join(process.cwd(), 'index.mdx'),
         pluginData: {contents}

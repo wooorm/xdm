@@ -73,7 +73,7 @@ test('xdm (evaluate)', async (t) => {
         (
           await evaluate(
             'import {number} from "' +
-              new URL('./context/data.js', import.meta.url) +
+              new URL('context/data.js', import.meta.url) +
               '"\n\n{number}',
             // @ts-expect-error runtime.js does not have a typing
             {baseUrl: import.meta.url, useDynamicImport: true, ...runtime}
