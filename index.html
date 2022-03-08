@@ -42,23 +42,31 @@ xdm turns that into (<B>output</B>):
 <XMP>/* @jsxRuntime automatic @jsxImportSource react */
 import {Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs} from 'react/jsx-runtime'
 
-export const Thing = () => _jsx(_Fragment, {children: 'World!'})
-
-function MDXContent(props) {
-  const _components = Object.assign({h1: 'h1'}, props.components)
-  const {wrapper: MDXLayout} = _components
-  const _content = _jsx(_Fragment, {
-    children: _jsxs(_components.h1, {
-      children: ['Hello, ', _jsx(Thing, {})]
-    })
-  })
-  return MDXLayout
-    ? _jsx(MDXLayout, Object.assign({}, props, {children: _content}))
-    : _content
-}
-
-export default MDXContent
-</XMP>
+export default function MDXContent(props = {}) {
+  const {wrapper: MDXLayout} = props.components || ({});
+  return MDXLayout ? _jsx(MDXLayout, Object.assign({}, props, {
+    children: _jsx(_createMdxContent, {})
+  })) : _createMdxContent();
+  function _createMdxContent() {
+    const _components = Object.assign({
+      h2: "h2",
+      blockquote: "blockquote",
+      p: "p"
+    }, props.components);
+    return _jsxs(_Fragment, {
+      children: [_jsx(_components.h2, {
+        children: "Hello, world!"
+      }), "\n", _jsx("div", {
+        className: "note",
+        children: _jsxs(_components.blockquote, {
+          children: ["\n", _jsx(_components.p, {
+            children: "Some notable things in a block quote!"
+          }), "\n"]
+        })
+      })]
+    });
+  }
+}</XMP>
 <P>
 The code needed to turn <B>input</B> into <B>output</B> looks like this:
 </P>
