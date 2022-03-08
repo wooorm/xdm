@@ -8,7 +8,7 @@ const path = require('path')
 const fs = require('fs').promises
 const test = require('tape')
 const React = require('react')
-const {renderToStaticMarkup} = require('react-dom/server.js')
+const {renderToStaticMarkup} = require('react-dom/server')
 
 require('../register.cjs')
 

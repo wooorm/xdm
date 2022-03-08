@@ -12,7 +12,7 @@ import {transformAsync as babel} from '@babel/core'
 // @ts-expect-error: untyped.
 import toBabel from 'estree-to-babel'
 import React from 'react'
-import {renderToStaticMarkup} from 'react-dom/server.js'
+import {renderToStaticMarkup} from 'react-dom/server'
 import {compileSync} from '../index.js'
 
 test('xdm (babel)', async (t) => {

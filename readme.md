@@ -1008,7 +1008,7 @@ Assuming `example.mdx` from [§ Use][use] exists, and our module `example.js`
 looks as follows:
 
 ```js
-import {renderToStaticMarkup} from 'react-dom/server.js'
+import {renderToStaticMarkup} from 'react-dom/server'
 import React from 'react'
 import Content from './example.mdx'
 
@@ -1057,7 +1057,7 @@ looks as follows:
 
 ```js
 const React = require('react')
-const {renderToStaticMarkup} = require('react-dom/server.js')
+const {renderToStaticMarkup} = require('react-dom/server')
 const Content = require('./example.mdx')
 
 console.log(renderToStaticMarkup(React.createElement(Content)))

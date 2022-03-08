@@ -12,7 +12,7 @@ import process from 'node:process'
 import test from 'tape'
 import esbuild from 'esbuild'
 import React from 'react'
-import {renderToStaticMarkup} from 'react-dom/server.js'
+import {renderToStaticMarkup} from 'react-dom/server'
 import esbuildXdm from '../esbuild.js'
 
 test('xdm (esbuild)', async (t) => {

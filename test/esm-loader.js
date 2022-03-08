@@ -6,7 +6,7 @@ import path from 'node:path'
 import {promises as fs} from 'node:fs'
 import test from 'tape'
 import React from 'react'
-import {renderToStaticMarkup} from 'react-dom/server.js'
+import {renderToStaticMarkup} from 'react-dom/server'
 
 test('xdm (ESM loader)', async (t) => {
   const base = path.resolve(path.join('test', 'context'))

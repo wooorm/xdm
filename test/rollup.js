@@ -7,7 +7,7 @@ import {promises as fs} from 'node:fs'
 import test from 'tape'
 import {rollup} from 'rollup'
 import React from 'react'
-import {renderToStaticMarkup} from 'react-dom/server.js'
+import {renderToStaticMarkup} from 'react-dom/server'
 import rollupXdm from '../rollup.js'
 
 test('xdm (rollup)', async (t) => {

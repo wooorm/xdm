@@ -1,7 +1,7 @@
 import * as provider from '@mdx-js/react'
 import React from 'react'
 import * as runtime from 'react/jsx-runtime'
-import {renderToStaticMarkup} from 'react-dom/server.js'
+import {renderToStaticMarkup} from 'react-dom/server'
 import test from 'tape'
 import {evaluate, evaluateSync, compile} from '../index.js'
 

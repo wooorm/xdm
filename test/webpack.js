@@ -8,7 +8,7 @@ import {promises as fs} from 'node:fs'
 import test from 'tape'
 import webpack from 'webpack'
 import React from 'react'
-import {renderToStaticMarkup} from 'react-dom/server.js'
+import {renderToStaticMarkup} from 'react-dom/server'
 
 test('xdm (webpack)', async (t) => {
   const base = path.resolve(path.join('test', 'context'))
